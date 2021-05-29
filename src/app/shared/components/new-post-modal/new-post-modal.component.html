@@ -1,0 +1,23 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="nzTitle" [nzWidth]="720" (nzOnCancel)="handleCancel()">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="postForm">
+      <nz-form-item>
+        <nz-form-control>
+          <ckeditor [editorUrl]="EDITOR_URL" [config]="EDITOR_CONFIG" formControlName="postDescription"></ckeditor>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+            <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+          </nz-upload>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" [nzLoading]="isSubmitted" (click)="handleOk()">Create</button>
+    <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+  </div>
+</nz-modal>

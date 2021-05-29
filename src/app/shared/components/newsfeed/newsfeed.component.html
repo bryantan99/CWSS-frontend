@@ -1,0 +1,24 @@
+<nz-spin [nzSpinning]="isLoading">
+  <h2 class="mb-4" nz-typography>Trending News</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 mb-4" *ngFor="let news of healthNews">
+        <nz-card [nzCover]="coverTemplate">
+          <ng-template #coverTemplate>
+            <img style="height: 380px; object-fit: cover; object-position: center center" src="{{news.urlToImage}}"
+                 alt="">
+          </ng-template>
+          <h4 nz-typography>{{news.title}}</h4>
+          <nz-divider></nz-divider>
+          <div>
+            <small>Published date: {{news.publishedAt | date: "short"}}</small><br>
+            <small>Source: {{news.source.name}}</small>
+          </div>
+          <nz-divider></nz-divider>
+          <p>{{news.description || 'Description is not available.'}}</p>
+          <a nz-button [href]="news.url">Read More</a>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+</nz-spin>

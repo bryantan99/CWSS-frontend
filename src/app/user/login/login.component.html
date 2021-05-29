@@ -1,0 +1,49 @@
+<form nz-form [formGroup]="loginForm">
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" class="fw-bold">Username</nz-form-label>
+    <nz-form-control [nzErrorTip]="userErrorTpl">
+      <input nz-input type="text" formControlName="username" id="username" />
+      <ng-template #userErrorTpl let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          Please input your username!
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" class="fw-bold">Password</nz-form-label>
+    <nz-form-control [nzErrorTip]="passwordErrorTpl">
+      <nz-input-group [nzSuffix]="suffixTemplate">
+        <input [type]="passwordIsVisible ? 'text' : 'password'" nz-input formControlName="password" id="password"/>
+        <ng-template #passwordErrorTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            Please input your password!
+          </ng-container>
+        </ng-template>
+      </nz-input-group>
+      <ng-template #suffixTemplate>
+        <i nz-icon [nzType]="passwordIsVisible ? 'eye' : 'eye-invisible'" (click)="passwordIsVisible = !passwordIsVisible"></i>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-col [nzSm]="6" [nzXs]="24"></nz-col>
+    <nz-col [nzSm]="18" [nzXs]="24">
+      <div nz-col [nzSpan]="6">
+        <a>Forgot password</a>
+      </div>
+    </nz-col>
+  </nz-form-item>
+
+  <nz-row>
+    <nz-col [nzSm]="6" nzXs="24"></nz-col>
+    <nz-col [nzSm]="18" nzXs="24">
+      <button nz-button nzType="primary" [nzLoading]="submitted" (click)="submitForm()">Log In</button>
+      or <a [routerLink]="'../signup'"> register now! </a>
+    </nz-col>
+  </nz-row>
+
+</form>
