@@ -1,5 +1,5 @@
 <nz-spin [nzSpinning]="isLoading">
-  <ng-container *ngIf="adminPost">
+  <ng-container *ngIf="adminPost.length > 0; else emptyPostTemplate">
     <nz-card class="mb-4"  *ngFor="let post of adminPost">
       <nz-card-meta [nzAvatar]="avatarTemplate" [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate"></nz-card-meta>
 
@@ -28,4 +28,7 @@
     </nz-card>
   </ng-container>
 
+  <ng-template #emptyPostTemplate>
+    <nz-empty></nz-empty>
+  </ng-template>
 </nz-spin>
