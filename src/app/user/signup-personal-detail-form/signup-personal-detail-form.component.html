@@ -1,0 +1,73 @@
+<ng-container [formGroup]="form">
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Full Name</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <input nz-input type="text" formControlName="fullName">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">NRIC No.</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <input nz-input type="text" formControlName="nric">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">E-mail</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <input nz-input type="email" formControlName="email">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Username</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <input nz-input type="text" formControlName="username">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Password</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <input nz-input type="password" formControlName="username">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Confirm Password</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <input nz-input type="password" formControlName="username">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Contact No</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <input nz-input type="text" formControlName="contactNo">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Gender</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-select nzAllowClear nzPlaceHolder="Choose a gender" formControlName="gender">
+        <nz-option nzValue="M" nzLabel="Male"></nz-option>
+        <nz-option nzValue="F" nzLabel="Female"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Race</nz-form-label>
+    <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose an ethnic" formControlName="ethnic">
+        <nz-option nzValue="M" nzLabel="Malay"></nz-option>
+        <nz-option nzValue="C" nzLabel="Chinese"></nz-option>
+        <nz-option nzValue="I" nzLabel="Indian"></nz-option>
+        <nz-option nzValue="O" nzLabel="Other"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+</ng-container>

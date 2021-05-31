@@ -6,11 +6,15 @@ import {SharedModule} from "../shared/shared.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppRoutingModule} from "../app-routing.module";
 import { LogoutComponent } from './logout/logout.component';
+import { SignupPersonalDetailFormComponent } from './signup-personal-detail-form/signup-personal-detail-form.component';
+import { SignupAddressFormComponent } from './signup-address-form/signup-address-form.component';
+import { SignupOccupationFormComponent } from './signup-occupation-form/signup-occupation-form.component';
+import { SignupHealthFormComponent } from './signup-health-form/signup-health-form.component';
 
 
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, LogoutComponent],
+  declarations: [LoginComponent, SignupComponent, LogoutComponent, SignupPersonalDetailFormComponent, SignupAddressFormComponent, SignupOccupationFormComponent, SignupHealthFormComponent],
   imports: [
     CommonModule,
     SharedModule,
