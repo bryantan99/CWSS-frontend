@@ -1,4 +1,4 @@
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="personalDetailForm">
   <nz-form-item>
     <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Full Name</nz-form-label>
     <nz-form-control [nzXs]="24" [nzMd]="20">
@@ -30,14 +30,14 @@
   <nz-form-item>
     <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Password</nz-form-label>
     <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="password" formControlName="username">
+      <input nz-input type="password" formControlName="password">
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
     <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Confirm Password</nz-form-label>
     <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="password" formControlName="username">
+      <input nz-input type="password" formControlName="confirmPassword">
     </nz-form-control>
   </nz-form-item>
 

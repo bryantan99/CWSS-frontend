@@ -1,0 +1,18 @@
+
+  <div formArrayName="diseaseList">
+    <div *ngFor="let disease of healthForm.get('diseaseList'); let i = index">
+      <div [formGroupName]="i">
+        <nz-form-item>
+          <nz-form-label>Disease Name</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="diseaseId">
+              <nz-option [nzValue]="1" [nzLabel]="'Kidney Disease'"></nz-option>
+              <nz-option [nzValue]="2" [nzLabel]="'Diabetes'"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </div>
+
+<button nz-button nzType="default" (click)="addDiseaseFormGroup()">Add Disease</button>
