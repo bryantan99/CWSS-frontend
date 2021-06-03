@@ -15,7 +15,12 @@ export class CommunityUserComponent implements OnInit {
   isLoading: boolean = false;
   pageIndex: number = 1;
   pageSize: number = 10;
-  fullNameSortFn = (a: CommunityUserTableModel, b: CommunityUserTableModel) => a.fullName.localeCompare(b.fullName);
+
+  fullNameColumnItem: TableColumnItemModel = {
+    name: "Full Name",
+    sortFn: (a: CommunityUserTableModel, b: CommunityUserTableModel) => a.fullName.localeCompare(b.fullName)
+  };
+
   accountStatusColumnItem: TableColumnItemModel = {
     name: "Account Status",
     listOfFilter: [
@@ -25,14 +30,13 @@ export class CommunityUserComponent implements OnInit {
     filterFn: (value: string, item: CommunityUserTableModel) => item.isActive.indexOf(value) !== -1
   }
 
-  visible: boolean = false;
-  searchValue = '';
+  fullNameFilterIsVisible: boolean = false;
+  fullNameSearchValue = '';
 
   constructor(private communityUserService: CommunityUserService) {
   }
 
   ngOnInit(): void {
-    // this.initListOfColumn();
     this.getCommunityUsers()
   }
 
@@ -54,69 +58,15 @@ export class CommunityUserComponent implements OnInit {
       });
   }
 
-  /*
-  private initListOfColumn() {
-    this.listOfColumn = [
-      {
-        name: 'No.',
-        sortOrder: null,
-        sortFn: null,
-        sortDirections: [],
-        filterMultiple: false,
-        listOfFilter: [],
-        filterFn: null
-      },
-      {
-        name: 'Full Name',
-        sortOrder: null,
-        sortFn: ,
-        sortDirections: ['ascend', 'descend', null],
-        filterMultiple: false,
-        listOfFilter: [],
-        filterFn: null
-      },
-      {
-        name: 'E-mail',
-        sortOrder: null,
-        sortFn: (a: CommunityUserTableModel, b: CommunityUserTableModel) => a.email.localeCompare(b.email),
-        sortDirections: ['ascend', 'descend', null],
-        filterMultiple: true,
-        listOfFilter: [
-          {text: 'Without e-mail', value: null}
-        ],
-        filterFn: (email: string, item: CommunityUserTableModel) => !item.email
-      },
-      {
-        name: 'Account Status',
-        sortOrder: null,
-        sortFn: (a: CommunityUserTableModel, b: CommunityUserTableModel) => a.isActive.localeCompare(b.isActive),
-        sortDirections: ['ascend', 'descend', null],
-        filterMultiple: true,
-        listOfFilter: [
-          {text: 'Active', value: 'Y'},
-          {text: 'Inactive', value: 'N'},
-        ],
-
-      },
-      {
-        name: 'View',
-        sortOrder: null,
-        sortFn: null,
-        sortDirections: [],
-        filterMultiple: false,
-        listOfFilter: [],
-        filterFn: null
-      },
-    ]
-  }
-  */
-  reset(): void {
-    this.searchValue = '';
-    this.search();
+  resetFullName(): void {
+    this.fullNameSearchValue = '';
+    this.searchFullName();
   }
 
-  search(): void {
-    this.visible = false;
-    this.listOfDisplayData = this.listOfData.filter((item: CommunityUserTableModel) => item.fullName.indexOf(this.searchValue) !== -1);
+  searchFullName(): void {
+    this.fullNameFilterIsVisible = false;
+    this.listOfDisplayData = this.listOfData.filter((item: CommunityUserTableModel) =>
+      item.fullName.toLowerCase().indexOf(this.fullNameSearchValue.toLowerCase()) !== -1
+    );
   }
 }
