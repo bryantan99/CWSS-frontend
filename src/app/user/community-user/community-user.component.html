@@ -1,0 +1,49 @@
+<nz-table #fixedTable
+          [nzData]="listOfDisplayData"
+          [nzPageIndex]="pageIndex"
+          [nzPageSize]="pageSize"
+          nzShowSizeChanger>
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th [nzSortFn]="fullNameSortFn" nzCustomFilter>
+      Full Name
+      <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+        <i nz-icon nzType="search"></i>
+      </nz-filter-trigger>
+    </th>
+    <th>Email</th>
+    <th [nzFilters]="accountStatusColumnItem.listOfFilter"
+        [nzFilterFn]="accountStatusColumnItem.filterFn"
+        [nzFilterMultiple]="false">
+      Account Status
+    </th>
+    <th>View Profile</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of fixedTable.data, let i = index">
+    <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+    <td>{{ data?.fullName }}</td>
+    <td>{{ data?.email || '-' }}</td>
+    <td>
+      <nz-tag [nzColor]="'green'" *ngIf="data?.isActive === 'Y'">Activated</nz-tag>
+      <nz-tag [nzColor]="'orange'" *ngIf="data?.isActive !== 'Y'">Unactivated</nz-tag>
+    <td>
+      <a nz-button nzType="link" [routerLink]="['/community-user-profile']" [queryParams]="{username: data.username}">View Profile</a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+      <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+        Search
+      </button>
+      <button nz-button nzSize="small" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>

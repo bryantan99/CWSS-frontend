@@ -7,6 +7,7 @@ import {
   ValidationErrors,
   Validators
 } from "@angular/forms";
+import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 
 @Component({
   selector: 'app-signup-occupation-form',
@@ -26,7 +27,8 @@ import {
 })
 export class SignupOccupationFormComponent implements OnInit, ControlValueAccessor {
 
-  occupationForm: FormGroup
+  occupationForm: FormGroup;
+  EMPLOYMENT_TYPE_CHOICE_LIST = DropdownConstant.EMPLOYMENT_TYPE_DROPDOWN;
 
   constructor(private fb: FormBuilder) {
   }

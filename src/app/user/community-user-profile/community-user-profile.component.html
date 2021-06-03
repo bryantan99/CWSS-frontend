@@ -1,0 +1,94 @@
+<nz-alert *ngIf="userProfile?.accIsActivate !== 'Y'"
+          nzType="warning"
+          nzMessage="Account is not activated"
+          [nzDescription]="accountNotActivatedTemplate"
+          nzShowIcon
+          class="mb-4">
+</nz-alert>
+
+<ng-template #accountNotActivatedTemplate>
+  <p nz-typography>Account details are provided by the user and has not been verified.<br> Please verify the details before approving the account.</p>
+  <button nz-button nzType="primary" class="me-2 mb-2" (click)="approveAccount()">Approve</button>
+  <button nz-button nzDanger nzType="primary" (click)="rejectAccount()">Reject</button>
+</ng-template>
+
+<nz-card nzTitle="Personal Detail" class="mb-4">
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Full Name</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.fullName | uppercase) || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Gender</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.gender | gender | uppercase) || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">NRIC</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.nric || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Contact No.</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.contactNo || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Email</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.email || '-'}}</nz-col>
+  </nz-row>
+</nz-card>
+
+<nz-card nzTitle="Address" class="mb-4">
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 1</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine1 || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 2</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine2 || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Postcode</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.postcode || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">City</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.city || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">State</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.address?.state | state | uppercase) || '-'}}</nz-col>
+  </nz-row>
+</nz-card>
+
+<nz-card nzTitle="Occupation" class="mb-4">
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employment Status</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.employmentType | employmentType | uppercase) || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Occupation Name</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.occupationName | uppercase) || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Salary</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">RM {{((userProfile?.occupation?.salary | number: '1.2-2')) || '0.00'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Company</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyName || '-'}}</nz-col>
+  </nz-row>
+
+  <nz-row class="mb-2">
+    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyContactNo || '-'}}</nz-col>
+  </nz-row>
+</nz-card>

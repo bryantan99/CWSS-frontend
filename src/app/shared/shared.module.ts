@@ -6,10 +6,13 @@ import {SHARED_ZORRO_MODULES} from "./shared-zorro.module";
 import { NewPostModalComponent } from './components/new-post-modal/new-post-modal.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CKEditorModule} from "ckeditor4-angular";
+import {GenderPipe} from "./pipes/gender.pipe";
+import {StatePipe} from "./pipes/state.pipe";
+import {EmploymentTypePipe} from "./pipes/employment-type.pipe";
 
 
 @NgModule({
-  declarations: [NewsfeedComponent, PostFeedComponent, NewPostModalComponent],
+  declarations: [NewsfeedComponent, PostFeedComponent, NewPostModalComponent,GenderPipe, StatePipe, EmploymentTypePipe],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -22,7 +25,10 @@ import {CKEditorModule} from "ckeditor4-angular";
     NewsfeedComponent,
     NewPostModalComponent,
     PostFeedComponent,
-    ...SHARED_ZORRO_MODULES
+    ...SHARED_ZORRO_MODULES,
+    GenderPipe,
+    StatePipe,
+    EmploymentTypePipe
   ]
 })
 export class SharedModule {

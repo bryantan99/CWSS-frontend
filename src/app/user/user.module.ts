@@ -10,11 +10,13 @@ import { SignupPersonalDetailFormComponent } from './signup-personal-detail-form
 import { SignupAddressFormComponent } from './signup-address-form/signup-address-form.component';
 import { SignupOccupationFormComponent } from './signup-occupation-form/signup-occupation-form.component';
 import { SignupHealthFormComponent } from './signup-health-form/signup-health-form.component';
+import { CommunityUserComponent } from './community-user/community-user.component';
+import { CommunityUserProfileComponent } from './community-user-profile/community-user-profile.component';
 
 
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, LogoutComponent, SignupPersonalDetailFormComponent, SignupAddressFormComponent, SignupOccupationFormComponent, SignupHealthFormComponent],
+  declarations: [LoginComponent, SignupComponent, LogoutComponent, SignupPersonalDetailFormComponent, SignupAddressFormComponent, SignupOccupationFormComponent, SignupHealthFormComponent, CommunityUserComponent, CommunityUserProfileComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -32,4 +32,8 @@ export class AppComponent {
   hasUserLoggedIn():boolean {
     return this.authService.isUserLoggedIn();
   }
+
+  isAdminUser() {
+    return this.authService.hasRole("ROLE_ADMIN") || this.authService.hasRole("ROLE_SUPER_ADMIN");
+  }
 }

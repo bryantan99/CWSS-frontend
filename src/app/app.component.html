@@ -22,6 +22,11 @@
           <a routerLink="/signup">Sign up</a>
         </li>
       </ul>
+      <ul *ngIf="isAdminUser()">
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/community-user">User</a>
+        </li>
+      </ul>
       <ul>
         <li nz-menu-item nzMatchRouter>
           <a routerLink="/about">About Us</a>

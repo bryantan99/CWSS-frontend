@@ -7,6 +7,7 @@ import {
   Validators
 } from "@angular/forms";
 import {StateConstant} from "../../shared/constants/state-constant";
+import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 
 @Component({
   selector: 'app-signup-address-form',
@@ -27,7 +28,7 @@ import {StateConstant} from "../../shared/constants/state-constant";
 export class SignupAddressFormComponent implements OnInit, ControlValueAccessor {
 
   addressForm: FormGroup;
-  STATE_FEDERAL_TERRITORY_DROPDOWN = StateConstant.STATE_AND_FEDERAL_TERRITORY_DROPDOWN;
+  STATE_FEDERAL_TERRITORY_DROPDOWN = DropdownConstant.STATE_AND_FEDERAL_TERRITORY_DROPDOWN;
 
   constructor(private fb: FormBuilder) {
   }
