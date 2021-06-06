@@ -40,7 +40,10 @@ export class SignupComponent implements OnInit {
   }
 
   submitForm() {
-    this.form.markAllAsTouched();
+    this.personalDetailFormComponent.updateTouchAndDirty();
+    this.addressFormComponent.updateTouchAndDirty();
+    this.occupationFormComponent.updateTouchAndDirty();
+    this.healthFormComponent.updateTouchAndDirty();
 
     if (!this.form.valid) {
       this.displayInvalidFormNotification();

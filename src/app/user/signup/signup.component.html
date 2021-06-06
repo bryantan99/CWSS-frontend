@@ -1,6 +1,6 @@
 <form [formGroup]="form">
 
-  <nz-steps nzProgressDot [nzCurrent]="stepIndex">
+  <nz-steps nzProgressDot [nzCurrent]="stepIndex" (nzIndexChange)="movePage($event)">
     <nz-step nzTitle="Personal Details"></nz-step>
     <nz-step nzTitle="Address"></nz-step>
     <nz-step nzTitle="Occupation"></nz-step>

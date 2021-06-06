@@ -3,7 +3,7 @@ import {
   AbstractControl,
   ControlValueAccessor,
   FormArray,
-  FormBuilder,
+  FormBuilder, FormControl,
   FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validators
@@ -60,7 +60,7 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   private initDiseaseForm() {
     return this.fb.group({
       diseaseId: ['', Validators.required],
-      description: ['']
+      description: ['', Validators.required]
     })
   }
 
@@ -96,6 +96,19 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   }
 
   updateTouchAndDirty() {
+    this.markAsTouchedAndDirty(this.healthForm);
+  }
 
+  markAsTouchedAndDirty(group: FormGroup | FormArray) {
+    group.markAsTouched()
+    for (let i in group.controls) {
+      if (group.controls[i] instanceof FormControl) {
+        const fc: FormControl = group.controls[i];
+        fc.markAsDirty();
+        fc.updateValueAndValidity();
+      } else {
+        this.markAsTouchedAndDirty(group.controls[i]);
+      }
+    }
   }
 }
