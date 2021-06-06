@@ -1,11 +1,33 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormArray,
+  FormBuilder,
+  FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validators
+} from "@angular/forms";
 
 @Component({
   selector: 'app-signup-health-form',
-  templateUrl: './signup-health-form.component.html'
+  templateUrl: './signup-health-form.component.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SignupHealthFormComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => SignupHealthFormComponent),
+      multi: true
+    }
+  ]
 })
-export class SignupHealthFormComponent implements OnInit {
+export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
+
+  @Input('parentDiseaseListFormValues') parentDiseaseListFormValues: {diseaseId: any; description: string}[] = [];
   healthForm: FormGroup;
 
   constructor(private fb: FormBuilder) { }
@@ -14,6 +36,12 @@ export class SignupHealthFormComponent implements OnInit {
     this.healthForm = this.fb.group({
       diseaseList: this.fb.array([])
     });
+
+    if (this.parentDiseaseListFormValues) {
+      for (let i = 0; i < this.parentDiseaseListFormValues.length ; i++) {
+        this.addDiseaseFormGroup();
+      }
+    }
   }
 
   get diseaseList(): FormArray {
@@ -33,5 +61,36 @@ export class SignupHealthFormComponent implements OnInit {
       diseaseId: ['', Validators.required],
       description: ['']
     })
+  }
+
+  onTouched: () => void = () => {
+  };
+
+  writeValue(val: any): void {
+    val && this.healthForm.patchValue(val, {emitEvent: false});
+  }
+
+  registerOnChange(fn: any): void {
+    console.log("on change");
+    this.healthForm.valueChanges.subscribe(fn);
+  }
+
+  registerOnTouched(fn: any): void {
+    console.log("on blur");
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.healthForm.disable() : this.healthForm.enable();
+  }
+
+  validate(c: AbstractControl): ValidationErrors | null {
+    console.log("Health Form validation", c);
+    return this.healthForm.valid ? null : {
+      invalidForm: {
+        valid: false,
+        message: "Health Form has invalid field(s)."
+      }
+    };
   }
 }

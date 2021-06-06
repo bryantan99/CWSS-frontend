@@ -12,12 +12,17 @@
   <app-signup-personal-detail-form *ngIf="stepIndex === 0" formControlName="personalDetail"></app-signup-personal-detail-form>
   <app-signup-address-form *ngIf="stepIndex === 1" formControlName="address"></app-signup-address-form>
   <app-signup-occupation-form *ngIf="stepIndex === 2" formControlName="occupation"></app-signup-occupation-form>
+  <app-signup-health-form *ngIf="stepIndex === 3" [parentDiseaseListFormValues]="form.get('health').value?.diseaseList"
+                          formControlName="health"></app-signup-health-form>
 
   <nz-row>
-    <nz-col [nzSpan]="12">
+    <nz-col [nzSpan]="8">
       <button nz-button nzType="primary" class="me-2" *ngIf="stepIndex !== 0" (click)="movePage(this.stepIndex - 1)">Previous</button>
     </nz-col>
-    <nz-col [nzSpan]="12">
+    <nz-col [nzSpan]="8" class="text-center">
+      <button *ngIf="stepIndex === 3" nz-button nzType="default" (click)="addDiseaseFormGroup()">Add Disease</button>
+    </nz-col>
+    <nz-col [nzSpan]="8">
       <button nz-button nzType="primary" class="float-end me-2" *ngIf="stepIndex !== 3" (click)="movePage(this.stepIndex + 1)">Next</button>
       <button nz-button nzType="primary" class="float-end" *ngIf="stepIndex === 3" (click)="submitForm()">Register</button>
     </nz-col>

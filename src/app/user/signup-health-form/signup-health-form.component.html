@@ -1,18 +1,43 @@
+<nz-alert nzType="warning"
+          nzMessage="Optional"
+          [nzDescription]="optionalMsgTemplate"
+          nzShowIcon
+          class="mb-4">
+</nz-alert>
 
+<ng-template #optionalMsgTemplate>
+  <p nz-typography>This section is only necessary if you have any form of disease currently.<br>
+    To add your current disease detail, click the button "Add Disease" below to write the disease name and a brief description about it (e.g. year diagnosed).</p>
+</ng-template>
+
+<ng-container [formGroup]="healthForm">
   <div formArrayName="diseaseList">
-    <div *ngFor="let disease of healthForm.get('diseaseList'); let i = index">
+    <div *ngFor="let disease of diseaseList.controls; let i = index" class="mb-4">
       <div [formGroupName]="i">
         <nz-form-item>
-          <nz-form-label>Disease Name</nz-form-label>
-          <nz-form-control>
+          <nz-form-label class="fw-bold" [nzXs]="24" [nzMd]="4">Disease {{i + 1}} Name</nz-form-label>
+          <nz-form-control [nzXs]="24" [nzMd]="20">
             <nz-select formControlName="diseaseId">
               <nz-option [nzValue]="1" [nzLabel]="'Kidney Disease'"></nz-option>
               <nz-option [nzValue]="2" [nzLabel]="'Diabetes'"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label class="fw-bold" [nzXs]="24" [nzMd]="4">Description</nz-form-label>
+          <nz-form-control [nzXs]="24" [nzMd]="20">
+            <textarea rows="4" nz-input formControlName="description"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-row>
+          <nz-col [nzSpan]="24">
+            <button class="float-end" nz-button nzDanger (click)="deleteDiseaseFormGroup(i)">Remove Disease {{i + 1}}</button>
+          </nz-col>
+        </nz-row>
+
       </div>
     </div>
   </div>
-
-<button nz-button nzType="default" (click)="addDiseaseFormGroup()">Add Disease</button>
+</ng-container>
