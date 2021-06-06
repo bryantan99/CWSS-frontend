@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -6,7 +6,6 @@ import {
   FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
   Validators
 } from "@angular/forms";
-import {StateConstant} from "../../shared/constants/state-constant";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 
 @Component({
@@ -27,6 +26,7 @@ import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 })
 export class SignupAddressFormComponent implements OnInit, ControlValueAccessor {
 
+  @Input('isVisible') isVisible: boolean;
   addressForm: FormGroup;
   STATE_FEDERAL_TERRITORY_DROPDOWN = DropdownConstant.STATE_AND_FEDERAL_TERRITORY_DROPDOWN;
 
@@ -72,5 +72,12 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
         message: "Address Form has invalid field(s)."
       }
     };
+  }
+
+  updateTouchAndDirty() {
+    for (const i in this.addressForm.controls) {
+      this.addressForm.controls[i].markAsDirty();
+      this.addressForm.controls[i].updateValueAndValidity();
+    }
   }
 }

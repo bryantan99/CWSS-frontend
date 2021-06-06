@@ -31,6 +31,11 @@ export class LoginComponent implements OnInit {
   }
 
   submitForm() {
+    for (const i in this.loginForm.controls) {
+      this.loginForm.controls[i].markAsDirty();
+      this.loginForm.controls[i].updateValueAndValidity();
+    }
+
     this.submitted = true;
     this.authService.login(this.loginForm.value)
       .pipe(finalize(() => {

@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -27,6 +27,7 @@ import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 })
 export class SignupOccupationFormComponent implements OnInit, ControlValueAccessor {
 
+  @Input('isVisible') isVisible: boolean;
   occupationForm: FormGroup;
   EMPLOYMENT_TYPE_CHOICE_LIST = DropdownConstant.EMPLOYMENT_TYPE_DROPDOWN;
 
@@ -72,5 +73,12 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
         message: "Occupation Form has invalid field(s)."
       }
     };
+  }
+
+  updateTouchAndDirty() {
+    for (const i in this.occupationForm.controls) {
+      this.occupationForm.controls[i].markAsDirty();
+      this.occupationForm.controls[i].updateValueAndValidity();
+    }
   }
 }

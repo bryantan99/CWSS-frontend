@@ -1,44 +1,47 @@
-<ng-container [formGroup]="occupationForm">
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Occupation Type</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <nz-radio-group formControlName="occupationType">
-        <label nz-radio *ngFor="let choice of EMPLOYMENT_TYPE_CHOICE_LIST" [nzValue]="choice.value">{{choice?.text}}</label>
-      </nz-radio-group>
-    </nz-form-control>
-  </nz-form-item>
+<div *ngIf="isVisible">
+  <ng-container [formGroup]="occupationForm">
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Occupation Type</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <nz-radio-group formControlName="occupationType">
+          <label nz-radio *ngFor="let choice of EMPLOYMENT_TYPE_CHOICE_LIST" [nzValue]="choice.value">{{choice?.text}}</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Occupation Name</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="text" formControlName="occupationName">
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Occupation Name</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <input nz-input type="text" formControlName="occupationName">
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Salary</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <nz-input-number
-        class="w-50"
-        formControlName="salary"
-        [nzMin]="0"
-        [nzStep]="1"
-        [nzPrecision]="2"
-      ></nz-input-number>
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Salary</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <nz-input-number
+          class="w-50"
+          formControlName="salary"
+          [nzMin]="0"
+          [nzStep]="1"
+          [nzPrecision]="2"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employee Company</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="text" formControlName="companyName">
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employee Company</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <input nz-input type="text" formControlName="companyName">
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="text" formControlName="companyContactNo">
-    </nz-form-control>
-  </nz-form-item>
-</ng-container>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <input nz-input type="text" formControlName="companyContactNo">
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+
+</div>

@@ -1,6 +1,6 @@
 <form [formGroup]="form">
 
-  <nz-steps nzProgressDot [nzCurrent]="stepIndex" (nzIndexChange)="onIndexChange($event)">
+  <nz-steps nzProgressDot [nzCurrent]="stepIndex">
     <nz-step nzTitle="Personal Details"></nz-step>
     <nz-step nzTitle="Address"></nz-step>
     <nz-step nzTitle="Occupation"></nz-step>
@@ -9,10 +9,10 @@
 
   <nz-divider></nz-divider>
 
-  <app-signup-personal-detail-form *ngIf="stepIndex === 0" formControlName="personalDetail"></app-signup-personal-detail-form>
-  <app-signup-address-form *ngIf="stepIndex === 1" formControlName="address"></app-signup-address-form>
-  <app-signup-occupation-form *ngIf="stepIndex === 2" formControlName="occupation"></app-signup-occupation-form>
-  <app-signup-health-form *ngIf="stepIndex === 3" [parentDiseaseListFormValues]="form.get('health').value?.diseaseList"
+  <app-signup-personal-detail-form [isVisible]="showPersonalDetailForm" formControlName="personalDetail"></app-signup-personal-detail-form>
+  <app-signup-address-form [isVisible]="showAddressForm" formControlName="address"></app-signup-address-form>
+  <app-signup-occupation-form [isVisible]="showOccupationForm" formControlName="occupation"></app-signup-occupation-form>
+  <app-signup-health-form [isVisible]="showHealthForm" [parentDiseaseListFormValues]="form.get('health').value?.diseaseList"
                           formControlName="health"></app-signup-health-form>
 
   <nz-row>

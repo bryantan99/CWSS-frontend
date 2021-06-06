@@ -1,38 +1,41 @@
-<ng-container [formGroup]="addressForm">
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 1</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="text" formControlName="addressLine1">
-    </nz-form-control>
-  </nz-form-item>
+<div *ngIf="isVisible">
+  <ng-container [formGroup]="addressForm">
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 1</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <input nz-input type="text" formControlName="addressLine1">
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 2</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="text" formControlName="addressLine2">
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 2</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <input nz-input type="text" formControlName="addressLine2">
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Post Code</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="text" formControlName="postcode">
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Post Code</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <input nz-input type="text" formControlName="postcode">
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">City</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <input nz-input type="text" formControlName="city">
-    </nz-form-control>
-  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">City</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <input nz-input type="text" formControlName="city">
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">State</nz-form-label>
-    <nz-form-control [nzXs]="24" [nzMd]="20">
-      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a state" formControlName="state">
-        <nz-option *ngFor="let state of STATE_FEDERAL_TERRITORY_DROPDOWN" [nzLabel]="state.text" [nzValue]="state.value"></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
-</ng-container>
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">State</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a state" formControlName="state">
+          <nz-option *ngFor="let state of STATE_FEDERAL_TERRITORY_DROPDOWN" [nzLabel]="state.text" [nzValue]="state.value"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+
+</div>

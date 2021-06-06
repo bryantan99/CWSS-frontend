@@ -28,6 +28,7 @@ import {
 export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
 
   @Input('parentDiseaseListFormValues') parentDiseaseListFormValues: {diseaseId: any; description: string}[] = [];
+  @Input('isVisible') isVisible: boolean;
   healthForm: FormGroup;
 
   constructor(private fb: FormBuilder) { }
@@ -92,5 +93,9 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
         message: "Health Form has invalid field(s)."
       }
     };
+  }
+
+  updateTouchAndDirty() {
+
   }
 }

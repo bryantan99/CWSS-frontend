@@ -1,8 +1,8 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
-  ControlValueAccessor,
-  FormBuilder,
+  ControlValueAccessor, FormArray,
+  FormBuilder, FormControl,
   FormGroup,
   FormGroupDirective, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors,
@@ -27,6 +27,7 @@ import {
 })
 export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAccessor {
 
+  @Input('isVisible') isVisible: boolean;
   personalDetailForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -70,5 +71,12 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   validate(c: AbstractControl): ValidationErrors | null{
     console.log("Basic Info validation", c);
     return this.personalDetailForm.valid ? null : { invalidForm: {valid: false, message: "Personal Detail Form has invalid field(s)."}};
+  }
+
+  updateTouchAndDirty() {
+    for (const i in this.personalDetailForm.controls) {
+      this.personalDetailForm.controls[i].markAsDirty();
+      this.personalDetailForm.controls[i].updateValueAndValidity();
+    }
   }
 }
