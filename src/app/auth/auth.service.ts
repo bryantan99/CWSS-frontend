@@ -1,15 +1,17 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs/operators";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiServerUrl = 'http://localhost:8080';
+  readonly API_SERVER_URL = 'http://localhost:8080';
 
-  LOGIN = this.apiServerUrl + "/authenticate";
+  readonly LOGIN = this.API_SERVER_URL + "/authenticate";
+  readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/is-valid-username";
 
   constructor(private http: HttpClient) {
   }
@@ -45,5 +47,10 @@ export class AuthService {
   logOut() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("roleList");
+  }
+
+  isUniqueUsername(username: string): Observable<any> {
+    const params = new HttpParams().set("username", username);
+    return this.http.get(this.IS_UNIQUE_USERNAME, {params: params});
   }
 }

@@ -2,72 +2,122 @@
   <ng-container [formGroup]="personalDetailForm">
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Full Name</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="fullNameErrorTpl">
         <input nz-input type="text" formControlName="fullName">
+        <ng-template #fullNameErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input full name<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">NRIC No.</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
-        <input nz-input type="text" formControlName="nric">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="nricErrorTpl">
+        <input nz-input type="text" [maxlength]="12" [minlength]="12" formControlName="nric">
+        <ng-template #nricErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input NRIC<br></span>
+            <span *ngIf="control.hasError('minlength')">Please ensure it is 12 digits<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">E-mail</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="emailErrorTpl">
         <input nz-input type="email" formControlName="email">
+        <ng-template #emailErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('email') || control.hasError('required')">Please input a valid email<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Username</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="usernameErrorTpl">
         <input nz-input type="text" formControlName="username">
+        <ng-template #usernameErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input username<br></span>
+            <span *ngIf="control.hasError('usernameTaken')">This username has been taken.<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Password</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="passwordErrorTpl">
         <input nz-input type="password" formControlName="password">
+        <ng-template #passwordErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input password<br></span>
+            <span *ngIf="control.hasError('invalidPassword')">Password does not meet minimum requirements<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Confirm Password</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="confirmPasswordErrorTpl">
         <input nz-input type="password" formControlName="confirmPassword">
+        <ng-template #confirmPasswordErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input confirm password<br></span>
+            <span *ngIf="control.hasError('passwordNotMatch')">Password does not match<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Contact No</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
-        <input nz-input type="text" formControlName="contactNo">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="contactNoErrorTpl">
+        <input nz-input type="text" [minlength]="9" [maxlength]="11" formControlName="contactNo">
+        <ng-template #contactNoErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input contact no.<br></span>
+            <span *ngIf="control.hasError('invalidContactNo')">Please input a valid contact no.<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Gender</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="genderErrorTpl">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a gender" formControlName="gender">
           <nz-option nzValue="M" nzLabel="Male"></nz-option>
           <nz-option nzValue="F" nzLabel="Female"></nz-option>
         </nz-select>
+        <ng-template #genderErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please select a gender<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Race</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="raceError">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose an ethnic" formControlName="ethnic">
           <nz-option nzValue="M" nzLabel="Malay"></nz-option>
           <nz-option nzValue="C" nzLabel="Chinese"></nz-option>
           <nz-option nzValue="I" nzLabel="Indian"></nz-option>
           <nz-option nzValue="O" nzLabel="Other"></nz-option>
         </nz-select>
+        <ng-template #raceError let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please select a race<br></span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 

@@ -1,13 +1,19 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
-  ControlValueAccessor, FormArray,
+  ControlValueAccessor,
   FormBuilder, FormControl,
-  FormGroup,
-  FormGroupDirective, NG_VALIDATORS,
+  FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors,
   Validators
 } from "@angular/forms";
+import {AuthService} from "../../auth/auth.service";
+import {uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
+import {
+  confirmPasswordMatchValidator,
+  passwordValidator,
+  phoneNumberValidator
+} from "../../shared/validators/custom-validators";
 
 @Component({
   selector: 'app-signup-personal-detail-form',
@@ -30,21 +36,31 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   @Input('isVisible') isVisible: boolean;
   personalDetailForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
     this.personalDetailForm = this.fb.group({
       fullName: ['', Validators.required],
       nric: ['', Validators.required],
-      email: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      username: ['', {
+        validators: [Validators.required],
+        asyncValidators: [uniqueUsernameValidator(this.authService)]
+      }],
+      password: ['', [Validators.required, passwordValidator()]],
+      confirmPassword: [''],
       gender: ['', Validators.required],
-      contactNo: ['', Validators.required],
+      contactNo: ['', [Validators.required, phoneNumberValidator()]],
       ethnic: ['', Validators.required]
     })
+
+    this.personalDetailForm.get('confirmPassword').setValidators(
+      [Validators.required,
+      confirmPasswordMatchValidator(this.personalDetailForm.get('password'))]
+    );
+
   }
 
   onTouched: () => void = () => {
@@ -68,9 +84,14 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
     isDisabled ? this.personalDetailForm.disable() : this.personalDetailForm.enable();
   }
 
-  validate(c: AbstractControl): ValidationErrors | null{
+  validate(c: AbstractControl): ValidationErrors | null {
     console.log("Basic Info validation", c);
-    return this.personalDetailForm.valid ? null : { invalidForm: {valid: false, message: "Personal Detail Form has invalid field(s)."}};
+    return this.personalDetailForm.valid ? null : {
+      invalidForm: {
+        valid: false,
+        message: "Personal Detail Form has invalid field(s)."
+      }
+    };
   }
 
   updateTouchAndDirty() {
