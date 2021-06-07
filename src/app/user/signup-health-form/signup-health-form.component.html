@@ -1,10 +1,14 @@
 <div *ngIf="isVisible">
   <nz-alert nzType="warning"
-            nzMessage="Optional"
+            [nzMessage]="titleTpl"
             [nzDescription]="optionalMsgTemplate"
             nzShowIcon
             class="mb-4">
   </nz-alert>
+
+  <ng-template #titleTpl>
+    <h4 nz-typography>Optional</h4>
+  </ng-template>
 
   <ng-template #optionalMsgTemplate>
     <p nz-typography>This section is only necessary if you have any form of disease currently.<br>
@@ -12,6 +16,7 @@
   </ng-template>
 
   <ng-container [formGroup]="healthForm">
+    <nz-empty *ngIf="diseaseList?.length === 0" class="mb-4" nzNotFoundContent="No disease"></nz-empty>
     <div formArrayName="diseaseList">
       <div *ngFor="let disease of diseaseList.controls; let i = index" class="mb-4">
         <div [formGroupName]="i">

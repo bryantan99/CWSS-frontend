@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {SignupService} from "../signup.service";
 import {SignupHealthFormComponent} from "../signup-health-form/signup-health-form.component";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -22,7 +22,8 @@ export class SignupComponent implements OnInit {
   form: FormGroup;
   stepIndex: number = 0;
 
-  showPersonalDetailForm: boolean = true;
+  showInfoPage: boolean = true;
+  showPersonalDetailForm: boolean = false;
   showAddressForm: boolean = false;
   showOccupationForm: boolean = false;
   showHealthForm: boolean = false;
@@ -37,7 +38,7 @@ export class SignupComponent implements OnInit {
       personalDetail: new FormControl(""),
       address: new FormControl(""),
       occupation: new FormControl(""),
-      health: new FormControl("")
+      health: new FormControl()
     });
   }
 
@@ -114,26 +115,27 @@ export class SignupComponent implements OnInit {
 
   private updateTouchAndDirty(indexBeforeMovePage: number) {
     switch (indexBeforeMovePage) {
-      case 0:
+      case 1:
         this.personalDetailFormComponent.updateTouchAndDirty();
         break;
-      case 1:
+      case 2:
         this.addressFormComponent.updateTouchAndDirty();
         break;
-      case 2:
+      case 3:
         this.occupationFormComponent.updateTouchAndDirty();
         break;
-      case 3:
+      case 4:
         this.healthFormComponent.updateTouchAndDirty();
         break;
     }
   }
 
   private displayChildForm(newIndex: number) {
-    this.showPersonalDetailForm = newIndex === 0;
-    this.showAddressForm = newIndex === 1;
-    this.showOccupationForm = newIndex === 2;
-    this.showHealthForm = newIndex === 3;
+    this.showInfoPage = newIndex === 0;
+    this.showPersonalDetailForm = newIndex === 1;
+    this.showAddressForm = newIndex === 2;
+    this.showOccupationForm = newIndex === 3;
+    this.showHealthForm = newIndex === 4;
   }
 
   private displaySignUpSuccessfulNotification() {
