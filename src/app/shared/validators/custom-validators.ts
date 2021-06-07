@@ -33,9 +33,20 @@ export function phoneNumberValidator(): ValidatorFn {
   return (control: FormControl): {[key: string]: boolean} | null => {
     const digitsOnlyRegex = /^[0-9]*$/;
     const phoneNo: string = control.value;
-    console.log(phoneNo.search(digitsOnlyRegex))
     if (phoneNo && (phoneNo.search(digitsOnlyRegex) == -1 || phoneNo.length < 9 || phoneNo.length > 11 || !phoneNo.startsWith("0"))) {
       return {invalidContactNo: true};
+    }
+    return null;
+  }
+}
+
+//  Checks if the postcode is valid ( 5 digits )
+export function postCodeValidator(): ValidatorFn {
+  return (control: FormControl): {[key: string]: boolean} | null => {
+    const digitsOnlyRegex = /^[0-9]*$/;
+    const postCode: string = control.value;
+    if (postCode && (postCode.search(digitsOnlyRegex) == -1 || postCode.length !== 5 )) {
+      return {invalidPostCode: true};
     }
     return null;
   }

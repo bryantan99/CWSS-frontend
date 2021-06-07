@@ -2,38 +2,64 @@
   <ng-container [formGroup]="addressForm">
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 1</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="addressLine1ErrorTpl">
         <input nz-input type="text" formControlName="addressLine1">
+        <ng-template #addressLine1ErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input address line 1</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 2</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="addressLine2ErrorTpl">
         <input nz-input type="text" formControlName="addressLine2">
+        <ng-template #addressLine2ErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input address line 2</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Post Code</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
-        <input nz-input type="text" formControlName="postcode">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="postCodeErrorTpl">
+        <input nz-input type="text" [minlength]="5" [maxlength]="5" formControlName="postcode">
+        <ng-template #postCodeErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input post code</span>
+            <span *ngIf="control.hasError('invalidPostCode')">Please input valid 5-digit post code</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">City</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="cityErrorTpl">
         <input nz-input type="text" formControlName="city">
+        <ng-template #cityErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input city name</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">State</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="stateErrorTpl">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a state" formControlName="state">
           <nz-option *ngFor="let state of STATE_FEDERAL_TERRITORY_DROPDOWN" [nzLabel]="state.text" [nzValue]="state.value"></nz-option>
         </nz-select>
+        <ng-template #stateErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please select a state</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
   </ng-container>

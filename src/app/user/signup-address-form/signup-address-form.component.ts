@@ -7,6 +7,7 @@ import {
   Validators
 } from "@angular/forms";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
+import {postCodeValidator} from "../../shared/validators/custom-validators";
 
 @Component({
   selector: 'app-signup-address-form',
@@ -37,7 +38,7 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
     this.addressForm = this.fb.group({
       addressLine1: ['', Validators.required],
       addressLine2: ['', Validators.required],
-      postcode: ['', Validators.required],
+      postcode: ['', [Validators.required, postCodeValidator()]],
       city: ['', Validators.required],
       state: ['', Validators.required],
     })
