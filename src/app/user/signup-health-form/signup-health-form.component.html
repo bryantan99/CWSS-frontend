@@ -19,8 +19,7 @@
             <nz-form-label class="fw-bold" [nzXs]="24" [nzMd]="4">Disease {{i + 1}} Name</nz-form-label>
             <nz-form-control [nzXs]="24" [nzMd]="20">
               <nz-select formControlName="diseaseId">
-                <nz-option [nzValue]="1" [nzLabel]="'Kidney Disease'"></nz-option>
-                <nz-option [nzValue]="2" [nzLabel]="'Diabetes'"></nz-option>
+                <nz-option *ngFor="let option of diseaseDropdownList" [nzValue]="option.value" [nzLabel]="option.text"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>

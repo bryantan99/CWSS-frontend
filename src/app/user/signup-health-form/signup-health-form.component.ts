@@ -8,6 +8,9 @@ import {
   ValidationErrors,
   Validators
 } from "@angular/forms";
+import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
+import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 
 @Component({
   selector: 'app-signup-health-form',
@@ -30,8 +33,13 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   @Input('parentDiseaseListFormValues') parentDiseaseListFormValues: {diseaseId: any; description: string}[] = [];
   @Input('isVisible') isVisible: boolean;
   healthForm: FormGroup;
+  diseaseDropdownList: DropdownChoiceModel[] = [];
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+              private dropdownChoiceService: DropdownChoiceService,
+              private notificationService: NzNotificationService) {
+    this.initDiseaseDropdownList();
+  }
 
   ngOnInit(): void {
     this.healthForm = this.fb.group({
@@ -110,5 +118,14 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
         this.markAsTouchedAndDirty(group.controls[i]);
       }
     }
+  }
+
+  private initDiseaseDropdownList() {
+    this.diseaseDropdownList = [];
+    this.dropdownChoiceService.getDiseaseDropdownChoices().subscribe(resp => {
+      this.diseaseDropdownList = resp ? resp : [];
+    }, error => {
+      this.notificationService.error("Error", "There's an error when retrieving disease dropdown choice list.");
+    })
   }
 }
