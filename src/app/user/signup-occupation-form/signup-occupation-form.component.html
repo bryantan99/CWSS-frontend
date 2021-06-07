@@ -1,24 +1,34 @@
 <div *ngIf="isVisible">
   <ng-container [formGroup]="occupationForm">
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Occupation Type</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
-        <nz-radio-group formControlName="occupationType">
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employment Type</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="occupationTypeErrorTpl">
+        <nz-radio-group formControlName="occupationType" (ngModelChange)="employmentTypeHasChange($event)">
           <label nz-radio *ngFor="let choice of EMPLOYMENT_TYPE_CHOICE_LIST" [nzValue]="choice.value">{{choice?.text}}</label>
         </nz-radio-group>
+        <ng-template #occupationTypeErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please select an employment type</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item *ngIf="showOccupationNameField">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Occupation Name</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="occupationNameErrorTpl">
         <input nz-input type="text" formControlName="occupationName">
+        <ng-template #occupationNameErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input occupation name</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item *ngIf="showSalaryField">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Salary</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="salaryErrorTpl">
         <nz-input-number
           class="w-50"
           formControlName="salary"
@@ -26,20 +36,36 @@
           [nzStep]="1"
           [nzPrecision]="2"
         ></nz-input-number>
+        <ng-template #salaryErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input the amount of salary</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employee Company</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+    <nz-form-item *ngIf="showEmployerCompanyField">
+      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employer Company</nz-form-label>
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="companyNameErrorTpl">
         <input nz-input type="text" formControlName="companyName">
+        <ng-template #companyNameErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input company's name</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item *ngIf="showEmployerContactNoField">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20">
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="companyContactNoErrorTpl">
         <input nz-input type="text" formControlName="companyContactNo">
+        <ng-template #companyContactNoErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please input employer's contact no.</span>
+            <span *ngIf="control.hasError('invalidContactNo')">Please input valid employer's contact no.</span>
+          </p>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
   </ng-container>

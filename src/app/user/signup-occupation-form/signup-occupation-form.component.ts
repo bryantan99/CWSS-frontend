@@ -8,6 +8,7 @@ import {
   Validators
 } from "@angular/forms";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
+import {phoneNumberValidator} from "../../shared/validators/custom-validators";
 
 @Component({
   selector: 'app-signup-occupation-form',
@@ -30,6 +31,10 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
   @Input('isVisible') isVisible: boolean;
   occupationForm: FormGroup;
   EMPLOYMENT_TYPE_CHOICE_LIST = DropdownConstant.EMPLOYMENT_TYPE_DROPDOWN;
+  showEmployerCompanyField: boolean = false;
+  showEmployerContactNoField: boolean = false;
+  showSalaryField: boolean = false;
+  showOccupationNameField: boolean = false;
 
   constructor(private fb: FormBuilder) {
   }
@@ -37,8 +42,8 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
   ngOnInit(): void {
     this.occupationForm = this.fb.group({
       occupationType: ['', Validators.required],
-      occupationName: ['', Validators.required],
-      salary: ['', Validators.required],
+      occupationName: [''],
+      salary: [''],
       companyName: [''],
       companyContactNo: [''],
     });
@@ -52,12 +57,10 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
   }
 
   registerOnChange(fn: any): void {
-    console.log("on change");
     this.occupationForm.valueChanges.subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
-    console.log("on blur");
     this.onTouched = fn;
   }
 
@@ -66,7 +69,6 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    console.log("Occupation Form validation", c);
     return this.occupationForm.valid ? null : {
       invalidForm: {
         valid: false,
@@ -79,6 +81,40 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
     for (const i in this.occupationForm.controls) {
       this.occupationForm.controls[i].markAsDirty();
       this.occupationForm.controls[i].updateValueAndValidity();
+    }
+  }
+
+  employmentTypeHasChange(value: string) {
+    const isUnemployed = value === '-';
+    const needEmployerDetails = value === 'GOVT' || value === 'PVT';
+
+    this.showOccupationNameField = !isUnemployed;
+    this.showSalaryField = !isUnemployed;
+    this.showEmployerCompanyField = needEmployerDetails;
+    this.showEmployerContactNoField = needEmployerDetails;
+
+    if (isUnemployed) {
+      this.occupationForm.get('occupationName').setValidators(null);
+      this.occupationForm.get('occupationName').updateValueAndValidity();
+      this.occupationForm.get('salary').setValidators(null);
+      this.occupationForm.get('salary').updateValueAndValidity();
+    } else {
+      this.occupationForm.get('occupationName').setValidators([Validators.required]);
+      this.occupationForm.get('occupationName').updateValueAndValidity();
+      this.occupationForm.get('salary').setValidators([Validators.required]);
+      this.occupationForm.get('salary').updateValueAndValidity();
+    }
+
+    if (needEmployerDetails) {
+      this.occupationForm.get('companyName').setValidators([Validators.required]);
+      this.occupationForm.get('companyContactNo').setValidators([Validators.required, phoneNumberValidator()]);
+      this.occupationForm.get('companyName').updateValueAndValidity();
+      this.occupationForm.get('companyContactNo').updateValueAndValidity();
+    } else {
+      this.occupationForm.get('companyName').setValidators(null);
+      this.occupationForm.get('companyContactNo').setValidators(null);
+      this.occupationForm.get('companyName').updateValueAndValidity();
+      this.occupationForm.get('companyContactNo').updateValueAndValidity();
     }
   }
 }
