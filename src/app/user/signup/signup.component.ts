@@ -6,6 +6,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {SignupPersonalDetailFormComponent} from "../signup-personal-detail-form/signup-personal-detail-form.component";
 import {SignupAddressFormComponent} from "../signup-address-form/signup-address-form.component";
 import {SignupOccupationFormComponent} from "../signup-occupation-form/signup-occupation-form.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -28,7 +29,8 @@ export class SignupComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private signupService: SignupService,
-              private notificationService: NzNotificationService) { }
+              private notificationService: NzNotificationService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -46,15 +48,41 @@ export class SignupComponent implements OnInit {
     this.healthFormComponent.updateTouchAndDirty();
 
     if (!this.form.valid) {
-      this.displayInvalidFormNotification();
+      const invalidFormList = this.filterInvalidForm();
+      this.displayInvalidFormNotification(invalidFormList);
       return;
     }
 
     this.signupService.registerAccount(this.form.value).subscribe(resp => {
-      if (resp == "OK") {
-        console.log("Account created successfully.");
+      if (resp) {
+        this.displaySignUpSuccessfulNotification();
+        this.router.navigate(['login']);
       }
+    }, error => {
+      this.notificationService.error("Error", "There's an error when submitting form.");
     });
+  }
+
+  private filterInvalidForm(): string[] {
+    let formList: string[] = [];
+
+    if (!this.form.get('personalDetail').valid) {
+      formList.push("Personal Detail Form")
+    }
+
+    if (!this.form.get('address').valid) {
+      formList.push("Address Form")
+    }
+
+    if (!this.form.get('occupation').valid) {
+      formList.push("Occupation Form")
+    }
+
+    if (!this.form.get('health').valid) {
+      formList.push("Health Form")
+    }
+
+    return formList;
   }
 
   movePage(newIndex: number) {
@@ -67,11 +95,20 @@ export class SignupComponent implements OnInit {
     this.healthFormComponent.addDiseaseFormGroup();
   }
 
-  private displayInvalidFormNotification() {
+  private displayInvalidFormNotification(invalidForms: string[]) {
+    if (!invalidForms || invalidForms.length == 0) {
+      return;
+    }
+
+    let errorMsg = "The following form(s) has invalid input fields. Please double check the form.<br/>";
+    invalidForms.forEach(name => {
+      errorMsg += "- " + name + "<br/>"
+    })
+
     this.notificationService.create(
       'error',
       'Form is invalid',
-      'Please ensure that all sections are valid.'
+      errorMsg
     )
   }
 
@@ -97,5 +134,12 @@ export class SignupComponent implements OnInit {
     this.showAddressForm = newIndex === 1;
     this.showOccupationForm = newIndex === 2;
     this.showHealthForm = newIndex === 3;
+  }
+
+  private displaySignUpSuccessfulNotification() {
+    const title: string = "Form is submitted!";
+    const content: string = "Your submission will be reviewed by the admin. Please schedule an appointment with the admin " +
+      "to review the submission. You should bring along supporting documents to support your details provided in occupation and health section."
+    this.notificationService.success(title, content);
   }
 }

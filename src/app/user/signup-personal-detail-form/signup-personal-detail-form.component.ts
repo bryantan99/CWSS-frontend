@@ -2,13 +2,11 @@ import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder, FormControl,
+  FormBuilder,
   FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors,
   Validators
 } from "@angular/forms";
-import {AuthService} from "../../auth/auth.service";
-import {uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
 import {
   confirmPasswordMatchValidator,
   passwordValidator,
@@ -36,8 +34,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   @Input('isVisible') isVisible: boolean;
   personalDetailForm: FormGroup;
 
-  constructor(private fb: FormBuilder,
-              private authService: AuthService) {
+  constructor(private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -46,8 +43,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
       nric: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       username: ['', {
-        validators: [Validators.required],
-        asyncValidators: [uniqueUsernameValidator(this.authService)]
+        validators: [Validators.required]
       }],
       password: ['', [Validators.required, passwordValidator()]],
       confirmPassword: [''],
