@@ -44,6 +44,11 @@ export class AuthService {
     return !(user === null);
   }
 
+  isAdminLoggedIn() {
+    let user = sessionStorage.getItem("username");
+    return !(user === null) && this.hasRole("ROLE_ADMIN") || this.hasRole("ROLE_SUPER_ADMIN");
+  }
+
   logOut() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("roleList");

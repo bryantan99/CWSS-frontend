@@ -12,13 +12,13 @@ export class HomepageComponent implements OnInit {
 
   nzSelectedIndex = 0;
   newPostModalIsVisible: boolean = false;
-  hasUserLoggedIn: boolean = false;
+  isAdminLoggedIn: boolean = false;
 
   constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.hasUserLoggedIn = this.authService.isUserLoggedIn();
+    this.isAdminLoggedIn = this.authService.isAdminLoggedIn();
   }
 
   openNewPostModal() {

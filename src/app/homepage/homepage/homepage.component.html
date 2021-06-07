@@ -8,7 +8,7 @@
 </nz-tabset>
 
 <ng-template #buttonTemplate>
-  <button nz-button *ngIf="nzSelectedIndex === 1 && hasUserLoggedIn" (click)="openNewPostModal()">Create New Post</button>
+  <button nz-button *ngIf="nzSelectedIndex === 1 && isAdminLoggedIn" (click)="openNewPostModal()">Create New Post</button>
 </ng-template>
 
 <app-new-post-modal [isVisible]="newPostModalIsVisible" (modalIsVisibleEmitter)="modalVisibleHasChange($event)" (addNewPostEmitter)="postListHasChanges($event)"></app-new-post-modal>

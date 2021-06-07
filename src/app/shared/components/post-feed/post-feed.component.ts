@@ -12,7 +12,7 @@ export class PostFeedComponent implements OnInit {
   adminPost: any[] = [];
   isLoading: boolean = false;
   dummyPhotoUrl: string = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
-  hasUserLoggedIn: boolean = false;
+  isAdminLoggedIn: boolean = false;
 
   constructor(private adminPostService: AdminPostService,
               private authService: AuthService) {
@@ -20,7 +20,7 @@ export class PostFeedComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAdminPosts();
-    this.hasUserLoggedIn = this.authService.isUserLoggedIn();
+    this.isAdminLoggedIn = this.authService.isAdminLoggedIn();
   }
 
   getAdminPosts() {
