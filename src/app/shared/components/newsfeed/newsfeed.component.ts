@@ -22,7 +22,7 @@ export class NewsfeedComponent implements OnInit {
     public getHealthNews() {
         this.healthNews = [];
         this.isLoading = true;
-        this.newsfeedService.getHealthNews("my", "health")
+        this.newsfeedService.getSearchedHealthNews("Malaysia health")
             .pipe(finalize(() => {
                 this.isLoading = false;
             }))
