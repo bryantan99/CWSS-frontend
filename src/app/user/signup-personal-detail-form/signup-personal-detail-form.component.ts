@@ -31,7 +31,7 @@ import {AuthService} from "../../auth/auth.service";
     }
   ]
 })
-export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAccessor {
+export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAccessor, Validators {
 
   @Input('isVisible') isVisible: boolean;
   personalDetailForm: FormGroup;
@@ -97,7 +97,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
     return {
       invalidForm: {
         valid: false,
-        message: "Personal Detail Form has invalid field(s)." + invalidCtrl
+        message: "Personal Detail Form has invalid field(s)."
       }
     }
   }
