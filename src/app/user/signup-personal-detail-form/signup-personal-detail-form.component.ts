@@ -12,6 +12,8 @@ import {
   passwordValidator,
   phoneNumberValidator
 } from "../../shared/validators/custom-validators";
+import {uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-signup-personal-detail-form',
@@ -34,7 +36,8 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   @Input('isVisible') isVisible: boolean;
   personalDetailForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -42,9 +45,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
       fullName: ['', Validators.required],
       nric: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      username: ['', {
-        validators: [Validators.required]
-      }],
+      username: ['', [Validators.required],[uniqueUsernameValidator(this.authService)]],
       password: ['', [Validators.required, passwordValidator()]],
       confirmPassword: [''],
       gender: ['', Validators.required],
@@ -81,13 +82,24 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    console.log("Basic Info validation", c);
-    return this.personalDetailForm.valid ? null : {
+    if (this.personalDetailForm.valid) {
+      return null;
+    }
+
+    let invalidCtrl = [];
+    for (const ctrlName in this.personalDetailForm.controls) {
+      const ctrl = this.personalDetailForm.get(ctrlName);
+      if (!ctrl.valid) {
+        invalidCtrl.push(ctrlName);
+      }
+    }
+
+    return {
       invalidForm: {
         valid: false,
-        message: "Personal Detail Form has invalid field(s)."
+        message: "Personal Detail Form has invalid field(s)." + invalidCtrl
       }
-    };
+    }
   }
 
   updateTouchAndDirty() {
@@ -95,5 +107,6 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
       this.personalDetailForm.controls[i].markAsDirty();
       this.personalDetailForm.controls[i].updateValueAndValidity();
     }
+    console.log(this.personalDetailForm);
   }
 }
