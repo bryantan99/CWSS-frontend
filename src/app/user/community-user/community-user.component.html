@@ -1,8 +1,8 @@
 <nz-table #fixedTable
           [nzLoading]="isLoading"
           [nzData]="listOfDisplayData"
-          [nzPageIndex]="pageIndex"
-          [nzPageSize]="pageSize"
+          [(nzPageIndex)]="pageIndex"
+          [(nzPageSize)]="pageSize"
           nzShowSizeChanger>
   <thead>
   <tr>
