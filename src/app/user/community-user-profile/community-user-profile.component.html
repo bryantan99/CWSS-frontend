@@ -1,4 +1,4 @@
-<nz-alert *ngIf="userProfile?.accIsActivate !== 'Y'"
+<nz-alert *ngIf="userProfile && userProfile.accIsActivate !== 'Y'"
           nzType="warning"
           nzMessage="Account is not activated"
           [nzDescription]="accountNotActivatedTemplate"
@@ -12,107 +12,111 @@
   <button nz-button nzDanger nzType="primary" (click)="rejectAccount()">Reject</button>
 </ng-template>
 
-<nz-card nzTitle="Personal Detail" class="mb-4">
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Full Name</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.fullName | uppercase) || '-'}}</nz-col>
-  </nz-row>
+<nz-spin [nzSpinning]="isLoading">
+  <nz-card nzTitle="Personal Detail" class="mb-4">
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Full Name</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.fullName | uppercase) || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Gender</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.gender | gender | uppercase) || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Gender</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.gender | gender | uppercase) || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">NRIC</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.nric || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">NRIC</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.nric || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Contact No.</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.contactNo || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Contact No.</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.contactNo || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Email</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.email || '-'}}</nz-col>
-  </nz-row>
-</nz-card>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Email</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.email || '-'}}</nz-col>
+    </nz-row>
+  </nz-card>
 
-<nz-card nzTitle="Address" class="mb-4">
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 1</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine1 || '-'}}</nz-col>
-  </nz-row>
+  <nz-card nzTitle="Address" class="mb-4">
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 1</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine1 || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 2</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine2 || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 2</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine2 || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Postcode</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.postcode || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Postcode</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.postcode || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">City</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.city || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">City</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.city || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">State</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.address?.state | state | uppercase) || '-'}}</nz-col>
-  </nz-row>
-</nz-card>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">State</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.address?.state | state | uppercase) || '-'}}</nz-col>
+    </nz-row>
+  </nz-card>
 
-<nz-card nzTitle="Occupation" class="mb-4">
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employment Status</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.employmentType | employmentType | uppercase) || '-'}}</nz-col>
-  </nz-row>
+  <nz-card nzTitle="Occupation" class="mb-4">
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employment Status</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.employmentType | employmentType | uppercase) || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Occupation Name</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.occupationName | uppercase) || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Occupation Name</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.occupationName | uppercase) || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Salary</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">RM {{((userProfile?.occupation?.salary | number: '1.2-2')) || '0.00'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Salary</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">RM {{((userProfile?.occupation?.salary | number: '1.2-2')) || '0.00'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Company</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyName || '-'}}</nz-col>
-  </nz-row>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Company</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyName || '-'}}</nz-col>
+    </nz-row>
 
-  <nz-row class="mb-2">
-    <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-col>
-    <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyContactNo || '-'}}</nz-col>
-  </nz-row>
-</nz-card>
+    <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyContactNo || '-'}}</nz-col>
+    </nz-row>
+  </nz-card>
 
-<nz-card nzTitle="Health" class="mb-4">
-  <nz-table #healthTable
-            [(nzPageIndex)]="healthTablePageIndex"
-            [(nzPageSize)]="healthTablePageSize"
-            [nzData]="userProfile?.healthModelList">
-    <thead>
-    <tr>
-      <th>No.</th>
-      <th>Disease Name</th>
-      <th>Validated By</th>
-      <th>Validated Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of healthTable.data; let i = index">
-      <td>{{(healthTablePageIndex - 1) * healthTablePageSize + i + 1}}</td>
-      <td>{{data?.diseaseName || '-'}}</td>
-      <td>{{data?.approvedBy || '-'}}</td>
-      <td>{{(data?.approvedDate | date: 'medium') || '-'}}</td>
-    </tr>
-    </tbody>
-  </nz-table>
-</nz-card>
+  <nz-card nzTitle="Health" class="mb-4">
+    <nz-table #healthTable
+              [(nzPageIndex)]="healthTablePageIndex"
+              [(nzPageSize)]="healthTablePageSize"
+              [nzData]="userProfile?.healthModelList">
+      <thead>
+      <tr>
+        <th>No.</th>
+        <th>Disease Name</th>
+        <th>Validated By</th>
+        <th>Validated Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of healthTable.data; let i = index">
+        <td>{{(healthTablePageIndex - 1) * healthTablePageSize + i + 1}}</td>
+        <td>{{data?.diseaseName || '-'}}</td>
+        <td>{{data?.approvedBy || '-'}}</td>
+        <td>{{(data?.approvedDate | date: 'medium') || '-'}}</td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</nz-spin>
+
+
