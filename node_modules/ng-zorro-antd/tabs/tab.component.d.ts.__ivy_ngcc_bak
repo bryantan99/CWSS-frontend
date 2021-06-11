@@ -2,7 +2,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
  */
-import { EventEmitter, InjectionToken, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
+import { EventEmitter, InjectionToken, OnChanges, OnDestroy, SimpleChanges, TemplateRef } from '@angular/core';
 import { TabTemplateContext } from './interfaces';
 import { Subject } from 'rxjs';
 import { BooleanInput, NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -11,7 +11,7 @@ import { NzTabLinkDirective, NzTabLinkTemplateDirective } from './tab-link.direc
  * Used to provide a tab set to a tab without causing a circular dependency.
  */
 export declare const NZ_TAB_SET: InjectionToken<any>;
-export declare class NzTabComponent implements OnChanges, OnDestroy, OnInit {
+export declare class NzTabComponent implements OnChanges, OnDestroy {
     closestTabSet: NzSafeAny;
     static ngAcceptInputType_nzDisabled: BooleanInput;
     static ngAcceptInputType_nzClosable: BooleanInput;
@@ -25,11 +25,6 @@ export declare class NzTabComponent implements OnChanges, OnDestroy, OnInit {
     readonly nzDeselect: EventEmitter<void>;
     readonly nzClick: EventEmitter<void>;
     readonly nzContextmenu: EventEmitter<MouseEvent>;
-    /**
-     * @deprecated Will be removed in 11.0.0
-     * @breaking-change 11.0.0
-     */
-    tabLinkTemplate: TemplateRef<void>;
     nzTabLinkTemplateDirective: NzTabLinkTemplateDirective;
     template: TemplateRef<void> | null;
     linkDirective: NzTabLinkDirective;
@@ -43,5 +38,4 @@ export declare class NzTabComponent implements OnChanges, OnDestroy, OnInit {
     constructor(closestTabSet: NzSafeAny);
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
-    ngOnInit(): void;
 }

@@ -1,8 +1,7 @@
-<nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar"
-            nzCollapsible
-            [nzCollapsedWidth]="0"
+<nz-layout class="layout">
+  <nz-sider nzCollapsible
             nzBreakpoint="lg"
+            [nzCollapsedWidth]="0"
             [(nzCollapsed)]="isCollapsed"
             [nzTrigger]="null">
     <div class="sidebar-logo">
@@ -12,37 +11,35 @@
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <ul *ngIf="!hasUserLoggedIn()">
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/login">Login</a>
-        </li>
-      </ul>
-      <ul *ngIf="!hasUserLoggedIn()">
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/signup">Sign up</a>
-        </li>
-      </ul>
-      <ul *ngIf="isAdminUser()">
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/community-user">User</a>
-        </li>
-      </ul>
-<!--      <ul *ngIf="hasUserLoggedIn()">-->
-<!--        <li nz-menu-item nzMatchRouter>-->
-<!--          <a routerLink="/community-user-assistance" *ngIf="!isAdminUser()">Assistance</a>-->
-<!--          <a routerLink="/admin-assistance" *ngIf="isAdminUser()">Assistance</a>-->
-<!--        </li>-->
-<!--      </ul>-->
-      <ul>
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/about">About Us</a>
-        </li>
-      </ul>
-      <ul  *ngIf="hasUserLoggedIn()">
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/logout">Logout</a>
-        </li>
-      </ul>
+      <li nz-menu-item nzMatchRouter *ngIf="!hasUserLoggedIn()" routerLink="/login">
+        <i nz-icon nzType="user"></i>
+        <a nz-button nzType="link">Login</a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter *ngIf="!hasUserLoggedIn()" routerLink="/signup">
+        <i nz-icon nzType="user"></i>
+        <a nz-button nzType="link">Sign up</a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter *ngIf="isAdminUser()" routerLink="/community-user">
+        <i nz-icon nzType="user"></i>
+        <a nz-button nzType="link">User</a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter *ngIf="hasUserLoggedIn()" [routerLink]="isAdminUser() ? '/admin-assistance' : 'community-user-assistance'">
+        <i nz-icon nzType="upload"></i>
+          <a nz-button nzType="link">Assistance</a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter routerLink="/about">
+        <i nz-icon nzType="info"></i>
+        <a nz-button nzType="link">About Us</a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter *ngIf="hasUserLoggedIn()" routerLink="/logout">
+        <i nz-icon nzType="video-camera"></i>
+        <a nz-button nzType="link">Logout</a>
+      </li>
     </ul>
   </nz-sider>
   <nz-layout>
@@ -61,5 +58,6 @@
         <router-outlet></router-outlet>
       </div>
     </nz-content>
+    <nz-footer>Health Support System for Aulong Community Service Centre ©2021</nz-footer>
   </nz-layout>
 </nz-layout>

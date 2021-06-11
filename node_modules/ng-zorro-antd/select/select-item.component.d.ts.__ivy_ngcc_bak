@@ -7,7 +7,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 export declare class NzSelectItemComponent {
     private elementRef;
     disabled: boolean;
-    label: string | null | undefined;
+    label: string | number | null | undefined;
     deletable: boolean;
     removeIcon: TemplateRef<NzSafeAny> | null;
     contentTemplateOutletContext: NzSafeAny | null;

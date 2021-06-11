@@ -2,6 +2,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
  */
+import { AnimationEvent } from '@angular/animations';
 import { ComponentType, Overlay } from '@angular/cdk/overlay';
 import { ChangeDetectorRef, EventEmitter, Injector, OnDestroy, OnInit } from '@angular/core';
 import { MessageConfig, NzConfigService } from 'ng-zorro-antd/core/config';
@@ -46,8 +47,11 @@ export declare abstract class NzMNComponent implements OnInit, OnDestroy {
         id: string;
         userAction: boolean;
     }>;
+    readonly animationStateChanged: Subject<AnimationEvent>;
     protected options: Required<NzMessageDataOptions>;
     protected autoClose?: boolean;
+    protected closeTimer?: number;
+    protected userAction: boolean;
     protected eraseTimer: number | null;
     protected eraseTimingStart?: number;
     protected eraseTTL: number;

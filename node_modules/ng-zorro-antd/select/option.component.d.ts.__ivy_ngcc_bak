@@ -13,9 +13,9 @@ export declare class NzOptionComponent implements OnChanges, OnInit, OnDestroy {
     static ngAcceptInputType_nzCustomContent: BooleanInput;
     private destroy$;
     changes: Subject<unknown>;
-    groupLabel: string | TemplateRef<NzSafeAny> | null;
+    groupLabel: string | number | TemplateRef<NzSafeAny> | null;
     template: TemplateRef<NzSafeAny>;
-    nzLabel: string | null;
+    nzLabel: string | number | null;
     nzValue: NzSafeAny | null;
     nzDisabled: boolean;
     nzHide: boolean;

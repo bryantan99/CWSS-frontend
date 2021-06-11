@@ -2,12 +2,17 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
  */
-import { ElementRef, EventEmitter, OnChanges, Renderer2, SimpleChanges, TemplateRef } from '@angular/core';
+import { Direction, Directionality } from '@angular/cdk/bidi';
+import { ChangeDetectorRef, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges, TemplateRef } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzPaginationI18nInterface } from 'ng-zorro-antd/i18n';
 import { NzPaginationItemComponent } from './pagination-item.component';
 import { PaginationItemRenderContext } from './pagination.types';
-export declare class NzPaginationDefaultComponent implements OnChanges {
+export declare class NzPaginationDefaultComponent implements OnChanges, OnDestroy, OnInit {
+    private cdr;
+    private renderer;
+    private elementRef;
+    private directionality;
     template: TemplateRef<NzSafeAny>;
     nzSize: 'default' | 'small';
     itemRender: TemplateRef<PaginationItemRenderContext> | null;
@@ -27,7 +32,12 @@ export declare class NzPaginationDefaultComponent implements OnChanges {
     readonly pageSizeChange: EventEmitter<number>;
     ranges: number[];
     listOfPageItem: Array<Partial<NzPaginationItemComponent>>;
-    constructor(renderer: Renderer2, elementRef: ElementRef);
+    dir: Direction;
+    private destroy$;
+    constructor(cdr: ChangeDetectorRef, renderer: Renderer2, elementRef: ElementRef, directionality: Directionality);
+    ngOnInit(): void;
+    private updateRtlStyle;
+    ngOnDestroy(): void;
     jumpPage(index: number): void;
     jumpDiff(diff: number): void;
     trackByPageItem(_: number, value: Partial<NzPaginationItemComponent>): string;

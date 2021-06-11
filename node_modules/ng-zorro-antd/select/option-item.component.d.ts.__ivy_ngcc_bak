@@ -13,7 +13,7 @@ export declare class NzOptionItemComponent implements OnChanges {
     template: TemplateRef<NzSafeAny> | null;
     disabled: boolean;
     showState: boolean;
-    label: string | null;
+    label: string | number | null;
     value: NzSafeAny | null;
     activatedValue: NzSafeAny | null;
     listOfSelectedValue: NzSafeAny[];

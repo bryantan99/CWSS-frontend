@@ -8,6 +8,7 @@ import { NzConfigKey, NzConfigService } from 'ng-zorro-antd/core/config';
 import { NzResizeService } from 'ng-zorro-antd/core/services';
 import { BooleanInput, NumberInput, NzSafeAny, NzTSType } from 'ng-zorro-antd/core/types';
 import { NzI18nService, NzTextI18nInterface } from 'ng-zorro-antd/i18n';
+import { Direction, Directionality } from '@angular/cdk/bidi';
 import { NzTextCopyComponent } from './text-copy.component';
 import { NzTextEditComponent } from './text-edit.component';
 export declare class NzTypographyComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -19,6 +20,7 @@ export declare class NzTypographyComponent implements OnInit, AfterViewInit, OnD
     private platform;
     private i18n;
     private resizeService;
+    private directionality;
     readonly _nzModuleName: NzConfigKey;
     static ngAcceptInputType_nzCopyable: BooleanInput;
     static ngAcceptInputType_nzEditable: BooleanInput;
@@ -60,6 +62,7 @@ export declare class NzTypographyComponent implements OnInit, AfterViewInit, OnD
     isEllipsis: boolean;
     expanded: boolean;
     ellipsisStr: string;
+    dir: Direction;
     get hasEllipsisObservers(): boolean;
     get canCssEllipsis(): boolean;
     get hasOperationsWithEllipsis(): boolean;
@@ -68,7 +71,7 @@ export declare class NzTypographyComponent implements OnInit, AfterViewInit, OnD
     private destroy$;
     private windowResizeSubscription;
     get copyText(): string;
-    constructor(nzConfigService: NzConfigService, host: ElementRef<HTMLElement>, cdr: ChangeDetectorRef, viewContainerRef: ViewContainerRef, renderer: Renderer2, platform: Platform, i18n: NzI18nService, document: NzSafeAny, resizeService: NzResizeService);
+    constructor(nzConfigService: NzConfigService, host: ElementRef<HTMLElement>, cdr: ChangeDetectorRef, viewContainerRef: ViewContainerRef, renderer: Renderer2, platform: Platform, i18n: NzI18nService, document: NzSafeAny, resizeService: NzResizeService, directionality: Directionality);
     onTextCopy(text: string): void;
     onStartEditing(): void;
     onEndEditing(text: string): void;

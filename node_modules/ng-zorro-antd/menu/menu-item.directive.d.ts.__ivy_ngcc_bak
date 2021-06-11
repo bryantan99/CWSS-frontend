@@ -2,6 +2,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
  */
+import { Direction, Directionality } from '@angular/cdk/bidi';
 import { AfterContentInit, ChangeDetectorRef, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges } from '@angular/core';
 import { Router, RouterLink, RouterLinkWithHref } from '@angular/router';
 import { BooleanInput } from 'ng-zorro-antd/core/types';
@@ -13,6 +14,7 @@ export declare class NzMenuItemDirective implements OnInit, OnChanges, OnDestroy
     private cdr;
     private nzSubmenuService;
     isMenuInsideDropDown: boolean;
+    private directionality;
     private routerLink?;
     private routerLinkWithHref?;
     private router?;
@@ -25,6 +27,7 @@ export declare class NzMenuItemDirective implements OnInit, OnChanges, OnDestroy
     level: number;
     selected$: Subject<boolean>;
     inlinePaddingLeft: number | null;
+    dir: Direction;
     nzPaddingLeft?: number;
     nzDisabled: boolean;
     nzSelected: boolean;
@@ -39,7 +42,7 @@ export declare class NzMenuItemDirective implements OnInit, OnChanges, OnDestroy
     private updateRouterActive;
     private hasActiveLinks;
     private isLinkActive;
-    constructor(nzMenuService: MenuService, cdr: ChangeDetectorRef, nzSubmenuService: NzSubmenuService, isMenuInsideDropDown: boolean, routerLink?: RouterLink | undefined, routerLinkWithHref?: RouterLinkWithHref | undefined, router?: Router | undefined);
+    constructor(nzMenuService: MenuService, cdr: ChangeDetectorRef, nzSubmenuService: NzSubmenuService, isMenuInsideDropDown: boolean, directionality: Directionality, routerLink?: RouterLink | undefined, routerLinkWithHref?: RouterLinkWithHref | undefined, router?: Router | undefined);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngOnChanges(changes: SimpleChanges): void;

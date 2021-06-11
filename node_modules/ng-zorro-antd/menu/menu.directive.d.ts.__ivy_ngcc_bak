@@ -2,6 +2,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
  */
+import { Direction, Directionality } from '@angular/cdk/bidi';
 import { AfterContentInit, ChangeDetectorRef, EventEmitter, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges } from '@angular/core';
 import { BooleanInput } from 'ng-zorro-antd/core/types';
 import { NzMenuItemDirective } from './menu-item.directive';
@@ -14,6 +15,7 @@ export declare class NzMenuDirective implements AfterContentInit, OnInit, OnChan
     private nzMenuService;
     isMenuInsideDropDown: boolean;
     private cdr;
+    private directionality;
     static ngAcceptInputType_nzInlineCollapsed: BooleanInput;
     static ngAcceptInputType_nzSelectable: BooleanInput;
     listOfNzMenuItemDirective: QueryList<NzMenuItemDirective>;
@@ -25,13 +27,14 @@ export declare class NzMenuDirective implements AfterContentInit, OnInit, OnChan
     nzSelectable: boolean;
     readonly nzClick: EventEmitter<NzMenuItemDirective>;
     actualMode: NzMenuModeType;
+    dir: Direction;
     private inlineCollapsed$;
     private mode$;
     private destroy$;
     private listOfOpenedNzSubMenuComponent;
     setInlineCollapsed(inlineCollapsed: boolean): void;
     updateInlineCollapse(): void;
-    constructor(nzMenuService: MenuService, isMenuInsideDropDown: boolean, cdr: ChangeDetectorRef);
+    constructor(nzMenuService: MenuService, isMenuInsideDropDown: boolean, cdr: ChangeDetectorRef, directionality: Directionality);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngOnChanges(changes: SimpleChanges): void;

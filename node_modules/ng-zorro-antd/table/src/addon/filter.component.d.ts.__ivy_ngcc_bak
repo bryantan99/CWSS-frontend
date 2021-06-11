@@ -23,10 +23,10 @@ export declare class NzTableFilterComponent implements OnChanges, OnDestroy, OnI
     readonly filterChange: EventEmitter<any>;
     private destroy$;
     locale: NzTableI18nInterface;
-    isChanged: boolean;
     isChecked: boolean;
     isVisible: boolean;
     listOfParsedFilter: NzThItemInterface[];
+    listOfChecked: NzSafeAny[];
     trackByValue(_: number, item: NzThItemInterface): NzSafeAny;
     check(filter: NzThItemInterface): void;
     confirm(): void;

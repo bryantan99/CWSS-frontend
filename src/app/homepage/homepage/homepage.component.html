@@ -1,4 +1,4 @@
-<nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzTabBarExtraContent]="buttonTemplate">
+<nz-tabset nzType="card" [(nzSelectedIndex)]="nzSelectedIndex" [nzTabBarExtraContent]="buttonTemplate">
   <nz-tab nzTitle="Newsfeed">
     <app-newsfeed *ngIf="nzSelectedIndex === 0"></app-newsfeed>
   </nz-tab>

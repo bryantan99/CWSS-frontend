@@ -9,6 +9,6 @@ export declare class NzTableContentComponent {
     tableLayout: NzTableLayout;
     theadTemplate: TemplateRef<NzSafeAny> | null;
     contentTemplate: TemplateRef<NzSafeAny> | null;
-    listOfColWidth: Array<string | null>;
+    listOfColWidth: ReadonlyArray<string | null>;
     scrollX: string | null;
 }

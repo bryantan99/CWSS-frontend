@@ -12,6 +12,7 @@ export declare class NzPaginationItemComponent implements OnChanges {
     locale: NzPaginationI18nInterface;
     index: number | null;
     disabled: boolean;
+    direction: string;
     type: PaginationItemType | string | null;
     itemRender: TemplateRef<PaginationItemRenderContext> | null;
     readonly diffIndex: EventEmitter<number>;

@@ -5,10 +5,12 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { Subject } from 'rxjs';
+import { Direction } from '@angular/cdk/bidi';
 import { NzMNContainerComponent } from './base';
 import { NzMessageData } from './typings';
 export declare class NzMessageContainerComponent extends NzMNContainerComponent {
     readonly destroy$: Subject<void>;
+    dir: Direction;
     instances: Array<Required<NzMessageData>>;
     top?: string | null;
     constructor(cdr: ChangeDetectorRef, nzConfigService: NzConfigService);

@@ -8,7 +8,7 @@ import { NzTableLayout } from '../table.types';
 export declare class NzTableInnerDefaultComponent {
     private elementRef;
     tableLayout: NzTableLayout;
-    listOfColWidth: Array<string | null>;
+    listOfColWidth: ReadonlyArray<string | null>;
     theadTemplate: TemplateRef<NzSafeAny> | null;
     contentTemplate: TemplateRef<NzSafeAny> | null;
     constructor(elementRef: ElementRef);

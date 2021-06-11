@@ -6,6 +6,6 @@ import { ElementRef, TemplateRef } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 export declare class NzOptionItemGroupComponent {
     private elementRef;
-    nzLabel: string | TemplateRef<NzSafeAny> | null;
+    nzLabel: string | number | TemplateRef<NzSafeAny> | null;
     constructor(elementRef: ElementRef);
 }

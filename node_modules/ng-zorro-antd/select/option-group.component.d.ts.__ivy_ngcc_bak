@@ -6,7 +6,7 @@ import { OnChanges, TemplateRef } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { Subject } from 'rxjs';
 export declare class NzOptionGroupComponent implements OnChanges {
-    nzLabel: string | TemplateRef<NzSafeAny> | null;
+    nzLabel: string | number | TemplateRef<NzSafeAny> | null;
     changes: Subject<void>;
     ngOnChanges(): void;
 }

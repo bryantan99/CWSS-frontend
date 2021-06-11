@@ -14,6 +14,7 @@ export declare class NzDropDownDirective implements AfterViewInit, OnDestroy, On
     private viewContainerRef;
     private platform;
     static ngAcceptInputType_nzBackdrop: BooleanInput;
+    static ngAcceptInputType_nzHasBackdrop: BooleanInput;
     static ngAcceptInputType_nzClickHide: BooleanInput;
     static ngAcceptInputType_nzDisabled: BooleanInput;
     static ngAcceptInputType_nzVisible: BooleanInput;
@@ -28,10 +29,11 @@ export declare class NzDropDownDirective implements AfterViewInit, OnDestroy, On
     nzTrigger: 'click' | 'hover';
     nzMatchWidthElement: ElementRef | null;
     /**
-     * @deprecated Not supported.
-     * @breaking-change 11.0.0
+     * @deprecated Not supported, use `nzHasBackDrop` instead.
+     * @breaking-change 12.0.0
      */
     nzBackdrop: boolean;
+    nzHasBackdrop: boolean;
     nzClickHide: boolean;
     nzDisabled: boolean;
     nzVisible: boolean;

@@ -10,6 +10,7 @@ import { NzSelectItemInterface, NzSelectModeType, NzSelectTopControlItemType } f
 export declare class NzSelectTopControlComponent implements OnChanges {
     private elementRef;
     noAnimation?: NzNoAnimationDirective | undefined;
+    nzId: string | null;
     showSearch: boolean;
     placeHolder: string | TemplateRef<NzSafeAny> | null;
     open: boolean;
@@ -28,7 +29,6 @@ export declare class NzSelectTopControlComponent implements OnChanges {
     tokenSeparators: string[];
     readonly tokenize: EventEmitter<string[]>;
     readonly inputValueChange: EventEmitter<string>;
-    readonly animationEnd: EventEmitter<void>;
     readonly deleteItem: EventEmitter<NzSelectItemInterface>;
     nzSelectSearchComponent: NzSelectSearchComponent;
     listOfSlicedItem: NzSelectTopControlItemType[];
@@ -46,7 +46,6 @@ export declare class NzSelectTopControlComponent implements OnChanges {
     blur(): void;
     trackValue(_index: number, option: NzSelectTopControlItemType): NzSafeAny;
     onDeleteItem(item: NzSelectItemInterface): void;
-    onAnimationEnd(): void;
     constructor(elementRef: ElementRef, noAnimation?: NzNoAnimationDirective | undefined);
     ngOnChanges(changes: SimpleChanges): void;
 }

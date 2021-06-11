@@ -8,7 +8,7 @@ export declare class NzTrMeasureComponent implements AfterViewInit, OnDestroy {
     private nzResizeObserver;
     private ngZone;
     private elementRef;
-    listOfMeasureColumn: string[];
+    listOfMeasureColumn: ReadonlyArray<string>;
     readonly listOfAutoWidth: EventEmitter<number[]>;
     listOfTdElement: QueryList<ElementRef>;
     private destroy$;

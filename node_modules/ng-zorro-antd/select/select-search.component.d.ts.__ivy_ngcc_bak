@@ -8,6 +8,7 @@ export declare class NzSelectSearchComponent implements AfterViewInit, OnChanges
     private elementRef;
     private renderer;
     private focusMonitor;
+    nzId: string | null;
     disabled: boolean;
     mirrorSync: boolean;
     showInput: boolean;

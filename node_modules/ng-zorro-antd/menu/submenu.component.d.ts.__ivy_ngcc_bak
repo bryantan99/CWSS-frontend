@@ -2,6 +2,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
  */
+import { Direction, Directionality } from '@angular/cdk/bidi';
 import { ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import { Platform } from '@angular/cdk/platform';
 import { AfterContentInit, ChangeDetectorRef, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef } from '@angular/core';
@@ -17,6 +18,7 @@ export declare class NzSubMenuComponent implements OnInit, OnDestroy, AfterConte
     nzSubmenuService: NzSubmenuService;
     private platform;
     isMenuInsideDropDown: boolean;
+    private directionality;
     noAnimation?: NzNoAnimationDirective | undefined;
     static ngAcceptInputType_nzOpen: BooleanInput;
     static ngAcceptInputType_nzDisabled: BooleanInput;
@@ -40,13 +42,14 @@ export declare class NzSubMenuComponent implements OnInit, OnDestroy, AfterConte
     overlayPositions: import("@angular/cdk/overlay").ConnectionPositionPair[];
     isSelected: boolean;
     isActive: boolean;
+    dir: Direction;
     /** set the submenu host open status directly **/
     setOpenStateWithoutDebounce(open: boolean): void;
     toggleSubMenu(): void;
     setMouseEnterState(value: boolean): void;
     setTriggerWidth(): void;
     onPositionChange(position: ConnectedOverlayPositionChange): void;
-    constructor(nzMenuService: MenuService, cdr: ChangeDetectorRef, nzSubmenuService: NzSubmenuService, platform: Platform, isMenuInsideDropDown: boolean, noAnimation?: NzNoAnimationDirective | undefined);
+    constructor(nzMenuService: MenuService, cdr: ChangeDetectorRef, nzSubmenuService: NzSubmenuService, platform: Platform, isMenuInsideDropDown: boolean, directionality: Directionality, noAnimation?: NzNoAnimationDirective | undefined);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
