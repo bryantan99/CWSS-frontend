@@ -92,3 +92,27 @@
     <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyContactNo || '-'}}</nz-col>
   </nz-row>
 </nz-card>
+
+<nz-card nzTitle="Health" class="mb-4">
+  <nz-table #healthTable
+            [(nzPageIndex)]="healthTablePageIndex"
+            [(nzPageSize)]="healthTablePageSize"
+            [nzData]="userProfile?.healthModelList">
+    <thead>
+    <tr>
+      <th>No.</th>
+      <th>Disease Name</th>
+      <th>Validated By</th>
+      <th>Validated Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of healthTable.data; let i = index">
+      <td>{{(healthTablePageIndex - 1) * healthTablePageSize + i + 1}}</td>
+      <td>{{data?.diseaseName || '-'}}</td>
+      <td>{{data?.approvedBy || '-'}}</td>
+      <td>{{(data?.approvedDate | date: 'medium') || '-'}}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</nz-card>

@@ -11,6 +11,8 @@ export class CommunityUserProfileComponent implements OnInit {
 
   @Input('username') username: string;
   userProfile: any;
+  healthTablePageSize: number = 10;
+  healthTablePageIndex: number = 1;
 
   constructor(private route: ActivatedRoute,
               private location: Location,
