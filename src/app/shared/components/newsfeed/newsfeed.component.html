@@ -1,8 +1,20 @@
 <nz-spin [nzSpinning]="isLoading">
-  <h2 class="mb-4" nz-typography>Health News</h2>
+  <nz-row class="mb-4">
+    <nz-col [nzXs]="24" [nzMd]="4">
+      <h2 nz-typography>Health News</h2>
+    </nz-col>
+    <nz-col [nzXs]="24" [nzMd]="20" class="text-end">
+      <nz-pagination [nzTotal]="totalResult"
+                     [(nzPageIndex)]="pageIndex"
+                     [nzPageSize]="PAGE_SIZE"
+                     (nzPageIndexChange)="pageIndexChange($event)"
+      nzResponsive>
+      </nz-pagination>
+    </nz-col>
+  </nz-row>
   <div class="container">
     <div class="row">
-      <div class="col-lg-4 mb-4" *ngFor="let news of healthNews">
+      <div class="col-lg-4 mb-4" *ngFor="let news of newsApiResponseModel?.articles">
         <nz-card [nzCover]="coverTemplate">
           <ng-template #coverTemplate>
             <img style="height: 380px; object-fit: cover; object-position: center center" src="{{news.urlToImage}}"
@@ -20,5 +32,14 @@
         </nz-card>
       </div>
     </div>
+    <nz-row>
+      <nz-col [nzSpan]="24" class="text-end">
+        <nz-pagination [nzTotal]="totalResult"
+                       [(nzPageIndex)]="pageIndex"
+                       [nzPageSize]="PAGE_SIZE"
+                       (nzPageIndexChange)="pageIndexChange($event)" nzResponsive>
+        </nz-pagination>
+      </nz-col>
+    </nz-row>
   </div>
 </nz-spin>

@@ -1,4 +1,4 @@
-export interface NewsModel {
+export interface ArticleModel {
   source: { id: any; name: string };
   author: any;
   title: string;

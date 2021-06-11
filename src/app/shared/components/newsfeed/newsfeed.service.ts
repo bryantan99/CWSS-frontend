@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
+import {NewsApiResponseModel} from "../../models/news-api-response-model";
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +29,13 @@ export class NewsfeedService {
     return this.http.get(this.NEWS_API_TOP_HEADLINES, {params: params});
   }
 
-  getSearchedHealthNews(keyword: string): Observable<any> {
-    let params = new HttpParams().set("apiKey", this.NEWS_API_KEY).set("q", keyword);
-    return this.http.get(this.NEWS_API_SEARCH, {params: params})
+  getSearchedHealthNews(keyword: string, pageIndex: string, pageSize: string): Observable<NewsApiResponseModel> {
+    let params = new HttpParams()
+      .set("apiKey", this.NEWS_API_KEY)
+      .set("q", keyword)
+      .set("page", pageIndex)
+      .set("pageSize", pageSize)
+      .set("excludeDomains", "techcrunch.com");
+    return this.http.get<NewsApiResponseModel>(this.NEWS_API_SEARCH, {params: params})
   }
 }

@@ -35,6 +35,7 @@ import {NzEmptyModule} from "ng-zorro-antd/empty";
 import {NzTypographyModule} from "ng-zorro-antd/typography";
 import {NzStepsModule} from "ng-zorro-antd/steps";
 import {NzNotificationModule} from "ng-zorro-antd/notification";
+import {NzPaginationModule} from "ng-zorro-antd/pagination";
 
 export const SHARED_ZORRO_MODULES = [
   NzButtonModule,
@@ -73,5 +74,6 @@ export const SHARED_ZORRO_MODULES = [
   NzEmptyModule,
   NzTypographyModule,
   NzStepsModule,
-  NzNotificationModule
+  NzNotificationModule,
+  NzPaginationModule
 ];
