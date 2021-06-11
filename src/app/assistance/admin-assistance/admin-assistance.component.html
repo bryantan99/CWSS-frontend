@@ -1,0 +1,29 @@
+<nz-table #basicTable
+          [nzPageIndex]="pageIndex"
+          [nzPageSize]="pageSize"
+          [nzData]="listOfAssistanceRecord">
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>Assistance ID</th>
+    <th>Issue Title</th>
+    <th>Applicant</th>
+    <th>Person-In-Charge</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let record of basicTable.data; let i = index">
+    <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+    <td>{{ record.assistanceId }}</td>
+    <td>{{ record.issueTitle }}</td>
+    <td>{{ record.applicantName }}</td>
+    <td>{{ record.adminName }}</td>
+    <td>{{ record.status }}</td>
+    <td>
+      <a [routerLink]="['/assistance-record']" [queryParams]="{assistanceId: record.assistanceId}">View</a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>

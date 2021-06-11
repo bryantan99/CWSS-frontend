@@ -18,6 +18,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UserModule} from "./user/user.module";
 import {AppService} from "./app.service";
 import {BasicAuthInterceptorService} from "./shared/services/basic-auth-interceptor.service";
+import {AssistanceModule} from "./assistance/assistance.module";
 
 registerLocaleData(en);
 
@@ -37,7 +38,8 @@ registerLocaleData(en);
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    UserModule
+    UserModule,
+    AssistanceModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }, AppService, {provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
