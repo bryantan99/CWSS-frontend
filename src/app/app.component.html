@@ -12,12 +12,12 @@
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
       <li nz-menu-item nzMatchRouter *ngIf="!hasUserLoggedIn()" routerLink="/login">
-        <i nz-icon nzType="user"></i>
+        <i nz-icon nzType="login"></i>
         <a nz-button nzType="link">Login</a>
       </li>
 
       <li nz-menu-item nzMatchRouter *ngIf="!hasUserLoggedIn()" routerLink="/signup">
-        <i nz-icon nzType="user"></i>
+        <i nz-icon nzType="user-add"></i>
         <a nz-button nzType="link">Sign up</a>
       </li>
 
@@ -27,7 +27,7 @@
       </li>
 
       <li nz-menu-item nzMatchRouter *ngIf="hasUserLoggedIn()" [routerLink]="isAdminUser() ? '/admin-assistance' : 'community-user-assistance'">
-        <i nz-icon nzType="upload"></i>
+        <i nz-icon nzType="alert"></i>
           <a nz-button nzType="link">Assistance</a>
       </li>
 
@@ -37,7 +37,7 @@
       </li>
 
       <li nz-menu-item nzMatchRouter *ngIf="hasUserLoggedIn()" routerLink="/logout">
-        <i nz-icon nzType="video-camera"></i>
+        <i nz-icon nzType="logout"></i>
         <a nz-button nzType="link">Logout</a>
       </li>
     </ul>
