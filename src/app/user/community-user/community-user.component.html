@@ -13,6 +13,12 @@
         <i nz-icon nzType="search"></i>
       </nz-filter-trigger>
     </th>
+    <th>
+      NRIC no.
+      <nz-filter-trigger [(nzVisible)]="nricFilterIsVisible" [nzActive]="nricSearchValue.length > 0" [nzDropdownMenu]="nricFilterMenu">
+        <i nz-icon nzType="search"></i>
+      </nz-filter-trigger>
+    </th>
     <th>Email</th>
     <th [nzFilters]="accountStatusColumnItem.listOfFilter"
         [nzFilterFn]="accountStatusColumnItem.filterFn"
@@ -26,6 +32,7 @@
   <tr *ngFor="let data of fixedTable.data, let i = index">
     <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
     <td>{{ data?.fullName | uppercase }}</td>
+    <td>{{ data?.nricNo || '-' }}</td>
     <td>{{ data?.email || '-' }}</td>
     <td>
       <nz-tag [nzColor]="'green'" *ngIf="data?.isActive === 'Y'">Activated</nz-tag>
@@ -39,8 +46,16 @@
 
 <nz-dropdown-menu #fullNameFilterMenu="nzDropdownMenu">
   <div class="ant-table-filter-dropdown p-2">
-    <input class="mb-2" type="text" nz-input placeholder="Search name" [(ngModel)]="fullNameSearchValue" />
+    <input class="mb-2" type="text" nz-input placeholder="Search name" [(ngModel)]="fullNameSearchValue"/>
     <button nz-button nzSize="small" nzType="primary" (click)="searchFullName()" class="me-2">Search</button>
     <button nz-button nzSize="small" (click)="resetFullName()">Reset</button>
+  </div>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #nricFilterMenu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown p-2">
+    <input class="mb-2" type="text" nz-input placeholder="Search NRIC" [(ngModel)]="nricSearchValue"/>
+    <button nz-button nzSize="small" nzType="primary" (click)="searchNric()" class="me-2">Search</button>
+    <button nz-button nzSize="small" (click)="resetNric()">Reset</button>
   </div>
 </nz-dropdown-menu>
