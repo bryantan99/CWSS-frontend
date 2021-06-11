@@ -3,6 +3,8 @@ import {CommunityUserTableModel} from "../../shared/models/community-user-table-
 import {CommunityUserService} from "../../shared/services/community-user.service";
 import {finalize} from "rxjs/operators";
 import {TableColumnItemModel} from "../../shared/models/table-column-item-model";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NotificationService} from "../../shared/services/notification.service";
 
 @Component({
   selector: 'app-community-user',
@@ -35,7 +37,8 @@ export class CommunityUserComponent implements OnInit {
   nricFilterIsVisible: boolean = false;
   nricSearchValue = '';
 
-  constructor(private communityUserService: CommunityUserService) {
+  constructor(private communityUserService: CommunityUserService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit(): void {
@@ -97,5 +100,15 @@ export class CommunityUserComponent implements OnInit {
   resetNric() {
     this.nricSearchValue = '';
     this.searchNric();
+  }
+
+  deleteUser(username: string) {
+    this.communityUserService.deleteCommunityUser(username).subscribe(resp => {
+      this.notificationService.createSuccessNotification("User account has been deleted.")
+      this.getCommunityUsers();
+    }, error => {
+      this.notificationService.createErrorNotification("There\'s an error when deleting user account.")
+      console.log(error);
+    });
   }
 }
