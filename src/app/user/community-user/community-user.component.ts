@@ -3,7 +3,6 @@ import {CommunityUserTableModel} from "../../shared/models/community-user-table-
 import {CommunityUserService} from "../../shared/services/community-user.service";
 import {finalize} from "rxjs/operators";
 import {TableColumnItemModel} from "../../shared/models/table-column-item-model";
-import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NotificationService} from "../../shared/services/notification.service";
 
 @Component({

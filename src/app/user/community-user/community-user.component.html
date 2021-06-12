@@ -1,5 +1,10 @@
+<nz-page-header>
+  <nz-page-header-title>
+    Community User
+  </nz-page-header-title>
+</nz-page-header>
+
 <nz-table #fixedTable
-          [nzTitle]="tableTitleTpl"
           [nzLoading]="isLoading"
           [nzData]="listOfDisplayData"
           [(nzPageIndex)]="pageIndex"
@@ -47,7 +52,7 @@
     </button>
     <nz-dropdown-menu #menu1="nzDropdownMenu">
       <ul nz-menu>
-        <li nz-menu-item [routerLink]="['/community-user-profile']" [queryParams]="{username: data.username}">View User Profile</li>
+        <li nz-menu-item [routerLink]="['/community-user/profile']" [queryParams]="{username: data.username}">View User Profile</li>
         <li nz-menu-item nz-popconfirm [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'" (nzOnConfirm)="deleteUser(data.username)">Delete User</li>
       </ul>
     </nz-dropdown-menu>
@@ -71,7 +76,3 @@
     <button nz-button nzSize="small" (click)="resetNric()">Reset</button>
   </div>
 </nz-dropdown-menu>
-
-<ng-template #tableTitleTpl>
-  <h2 nz-typography>Community User</h2>
-</ng-template>

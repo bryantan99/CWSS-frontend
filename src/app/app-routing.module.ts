@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent},
   { path: 'about', component: AboutComponent},
   { path: 'community-user', component: CommunityUserComponent},
-  { path: 'community-user-profile', component: CommunityUserProfileComponent},
+  { path: 'community-user/profile', component: CommunityUserProfileComponent},
   { path: 'community-user-assistance', component: CommunityUserAssistanceComponent},
   { path: 'admin-assistance', component: AdminAssistanceComponent},
   { path: 'assistance-record', component: AssistanceRecordComponent},

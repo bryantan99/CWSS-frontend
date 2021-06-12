@@ -1,3 +1,9 @@
+<nz-page-header class="mb-4" (nzBack)="onBack()" nzBackIcon>
+  <nz-page-header-title>
+    {{userProfile ? userProfile.personalDetail.fullName + "'s" : "User"}} Profile
+  </nz-page-header-title>
+</nz-page-header>
+
 <form [formGroup]="form">
 
   <nz-steps nzProgressDot [nzCurrent]="stepIndex" (nzIndexChange)="movePage($event)">
