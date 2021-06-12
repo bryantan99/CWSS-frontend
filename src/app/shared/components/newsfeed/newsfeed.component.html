@@ -17,7 +17,7 @@
       <div class="col-lg-4 mb-4" *ngFor="let news of newsApiResponseModel?.articles">
         <nz-card [nzCover]="coverTemplate">
           <ng-template #coverTemplate>
-            <img style="height: 380px; object-fit: cover; object-position: center center" src="{{news.urlToImage}}"
+            <img style="height: 380px; object-fit: cover; object-position: center center" src="{{news.urlToImage || NEWS_PLACEHOLDER_IMG_URL}}"
                  alt="">
           </ng-template>
           <h4 nz-typography>{{news.title}}</h4>

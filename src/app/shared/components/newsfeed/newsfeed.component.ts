@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NewsfeedService} from "./newsfeed.service";
 import {finalize} from "rxjs/operators";
 import {NewsApiResponseModel} from "../../models/news-api-response-model";
+import {PlaceholderConstant} from "../../constants/placeholder-constant";
 
 @Component({
   selector: 'app-newsfeed',
@@ -14,6 +15,7 @@ export class NewsfeedComponent implements OnInit {
   pageIndex: number;
   readonly PAGE_SIZE: number = 9;
   totalResult: number;
+  NEWS_PLACEHOLDER_IMG_URL: string = PlaceholderConstant.NEWS_PLACEHOLDER_IMG_URL;
 
   constructor(private newsfeedService: NewsfeedService) {
   }
