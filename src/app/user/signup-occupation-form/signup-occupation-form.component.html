@@ -14,7 +14,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item *ngIf="showOccupationNameField">
+    <nz-form-item *ngIf="employmentTypeFormControl.value && employmentTypeFormControl.value !== '-'">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Occupation Name</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="occupationNameErrorTpl">
         <input nz-input type="text" formControlName="occupationName">
@@ -26,7 +26,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item *ngIf="showSalaryField">
+    <nz-form-item *ngIf="employmentTypeFormControl.value && employmentTypeFormControl.value !== '-'">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Salary</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="salaryErrorTpl">
         <nz-input-number

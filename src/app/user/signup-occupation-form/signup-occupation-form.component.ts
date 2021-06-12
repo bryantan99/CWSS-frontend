@@ -2,7 +2,7 @@ import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder,
+  FormBuilder, FormControl,
   FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validators
@@ -33,8 +33,10 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
   EMPLOYMENT_TYPE_CHOICE_LIST = DropdownConstant.EMPLOYMENT_TYPE_DROPDOWN;
   showEmployerCompanyField: boolean = false;
   showEmployerContactNoField: boolean = false;
-  showSalaryField: boolean = false;
-  showOccupationNameField: boolean = false;
+
+  get employmentTypeFormControl() {
+    return this.occupationForm.get('employmentType') as FormControl;
+  }
 
   constructor(private fb: FormBuilder) {
   }
@@ -43,7 +45,7 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
     this.occupationForm = this.fb.group({
       employmentType: ['', Validators.required],
       occupationName: [''],
-      salary: [''],
+      salary: ['0.00'],
       companyName: [''],
       companyContactNo: [''],
     });
@@ -88,8 +90,6 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
     const isUnemployed = value === '-';
     const needEmployerDetails = value === 'GOVT' || value === 'PVT';
 
-    this.showOccupationNameField = !isUnemployed;
-    this.showSalaryField = !isUnemployed;
     this.showEmployerCompanyField = needEmployerDetails;
     this.showEmployerContactNoField = needEmployerDetails;
 
