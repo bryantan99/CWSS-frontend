@@ -15,7 +15,7 @@
 <nz-page-header>
   <nz-page-header-title>Community User's Profile</nz-page-header-title>
   <nz-page-header-extra>
-    <button nz-button [routerLink]="['/community-user/profile/update']" [queryParams]="{username: username}">Update Profile</button>
+    <button *ngIf="userProfile?.accIsActivate === 'Y'" nz-button [routerLink]="['/community-user/profile/update']" [queryParams]="{username: username}">Update Profile</button>
   </nz-page-header-extra>
 </nz-page-header>
 
@@ -105,21 +105,28 @@
     <nz-table #healthTable
               [(nzPageIndex)]="healthTablePageIndex"
               [(nzPageSize)]="healthTablePageSize"
-              [nzData]="userProfile?.healthModelList">
+              [nzData]="userProfile?.healthModelList"
+              [nzScroll]="{x: '1280px'}">
       <thead>
       <tr>
-        <th>No.</th>
-        <th>Disease Name</th>
-        <th>Validated By</th>
-        <th>Validated Date</th>
+        <th nzLeft nzWidth="20px">No.</th>
+        <th nzLeft nzWidth="40px">Disease Name</th>
+        <th nzWidth="300px">Description</th>
+        <th nzRight nzWidth="40px">Validation Status</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let data of healthTable.data; let i = index">
-        <td>{{(healthTablePageIndex - 1) * healthTablePageSize + i + 1}}</td>
-        <td>{{data?.diseaseName || '-'}}</td>
-        <td>{{data?.approvedBy || '-'}}</td>
-        <td>{{(data?.approvedDate | date: 'medium') || '-'}}</td>
+        <td nzLeft>{{(healthTablePageIndex - 1) * healthTablePageSize + i + 1}}</td>
+        <td nzLeft>{{data?.diseaseName || '-'}}</td>
+        <td>{{data?.diseaseDescription || '-'}}</td>
+        <td class="text-center" nzRight>
+          <nz-tag [nzColor]="'green'" *ngIf="data?.approvedBy && data?.approvedDate" nz-popover [nzPopoverContent]="validatedContentTpl">Validated</nz-tag>
+          <nz-tag [nzColor]="'gold'" *ngIf="!(data?.approvedBy && data?.approvedDate)">Pending</nz-tag>
+          <ng-template #validatedContentTpl>
+            Validated by {{data?.approvedBy | titlecase}} on {{(data?.approvedDate | date: 'medium') || '-'}}
+          </ng-template>
+        </td>
       </tr>
       </tbody>
     </nz-table>
