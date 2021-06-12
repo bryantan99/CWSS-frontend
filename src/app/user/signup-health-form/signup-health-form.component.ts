@@ -68,6 +68,7 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
 
   private initDiseaseForm() {
     const fg = this.fb.group({
+      issueId: [null],
       diseaseId: ['', Validators.required],
       description: ['']
     });
@@ -83,13 +84,7 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   };
 
   writeValue(val: any): void {
-    if (val) {
-      for (let i = 0 ; i < val.length ; i++) {
-        const fg = this.healthForm.controls['diseaseList'].get(i.toString(10));
-        fg.patchValue({diseaseId: val[i].diseaseId.toString(10)}, {emitEvent: false});
-      }
-    }
-    // val && this.healthForm.controls['diseaseList'].patchValue(val, {emitEvent: false});
+    val && this.healthForm.patchValue(val, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {

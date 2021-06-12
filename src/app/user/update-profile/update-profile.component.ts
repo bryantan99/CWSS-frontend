@@ -77,16 +77,20 @@ export class UpdateProfileComponent implements OnInit {
 
     const healthIssueList: any[] = this.userProfile.healthModelList;
     if (healthIssueList) {
-      let mappedHealthIssue = healthIssueList.map(toHealthDiseaseFormGroup)
-      for (let i = 0 ; i < mappedHealthIssue.length ; i++) {
+      let mappedHealthIssues: any[] = healthIssueList.map(toHealthDiseaseFormGroup)
+      for (let i = 0 ; i < mappedHealthIssues.length ; i++) {
         this.addDiseaseFormGroup();
       }
-      this.form.controls['health'].patchValue(mappedHealthIssue);
+      this.form.controls['health'].patchValue({diseaseList: mappedHealthIssues});
       this.form.controls['health'].updateValueAndValidity();
     }
 
     function toHealthDiseaseFormGroup(healthIssue) {
-      return {diseaseId: healthIssue.diseaseId.toString()}
+      return {
+        issueId: healthIssue.issueId ? healthIssue.issueId : null,
+        diseaseId: healthIssue.diseaseId.toString(),
+        description: healthIssue.diseaseDescription
+      }
     }
   }
 
