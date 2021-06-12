@@ -1,7 +1,6 @@
 <form [formGroup]="form">
 
   <nz-steps nzProgressDot [nzCurrent]="stepIndex" (nzIndexChange)="movePage($event)">
-    <nz-step nzTitle="Info"></nz-step>
     <nz-step nzTitle="Personal Details"></nz-step>
     <nz-step nzTitle="Address"></nz-step>
     <nz-step nzTitle="Occupation"></nz-step>
@@ -9,11 +8,10 @@
   </nz-steps>
 
   <nz-divider></nz-divider>
-  <app-signup-info [isVisible]="showInfoPage"></app-signup-info>
-  <app-signup-personal-detail-form [isSignUp]="true" [isVisible]="showPersonalDetailForm" formControlName="personalDetail"></app-signup-personal-detail-form>
+  <app-signup-personal-detail-form [isSignUp]="false" [isVisible]="showPersonalDetailForm" formControlName="personalDetail"></app-signup-personal-detail-form>
   <app-signup-address-form [isVisible]="showAddressForm" formControlName="address"></app-signup-address-form>
   <app-signup-occupation-form [isVisible]="showOccupationForm" formControlName="occupation"></app-signup-occupation-form>
-  <app-signup-health-form [isSignUp]="true" [isVisible]="showHealthForm" [parentDiseaseListFormValues]="form.get('health').value?.diseaseList"
+  <app-signup-health-form [isSignUp]="false" [isVisible]="showHealthForm" [parentDiseaseListFormValues]="form.get('health').value?.diseaseList"
                           formControlName="health"></app-signup-health-form>
 
   <nz-row>
@@ -21,11 +19,11 @@
       <button nz-button nzType="primary" class="me-2" *ngIf="stepIndex !== 0" (click)="movePage(this.stepIndex - 1)">Previous</button>
     </nz-col>
     <nz-col [nzSpan]="8" class="text-center">
-      <button *ngIf="stepIndex === 4" nz-button nzType="default" (click)="addDiseaseFormGroup()">Add Disease</button>
+      <button *ngIf="stepIndex === 3" nz-button nzType="default" (click)="addDiseaseFormGroup()">Add Disease</button>
     </nz-col>
     <nz-col [nzSpan]="8">
-      <button nz-button nzType="primary" class="float-end me-2" *ngIf="stepIndex !== 4" (click)="movePage(this.stepIndex + 1)">Next</button>
-      <button nz-button nzType="primary" class="float-end" *ngIf="stepIndex === 4" (click)="submitForm()">Register</button>
+      <button nz-button nzType="primary" class="float-end me-2" *ngIf="stepIndex !== 3" (click)="movePage(this.stepIndex + 1)">Next</button>
+      <button nz-button nzType="primary" class="float-end" *ngIf="stepIndex === 3" (click)="submitForm()">Update Profile</button>
     </nz-col>
   </nz-row>
 

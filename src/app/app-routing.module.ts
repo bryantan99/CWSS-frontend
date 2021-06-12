@@ -10,6 +10,7 @@ import {CommunityUserProfileComponent} from "./user/community-user-profile/commu
 import {CommunityUserAssistanceComponent} from "./assistance/community-user-assistance/community-user-assistance.component";
 import {AdminAssistanceComponent} from "./assistance/admin-assistance/admin-assistance.component";
 import {AssistanceRecordComponent} from "./assistance/assistance-record/assistance-record.component";
+import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent},
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'community-user-assistance', component: CommunityUserAssistanceComponent},
   { path: 'admin-assistance', component: AdminAssistanceComponent},
   { path: 'assistance-record', component: AssistanceRecordComponent},
+  { path: 'community-user/profile/update', component: UpdateProfileComponent},
 ];
 
 @NgModule({

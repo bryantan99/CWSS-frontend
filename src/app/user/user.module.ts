@@ -13,6 +13,7 @@ import {SignupHealthFormComponent} from './signup-health-form/signup-health-form
 import {CommunityUserComponent} from './community-user/community-user.component';
 import {CommunityUserProfileComponent} from './community-user-profile/community-user-profile.component';
 import {SignupInfoComponent} from './signup-info/signup-info.component';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {SignupInfoComponent} from './signup-info/signup-info.component';
     SignupHealthFormComponent,
     CommunityUserComponent,
     CommunityUserProfileComponent,
-    SignupInfoComponent
+    SignupInfoComponent,
+    UpdateProfileComponent
   ],
   imports: [
     CommonModule,

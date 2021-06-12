@@ -32,6 +32,7 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
 
   @Input('parentDiseaseListFormValues') parentDiseaseListFormValues: {diseaseId: any; description: string}[] = [];
   @Input('isVisible') isVisible: boolean;
+  @Input('isSignUp') isSignUp: boolean;
   healthForm: FormGroup;
   diseaseDropdownList: DropdownChoiceModel[] = [];
 
@@ -66,17 +67,29 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   }
 
   private initDiseaseForm() {
-    return this.fb.group({
+    const fg = this.fb.group({
       diseaseId: ['', Validators.required],
-      description: ['', Validators.required]
-    })
+      description: ['']
+    });
+
+    if (this.isSignUp) {
+      fg.get('description').setValidators([Validators.required]);
+    }
+
+    return fg;
   }
 
   onTouched: () => void = () => {
   };
 
   writeValue(val: any): void {
-    val && this.healthForm.patchValue(val, {emitEvent: false});
+    if (val) {
+      for (let i = 0 ; i < val.length ; i++) {
+        const fg = this.healthForm.controls['diseaseList'].get(i.toString(10));
+        fg.patchValue({diseaseId: val[i].diseaseId.toString(10)}, {emitEvent: false});
+      }
+    }
+    // val && this.healthForm.controls['diseaseList'].patchValue(val, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {
@@ -103,19 +116,18 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
     };
   }
 
-  updateTouchAndDirty() {
-    this.markAsTouchedAndDirty(this.healthForm);
+  setDirty() {
+    this.markAsDirty(this.healthForm);
   }
 
-  markAsTouchedAndDirty(group: FormGroup | FormArray) {
+  markAsDirty(group: FormGroup | FormArray) {
     group.markAsTouched()
     for (let i in group.controls) {
       if (group.controls[i] instanceof FormControl) {
         const fc: FormControl = group.controls[i];
         fc.markAsDirty();
-        fc.updateValueAndValidity();
       } else {
-        this.markAsTouchedAndDirty(group.controls[i]);
+        this.markAsDirty(group.controls[i]);
       }
     }
   }

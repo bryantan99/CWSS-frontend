@@ -43,10 +43,17 @@ export class SignupComponent implements OnInit {
   }
 
   submitForm() {
-    this.personalDetailFormComponent.updateTouchAndDirty();
-    this.addressFormComponent.updateTouchAndDirty();
-    this.occupationFormComponent.updateTouchAndDirty();
-    this.healthFormComponent.updateTouchAndDirty();
+    this.personalDetailFormComponent.setDirty();
+    this.form.controls['personalDetail'].updateValueAndValidity({emitEvent: false});
+
+    this.addressFormComponent.setDirty();
+    this.form.controls['address'].updateValueAndValidity({emitEvent: false});
+
+    this.occupationFormComponent.setDirty();
+    this.form.controls['occupation'].updateValueAndValidity({emitEvent: false});
+
+    this.healthFormComponent.setDirty();
+    this.form.controls['health'].updateValueAndValidity({emitEvent: false});
 
     if (!this.form.valid) {
       const invalidFormList = this.filterInvalidForm();
@@ -65,29 +72,22 @@ export class SignupComponent implements OnInit {
   }
 
   private filterInvalidForm(): string[] {
-    let formList: string[] = [];
-
-    if (!this.form.get('personalDetail').valid) {
-      formList.push("Personal Detail Form")
-    }
-
-    if (!this.form.get('address').valid) {
-      formList.push("Address Form")
-    }
-
-    if (!this.form.get('occupation').valid) {
-      formList.push("Occupation Form")
-    }
-
-    if (!this.form.get('health').valid) {
-      formList.push("Health Form")
-    }
-
-    return formList;
+    let formName: string[] = [];
+    Object.keys(this.form.controls).forEach(key => {
+      if (!this.form.controls[key].valid) {
+        key = key.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+        key = key.replace(/\w\S*/g,
+          function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+          })
+        formName.push(key);
+      }
+    });
+    return formName;
   }
 
   movePage(newIndex: number) {
-    this.updateTouchAndDirty(this.stepIndex);
+    // this.updateTouchAndDirty(this.stepIndex);
     this.stepIndex = newIndex;
     this.displayChildForm(newIndex);
   }
@@ -97,10 +97,6 @@ export class SignupComponent implements OnInit {
   }
 
   private displayInvalidFormNotification(invalidForms: string[]) {
-    if (!invalidForms || invalidForms.length == 0) {
-      return;
-    }
-
     let errorMsg = "The following form(s) has invalid input fields. Please double check the form.<br/>";
     invalidForms.forEach(name => {
       errorMsg += "- " + name + "<br/>"
@@ -116,16 +112,16 @@ export class SignupComponent implements OnInit {
   private updateTouchAndDirty(indexBeforeMovePage: number) {
     switch (indexBeforeMovePage) {
       case 1:
-        this.personalDetailFormComponent.updateTouchAndDirty();
+        this.personalDetailFormComponent.setDirty();
         break;
       case 2:
-        this.addressFormComponent.updateTouchAndDirty();
+        this.addressFormComponent.setDirty();
         break;
       case 3:
-        this.occupationFormComponent.updateTouchAndDirty();
+        this.occupationFormComponent.setDirty();
         break;
       case 4:
-        this.healthFormComponent.updateTouchAndDirty();
+        this.healthFormComponent.setDirty();
         break;
     }
   }

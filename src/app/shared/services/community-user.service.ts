@@ -13,6 +13,7 @@ export class CommunityUserService {
   readonly GET_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/view-profile";
   readonly APPROVE_USER_ACCOUNT = this.API_SERVER_URL + "/community-user/approve-user";
   readonly DELETE_COMMUNITY_USER = this.API_SERVER_URL + "/community-user/delete-user";
+  readonly UPDATE_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/update-user";
 
   constructor(private http: HttpClient) {
   }
@@ -37,5 +38,9 @@ export class CommunityUserService {
   deleteCommunityUser(username: string) {
     const url = this.DELETE_COMMUNITY_USER + "/" + username;
     return this.http.delete(url);
+  }
+
+  updateProfile(form: any):Observable<any> {
+    return this.http.post(this.UPDATE_COMMUNITY_USER_PROFILE, form);
   }
 }

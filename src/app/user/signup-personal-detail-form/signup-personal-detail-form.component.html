@@ -37,7 +37,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item *ngIf="isSignUp">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Username</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="usernameErrorTpl">
         <input nz-input type="text" formControlName="username">
@@ -50,7 +50,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item *ngIf="isSignUp">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Password</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="passwordErrorTpl">
         <input nz-input type="password" formControlName="password">
@@ -63,7 +63,7 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item *ngIf="isSignUp">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Confirm Password</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="confirmPasswordErrorTpl">
         <input nz-input type="password" formControlName="confirmPassword">

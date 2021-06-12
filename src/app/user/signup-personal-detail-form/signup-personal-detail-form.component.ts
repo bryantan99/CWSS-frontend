@@ -2,7 +2,7 @@ import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder,
+  FormBuilder, FormControl,
   FormGroup, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors,
   Validators
@@ -34,10 +34,23 @@ import {AuthService} from "../../auth/auth.service";
 export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAccessor, Validators {
 
   @Input('isVisible') isVisible: boolean;
+  @Input('isSignUp') isSignUp: boolean;
   personalDetailForm: FormGroup;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService) {
+  }
+
+  get usernameFormControl() {
+    return this.personalDetailForm.get('username') as FormControl;
+  }
+
+  get passwordFormControl() {
+    return this.personalDetailForm.get('password') as FormControl;
+  }
+
+  get confirmPasswordFormControl() {
+    return this.personalDetailForm.get('confirmPassword') as FormControl;
   }
 
   ngOnInit(): void {
@@ -45,35 +58,38 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
       fullName: ['', Validators.required],
       nric: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      username: ['', [Validators.required],[uniqueUsernameValidator(this.authService)]],
-      password: ['', [Validators.required, passwordValidator()]],
+      username: [''],
+      password: [''],
       confirmPassword: [''],
       gender: ['', Validators.required],
       contactNo: ['', [Validators.required, phoneNumberValidator()]],
       ethnic: ['', Validators.required]
     })
 
-    this.personalDetailForm.get('confirmPassword').setValidators(
-      [Validators.required,
-      confirmPasswordMatchValidator(this.personalDetailForm.get('password'))]
-    );
-
+    if (this.isSignUp) {
+      this.usernameFormControl.setValidators([Validators.required]);
+      this.usernameFormControl.setAsyncValidators([uniqueUsernameValidator(this.authService)])
+      this.passwordFormControl.setValidators([Validators.required, passwordValidator()])
+      this.confirmPasswordFormControl.setValidators([Validators.required, confirmPasswordMatchValidator(this.passwordFormControl)]);
+    } else {
+      this.usernameFormControl.disable();
+      this.passwordFormControl.disable();
+      this.confirmPasswordFormControl.disable();
+    }
   }
 
-  onTouched: () => void = () => {
-  };
+  onChange: any = () => {};
+  onTouched: any = () => {};
 
   writeValue(val: any): void {
-    val && this.personalDetailForm.setValue(val, {emitEvent: false});
+    val && this.personalDetailForm.patchValue(val, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {
-    console.log("on change");
     this.personalDetailForm.valueChanges.subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
-    console.log("on blur");
     this.onTouched = fn;
   }
 
@@ -82,19 +98,8 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    if (this.personalDetailForm.valid) {
-      return null;
-    }
-
-    let invalidCtrl = [];
-    for (const ctrlName in this.personalDetailForm.controls) {
-      const ctrl = this.personalDetailForm.get(ctrlName);
-      if (!ctrl.valid) {
-        invalidCtrl.push(ctrlName);
-      }
-    }
-
-    return {
+    console.log("Validating personal detail form.", this.personalDetailForm.valid);
+    return this.personalDetailForm.valid ? null : {
       invalidForm: {
         valid: false,
         message: "Personal Detail Form has invalid field(s)."
@@ -102,11 +107,10 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
     }
   }
 
-  updateTouchAndDirty() {
+  setDirty() {
     for (const i in this.personalDetailForm.controls) {
       this.personalDetailForm.controls[i].markAsDirty();
-      this.personalDetailForm.controls[i].updateValueAndValidity();
+      // this.personalDetailForm.controls[i].updateValueAndValidity();
     }
-    console.log(this.personalDetailForm);
   }
 }

@@ -3,7 +3,7 @@
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employment Type</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="occupationTypeErrorTpl">
-        <nz-radio-group formControlName="occupationType" (ngModelChange)="employmentTypeHasChange($event)">
+        <nz-radio-group formControlName="employmentType" (ngModelChange)="  employmentTypeHasChange($event)">
           <label nz-radio *ngFor="let choice of EMPLOYMENT_TYPE_CHOICE_LIST" [nzValue]="choice.value">{{choice?.text}}</label>
         </nz-radio-group>
         <ng-template #occupationTypeErrorTpl let-control>

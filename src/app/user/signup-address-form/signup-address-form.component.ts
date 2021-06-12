@@ -48,7 +48,7 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
   };
 
   writeValue(val: any): void {
-    val && this.addressForm.setValue(val, {emitEvent: false});
+    val && this.addressForm.patchValue(val, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {
@@ -75,10 +75,9 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
     };
   }
 
-  updateTouchAndDirty() {
+  setDirty() {
     for (const i in this.addressForm.controls) {
       this.addressForm.controls[i].markAsDirty();
-      this.addressForm.controls[i].updateValueAndValidity();
     }
   }
 }

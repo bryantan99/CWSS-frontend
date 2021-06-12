@@ -12,8 +12,12 @@
   <button nz-button nzDanger nzType="primary" (click)="rejectAccount()">Reject</button>
 </ng-template>
 
-<h2 nz-typography>Community User's Profile</h2>
-<nz-divider class="mb-4"></nz-divider>
+<nz-page-header>
+  <nz-page-header-title>Community User's Profile</nz-page-header-title>
+  <nz-page-header-extra>
+    <button nz-button [routerLink]="['/community-user/profile/update']" [queryParams]="{username: username}">Update Profile</button>
+  </nz-page-header-extra>
+</nz-page-header>
 
 <nz-spin [nzSpinning]="isLoading">
   <nz-card nzTitle="Personal Detail" class="mb-4">

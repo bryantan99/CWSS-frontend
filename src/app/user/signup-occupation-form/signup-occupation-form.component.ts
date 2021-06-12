@@ -41,7 +41,7 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
 
   ngOnInit(): void {
     this.occupationForm = this.fb.group({
-      occupationType: ['', Validators.required],
+      employmentType: ['', Validators.required],
       occupationName: [''],
       salary: [''],
       companyName: [''],
@@ -53,7 +53,8 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
   };
 
   writeValue(val: any): void {
-    val && this.occupationForm.setValue(val, {emitEvent: false});
+    val && this.occupationForm.patchValue(val, {emitEvent: false});
+    this.employmentTypeHasChange(val.employmentType);
   }
 
   registerOnChange(fn: any): void {
@@ -77,10 +78,9 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
     };
   }
 
-  updateTouchAndDirty() {
+  setDirty() {
     for (const i in this.occupationForm.controls) {
       this.occupationForm.controls[i].markAsDirty();
-      this.occupationForm.controls[i].updateValueAndValidity();
     }
   }
 
