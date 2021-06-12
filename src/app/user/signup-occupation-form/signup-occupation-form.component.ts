@@ -46,8 +46,8 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
       employmentType: ['', Validators.required],
       occupationName: [''],
       salary: ['0.00'],
-      companyName: [''],
-      companyContactNo: [''],
+      employerCompany: [''],
+      employerContactNo: [''],
     });
   }
 
@@ -106,15 +106,15 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
     }
 
     if (needEmployerDetails) {
-      this.occupationForm.get('companyName').setValidators([Validators.required]);
-      this.occupationForm.get('companyContactNo').setValidators([Validators.required, phoneNumberValidator()]);
-      this.occupationForm.get('companyName').updateValueAndValidity();
-      this.occupationForm.get('companyContactNo').updateValueAndValidity();
+      this.occupationForm.get('employerCompany').setValidators([Validators.required]);
+      this.occupationForm.get('employerContactNo').setValidators([Validators.required, phoneNumberValidator()]);
+      this.occupationForm.get('employerCompany').updateValueAndValidity();
+      this.occupationForm.get('employerContactNo').updateValueAndValidity();
     } else {
-      this.occupationForm.get('companyName').setValidators(null);
-      this.occupationForm.get('companyContactNo').setValidators(null);
-      this.occupationForm.get('companyName').updateValueAndValidity();
-      this.occupationForm.get('companyContactNo').updateValueAndValidity();
+      this.occupationForm.get('employerCompany').setValidators(null);
+      this.occupationForm.get('employerContactNo').setValidators(null);
+      this.occupationForm.get('employerCompany').updateValueAndValidity();
+      this.occupationForm.get('employerContactNo').updateValueAndValidity();
     }
   }
 }

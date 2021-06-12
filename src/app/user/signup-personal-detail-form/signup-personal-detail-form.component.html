@@ -37,15 +37,20 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item *ngIf="isSignUp">
+    <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Username</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="usernameErrorTpl">
-        <input nz-input type="text" formControlName="username">
+        <ng-container *ngIf="isSignUp else displayUsernameTpl">
+          <input nz-input type="text" formControlName="username">
+        </ng-container>
         <ng-template #usernameErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input username<br></span>
             <span *ngIf="control.hasError('usernameTaken')">This username has been taken.<br></span>
           </p>
+        </ng-template>
+        <ng-template #displayUsernameTpl>
+          <p>{{usernameFormControl.value}}</p>
         </ng-template>
       </nz-form-control>
     </nz-form-item>

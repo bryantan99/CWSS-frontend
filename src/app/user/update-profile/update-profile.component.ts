@@ -122,6 +122,7 @@ export class UpdateProfileComponent implements OnInit {
       return;
     }
 
+    console.log("Raw value", this.form.getRawValue());
     this.communityUserService.updateProfile(this.form.value).subscribe(resp => {
       if (resp) {
         this.notificationService.createSuccessNotification("User Profile has been updated.");

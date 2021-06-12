@@ -72,7 +72,6 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
       this.passwordFormControl.setValidators([Validators.required, passwordValidator()])
       this.confirmPasswordFormControl.setValidators([Validators.required, confirmPasswordMatchValidator(this.passwordFormControl)]);
     } else {
-      this.usernameFormControl.disable();
       this.passwordFormControl.disable();
       this.confirmPasswordFormControl.disable();
     }
@@ -110,7 +109,6 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   setDirty() {
     for (const i in this.personalDetailForm.controls) {
       this.personalDetailForm.controls[i].markAsDirty();
-      // this.personalDetailForm.controls[i].updateValueAndValidity();
     }
   }
 }

@@ -28,7 +28,7 @@
 
     <nz-row class="mb-2">
       <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Gender</nz-col>
-      <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.gender | gender | uppercase) || '-'}}</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.gender ? (userProfile.personalDetail.gender | gender | uppercase) : '-'}}</nz-col>
     </nz-row>
 
     <nz-row class="mb-2">
@@ -92,12 +92,12 @@
 
     <nz-row class="mb-2">
       <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Company</nz-col>
-      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyName || '-'}}</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.employerCompany || '-'}}</nz-col>
     </nz-row>
 
     <nz-row class="mb-2">
       <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-col>
-      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.companyContactNo || '-'}}</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.employerContactNo || '-'}}</nz-col>
     </nz-row>
   </nz-card>
 

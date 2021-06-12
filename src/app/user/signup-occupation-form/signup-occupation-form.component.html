@@ -46,9 +46,9 @@
 
     <nz-form-item *ngIf="showEmployerCompanyField">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employer Company</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="companyNameErrorTpl">
-        <input nz-input type="text" formControlName="companyName">
-        <ng-template #companyNameErrorTpl let-control>
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="employerCompanyErrorTpl">
+        <input nz-input type="text" formControlName="employerCompany">
+        <ng-template #employerCompanyErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input company's name</span>
           </p>
@@ -58,9 +58,9 @@
 
     <nz-form-item *ngIf="showEmployerContactNoField">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="companyContactNoErrorTpl">
-        <input nz-input type="text" formControlName="companyContactNo">
-        <ng-template #companyContactNoErrorTpl let-control>
+      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="employerContactNoErrorTpl">
+        <input nz-input type="text" formControlName="employerContactNo">
+        <ng-template #employerContactNoErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input employer's contact no.</span>
             <span *ngIf="control.hasError('invalidContactNo')">Please input valid employer's contact no.</span>
