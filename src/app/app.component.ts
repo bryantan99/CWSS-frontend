@@ -13,7 +13,7 @@ import {AuthService} from "./auth/auth.service";
 export class AppComponent {
 
   isCollapsed = false;
-  appName = "CHIS";
+  appName = "HSS";
 
   constructor(private app: AppService,
               private http: HttpClient,
