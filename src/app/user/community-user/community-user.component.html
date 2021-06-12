@@ -9,12 +9,12 @@
           [nzData]="listOfDisplayData"
           [(nzPageIndex)]="pageIndex"
           [(nzPageSize)]="pageSize"
-          [nzScroll]="{x: '1280px', y: '720px'}"
+          [nzScroll]="{x: '960px'}"
           nzShowSizeChanger>
   <thead>
   <tr>
-    <th nzLeft nzWidth="80px">No.</th>
-    <th nzLeft
+    <th nzWidth="80px">No.</th>
+    <th nzWidth="150px"
         [nzSortFn]="fullNameColumnItem.sortFn"
         nzCustomFilter>
       Full Name
@@ -22,31 +22,32 @@
         <i nz-icon nzType="search"></i>
       </nz-filter-trigger>
     </th>
-    <th>
+    <th nzWidth="150px">
       NRIC no.
       <nz-filter-trigger [(nzVisible)]="nricFilterIsVisible" [nzActive]="nricSearchValue.length > 0" [nzDropdownMenu]="nricFilterMenu">
         <i nz-icon nzType="search"></i>
       </nz-filter-trigger>
     </th>
-    <th>Email</th>
-    <th [nzFilters]="accountStatusColumnItem.listOfFilter"
+    <th nzWidth="150px">Email</th>
+    <th nzWidth="100px"
+        [nzFilters]="accountStatusColumnItem.listOfFilter"
         [nzFilterFn]="accountStatusColumnItem.filterFn"
         [nzFilterMultiple]="false">
       Account Status
     </th>
-    <th nzRight nzWidth="120px" class="text-center">Action</th>
+    <th nzWidth="120px" class="text-center">Action</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let data of fixedTable.data, let i = index">
-    <td nzLeft>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-    <td nzLeft>{{ data?.fullName | uppercase }}</td>
+    <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+    <td>{{ data?.fullName | uppercase }}</td>
     <td>{{ data?.nricNo || '-' }}</td>
     <td>{{ data?.email || '-' }}</td>
     <td>
       <nz-tag [nzColor]="'green'" *ngIf="data?.isActive === 'Y'">Activated</nz-tag>
       <nz-tag [nzColor]="'orange'" *ngIf="data?.isActive !== 'Y'">Unactivated</nz-tag>
-    <td nzRight class="text-center">
+    <td class="text-center">
     <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
       <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
     </button>
