@@ -113,10 +113,7 @@
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Race</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="raceError">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose an ethnic" formControlName="ethnic">
-          <nz-option nzValue="M" nzLabel="Malay"></nz-option>
-          <nz-option nzValue="C" nzLabel="Chinese"></nz-option>
-          <nz-option nzValue="I" nzLabel="Indian"></nz-option>
-          <nz-option nzValue="O" nzLabel="Other"></nz-option>
+          <nz-option *ngFor="let opt of ETHNIC_DROPDOWN" [nzValue]="opt.value" [nzLabel]="opt.text"></nz-option>
         </nz-select>
         <ng-template #raceError let-control>
           <p>

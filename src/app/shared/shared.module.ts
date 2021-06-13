@@ -9,10 +9,11 @@ import {CKEditorModule} from "ckeditor4-angular";
 import {GenderPipe} from "./pipes/gender.pipe";
 import {StatePipe} from "./pipes/state.pipe";
 import {EmploymentTypePipe} from "./pipes/employment-type.pipe";
+import {EthnicPipe} from "./pipes/ethnic.pipe";
 
 
 @NgModule({
-  declarations: [NewsfeedComponent, PostFeedComponent, NewPostModalComponent,GenderPipe, StatePipe, EmploymentTypePipe],
+  declarations: [NewsfeedComponent, PostFeedComponent, NewPostModalComponent,GenderPipe, StatePipe, EmploymentTypePipe, EthnicPipe],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -28,7 +29,8 @@ import {EmploymentTypePipe} from "./pipes/employment-type.pipe";
     ...SHARED_ZORRO_MODULES,
     GenderPipe,
     StatePipe,
-    EmploymentTypePipe
+    EmploymentTypePipe,
+    EthnicPipe
   ]
 })
 export class SharedModule {

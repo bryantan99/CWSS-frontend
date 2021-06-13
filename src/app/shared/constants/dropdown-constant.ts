@@ -28,4 +28,11 @@ export class DropdownConstant {
     {text: "W.P. PUTRAJAYA", value: StateConstant.FEDERAL_TERRITORY_PUTRAJAYA},
   ]
 
+  public static ETHNIC_DROPDOWN = [
+    {text: "Malay", value: "M"},
+    {text: "Chinese", value: "C"},
+    {text: "Indian", value: "I"},
+    {text: "Other", value: "O"},
+  ]
+
 }

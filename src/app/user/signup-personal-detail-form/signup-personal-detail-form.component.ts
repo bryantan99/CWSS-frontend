@@ -14,6 +14,7 @@ import {
 } from "../../shared/validators/custom-validators";
 import {uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
 import {AuthService} from "../../auth/auth.service";
+import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 
 @Component({
   selector: 'app-signup-personal-detail-form',
@@ -36,6 +37,8 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   @Input('isVisible') isVisible: boolean;
   @Input('isSignUp') isSignUp: boolean;
   personalDetailForm: FormGroup;
+
+  ETHNIC_DROPDOWN = DropdownConstant.ETHNIC_DROPDOWN;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService) {

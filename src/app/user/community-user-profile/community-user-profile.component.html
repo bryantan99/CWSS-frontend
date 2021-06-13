@@ -32,6 +32,11 @@
     </nz-row>
 
     <nz-row class="mb-2">
+      <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Ethnic</nz-col>
+      <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.ethnic | ethnic | uppercase) || '-'}}</nz-col>
+    </nz-row>
+
+    <nz-row class="mb-2">
       <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">NRIC</nz-col>
       <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.nric || '-'}}</nz-col>
     </nz-row>
