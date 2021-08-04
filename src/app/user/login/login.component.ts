@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted: boolean = false;
   invalidLogin: boolean = false;
+  incorrectLogin: boolean = false;
 
   passwordIsVisible: boolean = false;
 
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
               private customValidator: CustomValidationService,
               private authService: AuthService,
               private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -40,14 +42,19 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginForm.value)
       .pipe(finalize(() => {
         this.submitted = false;
-        console.log(this.authService.isUserLoggedIn());
+        this.validateLoginStatus();
       }))
       .subscribe(resp => {
         this.router.navigate(['']);
-    }, error => {
+      }, error => {
         this.invalidLogin = true;
         console.log("Encountered problem when logging in.", error);
-    });
+        this.validateLoginStatus();
+      });
+  }
+
+  private validateLoginStatus() {
+    this.incorrectLogin = !this.authService.isUserLoggedIn();
   }
 
 }

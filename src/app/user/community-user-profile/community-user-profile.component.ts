@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CommunityUserService} from "../../shared/services/community-user.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {finalize} from "rxjs/operators";
 import {NotificationService} from "../../shared/services/notification.service";
@@ -19,6 +19,7 @@ export class CommunityUserProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private location: Location,
+              private router: Router,
               private communityUserService: CommunityUserService,
               private notificationService: NotificationService) { }
 
@@ -60,6 +61,14 @@ export class CommunityUserProfileComponent implements OnInit {
   }
 
   rejectAccount() {
-
+    this.communityUserService.rejectAccount(this.username).subscribe(resp => {
+      if (resp) {
+        this.notificationService.createSuccessNotification("User account has been rejected.");
+        this.router.navigate(['/community-user']);
+      }
+    }, error => {
+      this.notificationService.createErrorNotification("There\'s an error when rejecting user account.");
+      console.log(error);
+    })
   }
 }

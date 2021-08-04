@@ -12,6 +12,7 @@ export class CommunityUserService {
   readonly GET_COMMUNITY_USERS_TABLE_DATA = this.API_SERVER_URL + "/community-user/get-community-users";
   readonly GET_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/view-profile";
   readonly APPROVE_USER_ACCOUNT = this.API_SERVER_URL + "/community-user/approve-user";
+  private readonly REJECT_USER_ACCOUNT = this.API_SERVER_URL + '/community-user/reject-user';
   readonly DELETE_COMMUNITY_USER = this.API_SERVER_URL + "/community-user/delete-user";
   readonly UPDATE_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/update-user";
 
@@ -42,5 +43,11 @@ export class CommunityUserService {
 
   updateProfile(form: any):Observable<any> {
     return this.http.post(this.UPDATE_COMMUNITY_USER_PROFILE, form);
+  }
+
+  rejectAccount(username: string) {
+    const params = new HttpParams()
+      .set("username", username);
+    return this.http.get(this.REJECT_USER_ACCOUNT, {params: params});
   }
 }
