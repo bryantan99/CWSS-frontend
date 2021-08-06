@@ -17,7 +17,8 @@
     </form>
   </div>
   <div *nzModalFooter>
-    <button nz-button nzType="primary" [nzLoading]="isSubmitted" (click)="handleOk()">Create</button>
+    <button *ngIf="!nzEdit" nz-button nzType="primary" [nzLoading]="isSubmitted" (click)="handleOkCreate()">Create</button>
+    <button *ngIf="nzEdit" nz-button nzType="primary" [nzLoading]="isSubmitted" (click)="handleOkUpdate()">Update</button>
     <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
   </div>
 </nz-modal>

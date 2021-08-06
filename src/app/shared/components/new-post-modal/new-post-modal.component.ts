@@ -10,10 +10,12 @@ import {NzUploadFile} from "ng-zorro-antd/upload";
 })
 export class NewPostModalComponent implements OnInit {
   @Input() isVisible: boolean;
+  @Input() postId: number | null;
   @Output() modalIsVisibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() addNewPostEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  nzTitle: string = "Create New Post";
+  nzEdit: boolean = false;
+  nzTitle: string;
   postForm: FormGroup;
   fileList: NzUploadFile[] = [];
   isSubmitted: boolean = false;
@@ -26,11 +28,24 @@ export class NewPostModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.postForm = this.fb.group({
+      postId: [null],
       postDescription: ['', Validators.required]
     });
+    this.nzTitle = this.nzEdit ? "Edit Post" : "Create New Post";
   }
 
-  handleOk(): void {
+  editPost(postId: number) {
+    if (!postId) {
+      return;
+    }
+
+    this.nzEdit = true;
+    this.nzTitle = "Edit Post";
+    this.isVisible = true;
+    this.getPost(postId);
+  }
+
+  handleOkCreate(): void {
     if (this.postForm.valid) {
       this.isSubmitted = true;
       this.adminPostService.addAdminPost(this.postForm.value, this.fileList)
@@ -44,6 +59,25 @@ export class NewPostModalComponent implements OnInit {
           }
         }, error => {
           console.log("There's an error when creating new post.", error);
+          this.isSubmitted = false;
+        });
+    }
+  }
+
+  handleOkUpdate(): void {
+    if (this.postForm.valid) {
+      this.isSubmitted = true;
+      this.adminPostService.updatePost(this.postForm.value, this.fileList)
+        .subscribe(resp => {
+          if (resp) {
+            this.isVisible = false;
+            this.emitIsVisible();
+            this.emitAddNewPost();
+            this.resetForm();
+            this.isSubmitted = false;
+          }
+        }, error => {
+          console.log("There's an error when updating post.", error);
           this.isSubmitted = false;
         });
     }
@@ -73,5 +107,20 @@ export class NewPostModalComponent implements OnInit {
 
   private emitAddNewPost() {
     this.addNewPostEmitter.emit(true);
+  }
+
+  private getPost(postId: number) {
+    this.adminPostService.getOneAdminPost(postId).subscribe(resp => {
+      this.patchForm(resp);
+    }, error => {
+      console.log("There's an error when retrieving post with Id " + postId);
+    })
+  }
+
+  private patchForm(resp: any) {
+    this.postForm.patchValue({
+      postId: resp.postId,
+      postDescription: resp.postDescription
+    });
   }
 }
