@@ -13,8 +13,9 @@ import {SignupHealthFormComponent} from './signup-health-form/signup-health-form
 import {CommunityUserComponent} from './community-user/community-user.component';
 import {CommunityUserProfileComponent} from './community-user-profile/community-user-profile.component';
 import {SignupInfoComponent} from './signup-info/signup-info.component';
-import { UpdateProfileComponent } from './update-profile/update-profile.component';
-
+import {UpdateProfileComponent} from './update-profile/update-profile.component';
+import {AdminManagementComponent} from "./admin/admin-management/admin-management.component";
+import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import { UpdateProfileComponent } from './update-profile/update-profile.componen
     CommunityUserComponent,
     CommunityUserProfileComponent,
     SignupInfoComponent,
-    UpdateProfileComponent
+    UpdateProfileComponent,
+    AdminManagementComponent,
+    AdminDetailComponent
   ],
   imports: [
     CommonModule,

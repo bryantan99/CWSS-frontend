@@ -1,0 +1,70 @@
+<nz-page-header>
+  <nz-page-header-title>
+    Admin
+  </nz-page-header-title>
+  <nz-page-header-extra>
+    <button nz-button (click)="openAddAdminModal()">Add New Staff</button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<nz-table #fixedTable
+          [nzLoading]="isLoading"
+          [nzData]="listOfDisplayData"
+          [(nzPageIndex)]="pageIndex"
+          [(nzPageSize)]="pageSize"
+          [nzScroll]="{x: '960px'}"
+          nzShowSizeChanger>
+  <thead>
+  <tr>
+    <th nzWidth="80px">No.</th>
+    <th nzWidth="150px"
+        [nzSortFn]="fullNameColumnItem.sortFn"
+        nzCustomFilter>
+      Full Name
+      <nz-filter-trigger [(nzVisible)]="fullNameFilterIsVisible" [nzActive]="fullNameSearchValue.length > 0" [nzDropdownMenu]="fullNameFilterMenu">
+        <i nz-icon nzType="search"></i>
+      </nz-filter-trigger>
+    </th>
+    <th nzWidth="150px">Email</th>
+    <th nzWidth="100px"
+        [nzFilters]="accountStatusColumnItem.listOfFilter"
+        [nzFilterFn]="accountStatusColumnItem.filterFn"
+        [nzFilterMultiple]="false">
+      Account Status
+    </th>
+    <th nzWidth="120px" class="text-center">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of fixedTable.data, let i = index">
+    <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+    <td>{{ data?.fullName | uppercase }}</td>
+    <td>{{ data?.email || '-' }}</td>
+    <td>
+      <nz-tag [nzColor]="'green'" *ngIf="data?.isActive === 'Y'">Activated</nz-tag>
+      <nz-tag [nzColor]="'orange'" *ngIf="data?.isActive !== 'Y'">Unactivated</nz-tag>
+    <td class="text-center">
+      <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
+        <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
+      </button>
+      <nz-dropdown-menu #menu1="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item [routerLink]="['/community-user/profile']" [queryParams]="{username: data.username}">View User Profile</li>
+          <li nz-menu-item nz-popconfirm [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'" (nzOnConfirm)="deleteUser(data.username)">Delete Staff</li>
+        </ul>
+      </nz-dropdown-menu>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-dropdown-menu #fullNameFilterMenu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown p-2">
+    <input class="mb-2" type="text" nz-input placeholder="Search name" [(ngModel)]="fullNameSearchValue"/>
+    <button nz-button nzSize="small" nzType="primary" (click)="searchFullName()" class="me-2">Search</button>
+    <button nz-button nzSize="small" (click)="resetFullName()">Reset</button>
+  </div>
+</nz-dropdown-menu>
+
+<app-admin-detail [isVisible]="adminDetailModalIsVisible"
+                  (modalIsVisibleEmitter)="modalVisibleHasChanged($event)"></app-admin-detail>

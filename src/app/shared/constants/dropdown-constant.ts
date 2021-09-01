@@ -35,4 +35,9 @@ export class DropdownConstant {
     {text: "Other", value: "O"},
   ]
 
+  public static ACCOUNT_ROLE_DROPDOWN = [
+    {text: "Admin", value: "ROLE_ADMIN"},
+    {text: "Super Admin", value: "ROLE_SUPER_ADMIN"}
+  ]
+
 }

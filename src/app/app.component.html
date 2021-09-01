@@ -26,6 +26,11 @@
         <a nz-button nzType="link">User</a>
       </li>
 
+      <li nz-menu-item nzMatchRouter *ngIf="isAdminUser()" routerLink="/admin-user">
+        <i nz-icon nzType="user"></i>
+        <a nz-button nzType="link">Admin</a>
+      </li>
+
       <li nz-menu-item nzMatchRouter *ngIf="hasUserLoggedIn()" [routerLink]="isAdminUser() ? '/admin-assistance' : 'community-user-assistance'">
         <i nz-icon nzType="alert"></i>
           <a nz-button nzType="link">Assistance</a>

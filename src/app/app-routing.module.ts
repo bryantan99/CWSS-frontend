@@ -11,6 +11,7 @@ import {CommunityUserAssistanceComponent} from "./assistance/community-user-assi
 import {AdminAssistanceComponent} from "./assistance/admin-assistance/admin-assistance.component";
 import {AssistanceRecordComponent} from "./assistance/assistance-record/assistance-record.component";
 import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
+import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent},
   { path: 'about', component: AboutComponent},
   { path: 'community-user', component: CommunityUserComponent},
+  { path: 'admin-user', component: AdminManagementComponent},
   { path: 'community-user/profile', component: CommunityUserProfileComponent},
   { path: 'community-user-assistance', component: CommunityUserAssistanceComponent},
   { path: 'admin-assistance', component: AdminAssistanceComponent},
