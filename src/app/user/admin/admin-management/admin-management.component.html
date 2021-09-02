@@ -26,12 +26,7 @@
       </nz-filter-trigger>
     </th>
     <th nzWidth="150px">Email</th>
-    <th nzWidth="100px"
-        [nzFilters]="accountStatusColumnItem.listOfFilter"
-        [nzFilterFn]="accountStatusColumnItem.filterFn"
-        [nzFilterMultiple]="false">
-      Account Status
-    </th>
+    <th nzWidth="150px">Contact No.</th>
     <th nzWidth="120px" class="text-center">Action</th>
   </tr>
   </thead>
@@ -40,16 +35,13 @@
     <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
     <td>{{ data?.fullName | uppercase }}</td>
     <td>{{ data?.email || '-' }}</td>
-    <td>
-      <nz-tag [nzColor]="'green'" *ngIf="data?.isActive === 'Y'">Activated</nz-tag>
-      <nz-tag [nzColor]="'orange'" *ngIf="data?.isActive !== 'Y'">Unactivated</nz-tag>
+    <td>{{ data?.contactNo }}</td>
     <td class="text-center">
       <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
         <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
       </button>
       <nz-dropdown-menu #menu1="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item [routerLink]="['/community-user/profile']" [queryParams]="{username: data.username}">View User Profile</li>
           <li nz-menu-item
               nz-popconfirm
               [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'"
