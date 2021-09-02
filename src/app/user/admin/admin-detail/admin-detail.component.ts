@@ -6,6 +6,7 @@ import {AuthService} from "../../../auth/auth.service";
 import {phoneNumberValidator} from "../../../shared/validators/custom-validators";
 import {NotificationService} from "../../../shared/services/notification.service";
 import {AdminUserService} from "../../../shared/services/admin-user.service";
+import {finalize} from "rxjs/operators";
 
 @Component({
   selector: 'app-admin-detail',
@@ -13,9 +14,10 @@ import {AdminUserService} from "../../../shared/services/admin-user.service";
 })
 export class AdminDetailComponent implements OnInit {
   @Input() isVisible: boolean;
-  @Output() modalIsVisibleEmitter: EventEmitter<{ isVisible: boolean, refresh: boolean}> = new EventEmitter<{ isVisible: boolean, refresh: boolean }>();
+  @Output() modalIsVisibleEmitter: EventEmitter<{ isVisible: boolean, refresh: boolean }> = new EventEmitter<{ isVisible: boolean, refresh: boolean }>();
   @Output() refreshListEmitter: EventEmitter<{ refreshList: boolean }> = new EventEmitter<{ refreshList: boolean }>();
   adminForm: FormGroup;
+  isSubmitting: boolean = false;
   readonly roleChoices: { text: string, value: string }[] = DropdownConstant.ACCOUNT_ROLE_DROPDOWN;
 
   constructor(private fb: FormBuilder,
@@ -42,12 +44,18 @@ export class AdminDetailComponent implements OnInit {
 
   handleOk() {
     if (this.adminForm.valid) {
-      this.adminService.addNewStaff(this.adminForm.value).subscribe(resp => {
+      this.isSubmitting = true;
+      this.adminService.addNewStaff(this.adminForm.value).pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+        })
+      ).subscribe(resp => {
         if (resp) {
           this.notificationService.createSuccessNotification("New staff has been created.");
           this.closeModal(true);
         }
       }, error => {
+        this.isSubmitting = false;
         this.notificationService.createErrorNotification("There\'s an error when adding new staff.");
       })
     }

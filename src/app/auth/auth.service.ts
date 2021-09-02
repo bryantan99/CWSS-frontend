@@ -8,10 +8,10 @@ import {Observable} from "rxjs";
 })
 export class AuthService {
 
-  readonly API_SERVER_URL = 'http://localhost:8080';
+  private readonly API_SERVER_URL = 'http://localhost:8080';
 
-  readonly LOGIN = this.API_SERVER_URL + "/authenticate";
-  readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/is-valid-username";
+  private readonly LOGIN = this.API_SERVER_URL + "/authenticate";
+  private readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/is-valid-username";
 
   constructor(private http: HttpClient) {
   }

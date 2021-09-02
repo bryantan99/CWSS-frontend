@@ -33,8 +33,6 @@ export class AdminManagementComponent implements OnInit {
 
   fullNameFilterIsVisible: boolean = false;
   fullNameSearchValue = '';
-  nricFilterIsVisible: boolean = false;
-  nricSearchValue = '';
   adminDetailModalIsVisible: boolean = false;
 
   constructor(private adminUserService: AdminUserService,
@@ -71,13 +69,6 @@ export class AdminManagementComponent implements OnInit {
   searchFullName(): void {
     this.fullNameFilterIsVisible = false;
     this.listOfDisplayData = this.listOfData.filter((item: CommunityUserTableModel) => {
-      //  Filter by fullName & nric if nric is present
-      if (this.nricSearchValue) {
-        return item.fullName.toLowerCase().indexOf(this.fullNameSearchValue.toLowerCase()) !== -1 &&
-          item.nricNo.toLowerCase().indexOf(this.nricSearchValue.toLowerCase()) !== -1
-      }
-
-      //  Filter by fullName only
       return item.fullName.toLowerCase().indexOf(this.fullNameSearchValue.toLowerCase()) !== -1
     });
   }
