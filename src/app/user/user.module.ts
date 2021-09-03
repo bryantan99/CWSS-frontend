@@ -16,6 +16,7 @@ import {SignupInfoComponent} from './signup-info/signup-info.component';
 import {UpdateProfileComponent} from './update-profile/update-profile.component';
 import {AdminManagementComponent} from "./admin/admin-management/admin-management.component";
 import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component";
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component"
     SignupInfoComponent,
     UpdateProfileComponent,
     AdminManagementComponent,
-    AdminDetailComponent
+    AdminDetailComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,
