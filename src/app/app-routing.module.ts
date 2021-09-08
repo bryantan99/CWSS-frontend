@@ -12,6 +12,7 @@ import {AdminAssistanceComponent} from "./assistance/admin-assistance/admin-assi
 import {AssistanceRecordComponent} from "./assistance/assistance-record/assistance-record.component";
 import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
 import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
+import {ResetPasswordComponent} from "./user/reset-password/reset-password.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent},
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'admin-assistance', component: AdminAssistanceComponent},
   { path: 'assistance-record', component: AssistanceRecordComponent},
   { path: 'community-user/profile/update', component: UpdateProfileComponent},
+  { path: 'reset', component: ResetPasswordComponent }
 ];
 
 @NgModule({

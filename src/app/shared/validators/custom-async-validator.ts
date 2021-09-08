@@ -6,8 +6,8 @@ import {map} from "rxjs/operators";
 export function uniqueUsernameValidator(authService: AuthService): AsyncValidatorFn {
   return (control: AbstractControl) => {
     return authService.isUniqueUsername(control.value).pipe(
-      map(isUnique => {
-        return isUnique ? null : {usernameTaken: true}
+      map(resp => {
+        return resp && resp.data ? null : {usernameTaken: true}
       })
     )
   }
