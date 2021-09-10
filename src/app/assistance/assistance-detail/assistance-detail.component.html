@@ -1,33 +1,106 @@
-<form nz-form [formGroup]="form">
-  <nz-form-item>
-    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Category</nz-form-label>
-    <nz-form-control [nzSpan]="12" [nzErrorTip]="categoryTplError">
-      <nz-select formControlName="categoryId">
-        <nz-option [nzLabel]="'Category 1'" [nzValue]="1"></nz-option>
-      </nz-select>
-      <ng-template #categoryTplError let-control>
-        <ng-container *ngIf="control.hasError('required')">Please select a category!</ng-container>
-      </ng-template>
-    </nz-form-control>
-  </nz-form-item>
+<nz-spin [nzSpinning]="isLoading">
+  <nz-page-header nzBackIcon
+                  (nzBack)="navigateToPreviousPage()">
+    <nz-page-header-title style="text-overflow: unset; white-space: initial">Assistance Request Detail
+    </nz-page-header-title>
+    <nz-page-header-extra>
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu"
+              *ngIf="assistanceRecord?.assistanceStatus ==='pending' || isAdmin">
+        Actions
+        <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item *ngIf="assistanceRecord?.assistanceStatus ==='pending' || isAdmin">
+            <a>Edit/Update</a>
+          </li>
+          <li nz-menu-item *ngIf="assistanceRecord?.assistanceStatus === 'pending'">
+            <a nz-popconfirm
+               nzPopconfirmTitle="Are you sure you want to delete this request?"
+               (nzOnConfirm)="deleteRec(assistanceRecord?.assistanceId)">Delete</a>
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <nz-row class="mb-2">
+        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Request ID<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
+        <nz-col [nzSm]="24" [nzMd]="16">
+          {{ assistanceRecord?.assistanceId || "-"}}
+        </nz-col>
+      </nz-row>
 
-  <nz-form-item>
-    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Title</nz-form-label>
-    <nz-form-control [nzSpan]="12" [nzErrorTip]="titleErrorTpl">
-      <textarea rows="2" nz-input [maxlength]="200" formControlName="assistanceTitle"></textarea>
-    </nz-form-control>
-    <ng-template #titleErrorTpl let-control>
-      <ng-container *ngIf="control.hasError('required')">Please enter title!</ng-container>
-    </ng-template>
-  </nz-form-item>
+      <nz-row class="mb-2">
+        <div nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Title<span class="float-end">&nbsp;:&nbsp;</span></div>
+        <div nz-col [nzSm]="24" [nzMd]="16">
+          {{ assistanceRecord?.assistanceTitle || "-" }}
+        </div>
+      </nz-row>
 
-  <nz-form-item>
-    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Description</nz-form-label>
-    <nz-form-control [nzSpan]="12" [nzErrorTip]="descriptionErrorTpl">
-      <textarea rows="8" nz-input formControlName="assistanceDescription"></textarea>
-    </nz-form-control>
-    <ng-template #descriptionErrorTpl let-control>
-      <ng-container *ngIf="control.hasError('required')">Please enter description!</ng-container>
-    </ng-template>
-  </nz-form-item>
-</form>
+      <nz-row class="mb-2">
+        <div nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Description<span class="float-end">&nbsp;:&nbsp;</span></div>
+        <div nz-col [nzSm]="24" [nzMd]="16">
+          {{ assistanceRecord?.assistanceDescription || "-" }}
+        </div>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Status<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
+        <nz-col [nzSm]="24" [nzMd]="16">
+          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'pending'" nzColor="gold">Pending</nz-tag>
+          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'processing'" nzColor="blue">Processing</nz-tag>
+          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'completed'" nzColor="green">Completed</nz-tag>
+          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
+          <span *ngIf="!assistanceRecord?.assistanceStatus">-</span>
+        </nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Person In Charge<span class="float-end">&nbsp;:&nbsp;</span>
+        </nz-col>
+        <nz-col [nzSm]="24" [nzMd]="16">
+          {{ assistanceRecord?.adminBean?.fullName || "-" }}
+        </nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Created Date<span class="float-end">&nbsp;:&nbsp;</span>
+        </nz-col>
+        <nz-col [nzSm]="24" [nzMd]="16">
+          {{ (assistanceRecord?.createdDate | date: 'medium') || "-"}}
+        </nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Last Updated Date<span class="float-end">&nbsp;:&nbsp;</span>
+        </nz-col>
+        <nz-col [nzSm]="24" [nzMd]="16">
+          {{ (assistanceRecord?.lastUpdatedDate | date: 'medium') || "-"}}
+        </nz-col>
+      </nz-row>
+    </nz-page-header-content>
+  </nz-page-header>
+
+  <nz-page-header>
+    <nz-page-header-title style="text-overflow: unset; white-space: initial">Help-seeker's Detail</nz-page-header-title>
+    <nz-page-header-content>
+      <nz-row class="mb-2">
+        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Name<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
+        <nz-col [nzSm]="24" [nzMd]="16">
+          <a nz-typography [routerLink]="['/community-user/profile']"
+             [queryParams]="{username: assistanceRecord?.communityUserBean?.username}"
+             *ngIf="assistanceRecord?.communityUserBean">{{ assistanceRecord?.communityUserBean?.fullName }}
+          </a>
+          <span *ngIf="!assistanceRecord?.communityUserBean">-</span>
+        </nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Contact No.<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
+        <nz-col [nzSm]="24" [nzMd]="16">
+          {{ assistanceRecord?.communityUserBean?.contactNo || "-" }}
+        </nz-col>
+      </nz-row>
+    </nz-page-header-content>
+  </nz-page-header>
+</nz-spin>

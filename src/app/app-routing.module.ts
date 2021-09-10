@@ -13,6 +13,7 @@ import {AssistanceRecordComponent} from "./assistance/assistance-record/assistan
 import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
 import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
 import {ResetPasswordComponent} from "./user/reset-password/reset-password.component";
+import {AssistanceDetailComponent} from "./assistance/assistance-detail/assistance-detail.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'community-user/profile', component: CommunityUserProfileComponent},
   { path: 'user/assistance', component: UserAssistanceComponent},
   { path: 'admin/assistance', component: AdminAssistanceComponent},
+  { path: 'assistance/detail', component: AssistanceDetailComponent},
   { path: 'assistance-record', component: AssistanceRecordComponent},
   { path: 'community-user/profile/update', component: UpdateProfileComponent},
   { path: 'reset', component: ResetPasswordComponent }

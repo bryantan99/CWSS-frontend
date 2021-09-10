@@ -13,6 +13,7 @@ export class AssistanceService {
   private readonly FIND_USER_ASSISTANCE_RECORD = this.APP_URL + "/assistance/current-user";
   private readonly ADD_ASSISTANCE_RECORD = this.APP_URL + "/assistance/new-request";
   private readonly DELETE_ASSISTANCE_RECORD = this.APP_URL + "/assistance";
+  private readonly GET_ASSISTANCE_RECORD_DETAIL = this.APP_URL + "/assistance/assistanceId/detail";
 
   constructor(private http: HttpClient) {
   }
@@ -26,8 +27,13 @@ export class AssistanceService {
     return this.http.post<ResponseModel<any>>(this.ADD_ASSISTANCE_RECORD, value);
   }
 
-  deleteRec(assistanceId: number):Observable<ResponseModel<any>> {
+  deleteRec(assistanceId: number): Observable<ResponseModel<any>> {
     const url = this.DELETE_ASSISTANCE_RECORD + "/" + assistanceId;
     return this.http.delete<ResponseModel<any>>(url);
+  }
+
+  findAssistanceRecordDetail(assistanceId: number): Observable<ResponseModel<any>> {
+    const url = this.GET_ASSISTANCE_RECORD_DETAIL.replace("assistanceId", assistanceId.toString(10));
+    return this.http.get<ResponseModel<any>>(url);
   }
 }

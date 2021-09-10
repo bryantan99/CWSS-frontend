@@ -47,7 +47,10 @@
       <nz-dropdown-menu #menu1="nzDropdownMenu">
         <ul nz-menu>
           <li nz-menu-item (click)="viewRec(data?.assistanceId)">View Request</li>
-          <li nz-menu-item (click)="deleteRec(data?.assistanceId)" *ngIf="data?.status === 'pending'">Delete Request
+          <li nz-menu-item nz-popconfirm
+              nzPopconfirmTitle="Are you sure you want to delete this request?"
+              (nzOnConfirm)="deleteRec(data?.assistanceId)" *ngIf="data?.status === 'pending'">Delete
+            Request
           </li>
         </ul>
       </nz-dropdown-menu>
@@ -60,9 +63,9 @@
           [nzTitle]="nzTitle"
           (nzOnCancel)="cancelNewAssistance()">
   <div *nzModalContent>
-    <app-assistance-detail [isEdit]="isEdit"
-                           (modalIsVisibleEventEmitter)="modalVisibleHasChange($event)"
-                           (refreshListEventEmitter)="listHasChange($event)"></app-assistance-detail>
+    <app-assistance-form [isEdit]="isEdit"
+                         (modalIsVisibleEventEmitter)="modalVisibleHasChange($event)"
+                         (refreshListEventEmitter)="listHasChange($event)"></app-assistance-form>
   </div>
   <div *nzModalFooter>
     <button nz-button nzType="default" (click)="cancelNewAssistance()">Cancel</button>

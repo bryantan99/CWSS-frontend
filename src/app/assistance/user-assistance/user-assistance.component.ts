@@ -4,14 +4,15 @@ import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {AuthService} from "../../auth/auth.service";
 import {NotificationService} from "../../shared/services/notification.service";
 import {finalize} from "rxjs/operators";
-import {AssistanceDetailComponent} from "../assistance-detail/assistance-detail.component";
+import {AssistanceFormComponent} from "../assistance-form/assistance-form.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-community-user-assistance',
   templateUrl: './user-assistance.component.html'
 })
 export class UserAssistanceComponent implements OnInit {
-  @ViewChild(AssistanceDetailComponent) assistanceDetailComponent: AssistanceDetailComponent;
+  @ViewChild(AssistanceFormComponent) assistanceFormComponent: AssistanceFormComponent;
 
   listOfAssistanceRecord: any[] = [];
   pageSize: number = 10;
@@ -24,7 +25,8 @@ export class UserAssistanceComponent implements OnInit {
 
   constructor(private assistanceService: AssistanceService,
               private authService: AuthService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -50,7 +52,7 @@ export class UserAssistanceComponent implements OnInit {
   }
 
   submitNewAssistance() {
-    this.assistanceDetailComponent.submit();
+    this.assistanceFormComponent.submit();
   }
 
   private findUserAssistanceRecord() {
@@ -72,9 +74,7 @@ export class UserAssistanceComponent implements OnInit {
   }
 
   viewRec(assistanceId: number) {
-    this.isEdit = false;
-    this.nzTitle = "Assistance Record [ID: " + assistanceId.toString(10) + "]";
-    this.assistanceDetailIsVisible = true;
+    this.router.navigate(['/assistance/detail'], {queryParams: {assistanceId: assistanceId}});
   }
 
   modalVisibleHasChange(data: any) {
@@ -91,6 +91,7 @@ export class UserAssistanceComponent implements OnInit {
     this.assistanceService.deleteRec(assistanceId)
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
+          this.notificationService.createSuccessNotification("Assistance request ID : " + assistanceId + " has been deleted.");
           this.findUserAssistanceRecord();
         }
       }, error => {

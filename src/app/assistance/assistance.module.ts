@@ -5,13 +5,14 @@ import { UserAssistanceComponent } from './user-assistance/user-assistance.compo
 import {SharedModule} from "../shared/shared.module";
 import { AssistanceRecordComponent } from './assistance-record/assistance-record.component';
 import {AppRoutingModule} from "../app-routing.module";
-import { AssistanceDetailComponent } from './assistance-detail/assistance-detail.component';
+import { AssistanceFormComponent } from './assistance-form/assistance-form.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { AssistanceDetailComponent } from './assistance-detail/assistance-detail.component';
 
 
 
 @NgModule({
-  declarations: [AdminAssistanceComponent, UserAssistanceComponent, AssistanceRecordComponent, AssistanceDetailComponent],
+  declarations: [AdminAssistanceComponent, UserAssistanceComponent, AssistanceRecordComponent, AssistanceFormComponent, AssistanceDetailComponent],
     imports: [
         CommonModule,
         SharedModule,

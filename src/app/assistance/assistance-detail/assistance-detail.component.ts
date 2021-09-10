@@ -1,8 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
 import {AssistanceService} from "../assistance.service";
+import {ActivatedRoute} from "@angular/router";
+import {Location} from "@angular/common";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {NotificationService} from "../../shared/services/notification.service";
+import {finalize} from "rxjs/operators";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-assistance-detail',
@@ -10,42 +13,60 @@ import {NotificationService} from "../../shared/services/notification.service";
 })
 export class AssistanceDetailComponent implements OnInit {
 
-  @Input() isEdit: boolean = false;
-  @Output() refreshListEventEmitter: EventEmitter<any> = new EventEmitter<any>();
-  @Output() modalIsVisibleEventEmitter: EventEmitter<any> = new EventEmitter<any>();
-  nzTitle: string;
-  form: FormGroup;
+  assistanceId: number;
+  assistanceRecord: any;
+  isLoading: boolean = false;
+  isAdmin: boolean = false;
 
-  constructor(private fb: FormBuilder,
-              private assistanceService: AssistanceService,
-              private notificationService: NotificationService) { }
-
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      categoryId: ['', Validators.required],
-      assistanceTitle: ['', Validators.required],
-      assistanceDescription: ['', Validators.required],
-    });
+  constructor(private assistanceService: AssistanceService,
+              private notificationService: NotificationService,
+              private route: ActivatedRoute,
+              private location: Location,
+              private authService: AuthService) {
   }
 
-  submit() {
-    for (const key in this.form.controls) {
-      this.form.controls[key].markAsTouched();
-      this.form.controls[key].markAsDirty();
-      this.form.controls[key].updateValueAndValidity();
-    }
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['assistanceId']) {
+        this.assistanceId = params['assistanceId'];
+        this.getAssistanceDetail();
+      } else {
+        this.location.back();
+      }
+    });
+    this.isAdmin = this.authService.isAdminLoggedIn();
+  }
 
-    if (this.form.valid) {
-      this.assistanceService.addAssistance(this.form.value).subscribe(resp => {
-        if (resp && resp.status === HttpStatusConstant.CREATED) {
-          this.notificationService.createSuccessNotification("Created new assistance request.");
-          this.refreshListEventEmitter.emit({refreshList: true});
-          this.modalIsVisibleEventEmitter.emit({modalIsVisible: false});
+  private getAssistanceDetail() {
+    this.isLoading = true;
+    this.assistanceService.findAssistanceRecordDetail(this.assistanceId)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+      }))
+      .subscribe(resp => {
+        if (resp && resp.status === HttpStatusConstant.OK && resp.data) {
+          this.assistanceRecord = resp.data;
         }
       }, error => {
-        this.notificationService.createErrorNotification("There\'s an error when adding new assistance request.");
+        this.isLoading = false;
+        this.notificationService.createErrorNotification("There\'s an error when retrieving assistance record detail.");
         console.log(error.error);
       });
-    }
+  }
+
+  navigateToPreviousPage() {
+    this.location.back();
+  }
+
+  deleteRec(assistanceId: any) {
+    this.assistanceService.deleteRec(assistanceId).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.notificationService.createSuccessNotification("Assistance request ID : " + assistanceId + " has been deleted.");
+        this.location.back();
+      }
+    }, error => {
+      this.notificationService.createErrorNotification("There\'s an error when deleting assistance request.");
+      console.log(error.error);
+    })
   }
 }
