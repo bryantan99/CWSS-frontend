@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {Observable} from "rxjs";
+import {ResponseModel} from "../shared/models/response-model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class AuthService {
 
   private readonly LOGIN = this.API_SERVER_URL + "/authenticate";
   private readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/is-valid-username";
+  private readonly CURRENT_LOGGED_IN_USERNAME = this.API_SERVER_URL + "/account/current-username";
 
   constructor(private http: HttpClient) {
   }
@@ -57,5 +59,9 @@ export class AuthService {
   isUniqueUsername(username: string): Observable<any> {
     const params = new HttpParams().set("username", username);
     return this.http.get(this.IS_UNIQUE_USERNAME, {params: params});
+  }
+
+  getCurrentLoggedInUsername(): Observable<ResponseModel<any>> {
+    return this.http.get<ResponseModel<any>>(this.CURRENT_LOGGED_IN_USERNAME);
   }
 }

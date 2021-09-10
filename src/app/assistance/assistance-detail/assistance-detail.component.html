@@ -1,0 +1,33 @@
+<form nz-form [formGroup]="form">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Category</nz-form-label>
+    <nz-form-control [nzSpan]="12" [nzErrorTip]="categoryTplError">
+      <nz-select formControlName="categoryId">
+        <nz-option [nzLabel]="'Category 1'" [nzValue]="1"></nz-option>
+      </nz-select>
+      <ng-template #categoryTplError let-control>
+        <ng-container *ngIf="control.hasError('required')">Please select a category!</ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Title</nz-form-label>
+    <nz-form-control [nzSpan]="12" [nzErrorTip]="titleErrorTpl">
+      <textarea rows="2" nz-input [maxlength]="200" formControlName="assistanceTitle"></textarea>
+    </nz-form-control>
+    <ng-template #titleErrorTpl let-control>
+      <ng-container *ngIf="control.hasError('required')">Please enter title!</ng-container>
+    </ng-template>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Description</nz-form-label>
+    <nz-form-control [nzSpan]="12" [nzErrorTip]="descriptionErrorTpl">
+      <textarea rows="8" nz-input formControlName="assistanceDescription"></textarea>
+    </nz-form-control>
+    <ng-template #descriptionErrorTpl let-control>
+      <ng-container *ngIf="control.hasError('required')">Please enter description!</ng-container>
+    </ng-template>
+  </nz-form-item>
+</form>

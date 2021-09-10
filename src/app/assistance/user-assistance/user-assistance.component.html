@@ -1,0 +1,71 @@
+<nz-page-header
+  class="site-page-header"
+  nzTitle="Assistance Record"
+>
+  <nz-page-header-extra>
+    <button nz-button (click)="openAddAssistanceModal()">Request Assistance</button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<nz-table #assistanceRecordTable
+          [(nzPageIndex)]="pageIndex"
+          [(nzPageSize)]="pageSize"
+          [nzData]="listOfAssistanceRecord"
+          [nzLoading]="isLoading">
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Status</th>
+    <th>Person In Charge</th>
+    <th>Created Date</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of assistanceRecordTable.data;
+      let i = index">
+    <td>{{ (pageIndex - 1) * pageSize + 1 + i}}</td>
+    <td>{{ data?.assistanceId || "-" }}</td>
+    <td>{{ data?.assistanceTitle || "-" }}</td>
+    <td>
+      <ng-container *ngIf="data?.status; else noStatusTpl">
+        <nz-tag *ngIf="data.status === 'pending'" nzColor="gold">Pending</nz-tag>
+        <nz-tag *ngIf="data.status === 'processing'" nzColor="blue">Processing</nz-tag>
+        <nz-tag *ngIf="data.status === 'completed'" nzColor="green">Completed</nz-tag>
+        <nz-tag *ngIf="data.status === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
+      </ng-container>
+      <ng-template #noStatusTpl>-</ng-template>
+    </td>
+    <td>{{ data?.adminFullName || "-" }}</td>
+    <td>{{ (data?.createdDate | date: 'medium') || "-" }}</td>
+    <td>
+      <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
+        <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
+      </button>
+      <nz-dropdown-menu #menu1="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="viewRec(data?.assistanceId)">View Request</li>
+          <li nz-menu-item (click)="deleteRec(data?.assistanceId)" *ngIf="data?.status === 'pending'">Delete Request
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal [(nzVisible)]="assistanceDetailIsVisible"
+          [nzTitle]="nzTitle"
+          (nzOnCancel)="cancelNewAssistance()">
+  <div *nzModalContent>
+    <app-assistance-detail [isEdit]="isEdit"
+                           (modalIsVisibleEventEmitter)="modalVisibleHasChange($event)"
+                           (refreshListEventEmitter)="listHasChange($event)"></app-assistance-detail>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelNewAssistance()">Cancel</button>
+    <button nz-button nzType="primary" (click)="submitNewAssistance()">Submit</button>
+  </div>
+</nz-modal>

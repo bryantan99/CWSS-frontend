@@ -7,7 +7,7 @@ import {AboutComponent} from "./homepage/about/about.component";
 import {LogoutComponent} from "./user/logout/logout.component";
 import {CommunityUserComponent} from "./user/community-user/community-user.component";
 import {CommunityUserProfileComponent} from "./user/community-user-profile/community-user-profile.component";
-import {CommunityUserAssistanceComponent} from "./assistance/community-user-assistance/community-user-assistance.component";
+import {UserAssistanceComponent} from "./assistance/user-assistance/user-assistance.component";
 import {AdminAssistanceComponent} from "./assistance/admin-assistance/admin-assistance.component";
 import {AssistanceRecordComponent} from "./assistance/assistance-record/assistance-record.component";
 import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
@@ -23,8 +23,8 @@ const routes: Routes = [
   { path: 'community-user', component: CommunityUserComponent},
   { path: 'admin-user', component: AdminManagementComponent},
   { path: 'community-user/profile', component: CommunityUserProfileComponent},
-  { path: 'community-user-assistance', component: CommunityUserAssistanceComponent},
-  { path: 'admin-assistance', component: AdminAssistanceComponent},
+  { path: 'user/assistance', component: UserAssistanceComponent},
+  { path: 'admin/assistance', component: AdminAssistanceComponent},
   { path: 'assistance-record', component: AssistanceRecordComponent},
   { path: 'community-user/profile/update', component: UpdateProfileComponent},
   { path: 'reset', component: ResetPasswordComponent }
