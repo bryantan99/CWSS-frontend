@@ -15,9 +15,12 @@
 
 <nz-divider></nz-divider>
 
-<nz-list *ngIf="commentDisplayList.length" [nzDataSource]="commentDisplayList" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+<nz-list *ngIf="commentDisplayList.length"
+         [nzDataSource]="commentDisplayList"
+         [nzRenderItem]="item"
+         [nzItemLayout]="'horizontal'">
   <ng-template #item let-item>
-    <nz-comment [nzAuthor]="item?.createdBy" [nzDatetime]="item?.createdDate | date: 'medium'">
+    <nz-comment [nzAuthor]="item?.createdByFullName || '-'" [nzDatetime]="item?.createdDate | date: 'medium'">
       <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
       <nz-comment-content>
         <p>{{ item?.commentDesc }}</p>
@@ -27,7 +30,7 @@
 </nz-list>
 
 <nz-pagination *ngIf="commentList?.length"
-               [(nzPageIndex)] ="pageIndex"
+               [(nzPageIndex)]="pageIndex"
                [nzPageSize]="pageSize"
                (nzPageIndexChange)="initCommentDisplayList()"
                [nzSize]="'small'"
