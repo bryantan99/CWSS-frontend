@@ -4,8 +4,7 @@
     <nz-page-header-title style="text-overflow: unset; white-space: initial">Assistance Request Detail
     </nz-page-header-title>
     <nz-page-header-extra>
-      <button nz-button nz-dropdown [nzDropdownMenu]="menu"
-              *ngIf="assistanceRecord?.assistanceStatus ==='pending' || isAdmin">
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu">
         Actions
         <i nz-icon nzType="down"></i>
       </button>
@@ -18,6 +17,9 @@
             <a nz-popconfirm
                nzPopconfirmTitle="Are you sure you want to delete this request?"
                (nzOnConfirm)="deleteRec(assistanceRecord?.assistanceId)">Delete</a>
+          </li>
+          <li nz-menu-item>
+            <a (click)="openCommentDrawer()">View comment</a>
           </li>
         </ul>
       </nz-dropdown-menu>
@@ -104,3 +106,13 @@
     </nz-page-header-content>
   </nz-page-header>
 </nz-spin>
+
+<nz-drawer *ngIf="commentDrawerIsVisible"
+           [(nzVisible)]="commentDrawerIsVisible"
+           [nzTitle]="'Follow-up Comment'"
+           [nzWidth]="320"
+           (nzOnClose)="closeCommentDrawer()">
+  <ng-container *nzDrawerContent>
+    <app-assistance-comment [assistanceId]="assistanceId"></app-assistance-comment>
+  </ng-container>
+</nz-drawer>

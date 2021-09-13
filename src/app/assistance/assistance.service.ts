@@ -15,6 +15,8 @@ export class AssistanceService {
   private readonly ADD_ASSISTANCE_RECORD = this.APP_URL + "/assistance/new-request";
   private readonly DELETE_ASSISTANCE_RECORD = this.APP_URL + "/assistance";
   private readonly GET_ASSISTANCE_RECORD_DETAIL = this.APP_URL + "/assistance/assistanceId/detail";
+  private readonly GET_ASSISTANCE_COMMENTS: string = this.APP_URL + "/assistance/assistanceId/comment";
+  private readonly ADD_ASSISTANCE_COMMENT: string = this.APP_URL + "/assistance/comment";
 
   constructor(private http: HttpClient) {
   }
@@ -40,5 +42,14 @@ export class AssistanceService {
 
   findAllAssistanceRecords(): Observable<ResponseModel<any[]>> {
     return this.http.get<ResponseModel<any[]>>(this.FIND_ALL_ASSISTANCE_RECORD);
+  }
+
+  addComment(form: { commentDesc: string, assistanceId: number }): Observable<ResponseModel<any>> {
+    return this.http.post<ResponseModel<any>>(this.ADD_ASSISTANCE_COMMENT, form);
+  }
+
+  findComments(assistanceId: number): Observable<ResponseModel<any[]>> {
+    const url = this.GET_ASSISTANCE_COMMENTS.replace("assistanceId", assistanceId.toString(10));
+    return this.http.get<ResponseModel<any>>(url);
   }
 }

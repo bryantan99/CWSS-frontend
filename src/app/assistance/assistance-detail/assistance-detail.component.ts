@@ -17,6 +17,7 @@ export class AssistanceDetailComponent implements OnInit {
   assistanceRecord: any;
   isLoading: boolean = false;
   isAdmin: boolean = false;
+  commentDrawerIsVisible: boolean = false;
 
   constructor(private assistanceService: AssistanceService,
               private notificationService: NotificationService,
@@ -68,5 +69,13 @@ export class AssistanceDetailComponent implements OnInit {
       this.notificationService.createErrorNotification("There\'s an error when deleting assistance request.");
       console.log(error.error);
     })
+  }
+
+  closeCommentDrawer() {
+    this.commentDrawerIsVisible = false;
+  }
+
+  openCommentDrawer() {
+    this.commentDrawerIsVisible = true;
   }
 }

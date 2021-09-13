@@ -1,0 +1,36 @@
+<nz-comment>
+  <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
+  <nz-comment-content>
+    <nz-form-item>
+      <textarea [(ngModel)]="inputValue" [maxlength]="1000" nz-input rows="4"></textarea>
+      <p>{{ inputValue?.length || 0 }} / 1000 characters</p>
+    </nz-form-item>
+    <nz-form-item>
+      <button nz-button nzType="primary" [nzLoading]="isSubmitting" [disabled]="!inputValue" (click)="handleSubmit()">
+        Add Comment
+      </button>
+    </nz-form-item>
+  </nz-comment-content>
+</nz-comment>
+
+<nz-divider></nz-divider>
+
+<nz-list *ngIf="commentDisplayList.length" [nzDataSource]="commentDisplayList" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+  <ng-template #item let-item>
+    <nz-comment [nzAuthor]="item?.createdBy" [nzDatetime]="item?.createdDate | date: 'medium'">
+      <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
+      <nz-comment-content>
+        <p>{{ item?.commentDesc }}</p>
+      </nz-comment-content>
+    </nz-comment>
+  </ng-template>
+</nz-list>
+
+<nz-pagination *ngIf="commentList?.length"
+               [(nzPageIndex)] ="pageIndex"
+               [nzPageSize]="pageSize"
+               (nzPageIndexChange)="initCommentDisplayList()"
+               [nzSize]="'small'"
+               [nzTotal]="commentList?.length"></nz-pagination>
+
+
