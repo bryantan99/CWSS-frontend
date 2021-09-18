@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {NzUploadFile} from "ng-zorro-antd/upload";
+import {ResponseModel} from "../models/response-model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AdminPostService {
 
   GET_ADMIN_POST = this.apiServerUrl + "/post/get-admin-posts";
   ADD_ADMIN_POST = this.apiServerUrl + "/post/add-admin-post";
-  DELETE_ADMIN_POST = this.apiServerUrl + "/post/delete-admin-post";
+  private readonly DELETE_ADMIN_POST = this.apiServerUrl + "/post";
   readonly GET_POST = this.apiServerUrl + "/post/get-post";
   readonly UPDATE_POST = this.apiServerUrl + "/post/update-post";
 
@@ -33,9 +34,9 @@ export class AdminPostService {
 
   getAdminPost():Observable<any> {return this.http.get(this.GET_ADMIN_POST);}
 
-  deleteAdminPost(postId: number):Observable<any> {
+  deleteAdminPost(postId: number):Observable<ResponseModel<any>> {
     const url = this.DELETE_ADMIN_POST + "/" + postId;
-    return this.http.delete(url);
+    return this.http.delete<ResponseModel<any>>(url);
   }
 
   getOneAdminPost(postId: number) {

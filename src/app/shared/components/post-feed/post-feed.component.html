@@ -1,8 +1,8 @@
-<!--<img nz-image nzSrc="./assets/img/angular-spring-boot-postgresql.jpg">-->
 <nz-spin [nzSpinning]="isLoading">
   <ng-container *ngIf="adminPost.length > 0; else emptyPostTemplate">
-    <nz-card class="mb-4"  *ngFor="let post of adminPost">
-      <nz-card-meta [nzAvatar]="avatarTemplate" [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate"></nz-card-meta>
+    <nz-card class="mb-4" *ngFor="let post of adminPost">
+      <nz-card-meta [nzAvatar]="avatarTemplate" [nzTitle]="titleTemplate"
+                    [nzDescription]="descriptionTemplate"></nz-card-meta>
 
       <ng-template #avatarTemplate>
         <nz-avatar [nzSrc]="dummyPhotoUrl"></nz-avatar>
@@ -16,22 +16,35 @@
           </nz-col>
 
           <nz-col [nzXs]="24" [nzSm]="12" *ngIf="isAdminLoggedIn">
-            <button class="float-end" nz-button nz-dropdown [nzDropdownMenu]="menu4">Action<i nz-icon nzType="down"></i></button>
+            <button class="float-end" nz-button nz-dropdown [nzDropdownMenu]="menu4">Action<i nz-icon nzType="down"></i>
+            </button>
             <nz-dropdown-menu #menu4="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item (click)="editPost(post?.postId)">Edit Post</li>
-                <li nz-menu-item nz-popconfirm nzPopconfirmTitle="Are you sure you want to delete this post?" (nzOnConfirm)="deletePost(post?.postId)">Delete Post</li>
+                <li nz-menu-item nz-popconfirm nzPopconfirmTitle="Are you sure you want to delete this post?"
+                    (nzOnConfirm)="deletePost(post?.postId)">Delete Post
+                </li>
               </ul>
             </nz-dropdown-menu>
           </nz-col>
 
-          <app-new-post-modal [isVisible]="editPostModalIsVisible" (modalIsVisibleEmitter)="modalVisibleHasChange($event)" (addNewPostEmitter)="postListHasChanges($event)"></app-new-post-modal>
+          <app-new-post-modal [isVisible]="editPostModalIsVisible"
+                              (modalIsVisibleEmitter)="modalVisibleHasChange($event)"
+                              (addNewPostEmitter)="postListHasChanges($event)"></app-new-post-modal>
         </nz-row>
 
       </ng-template>
 
       <ng-template #descriptionTemplate>
         <p nz-typography class="text-dark" innerHTML="{{post?.postDescription || '-'}}"></p>
+        <nz-image-group *ngIf="post?.postMediaBeanSet?.length !== 0">
+          <img *ngFor="let img of post?.postMediaBeanSet"
+               nz-image
+               width="200px"
+               height="200px"
+               class="me-2 mb-2"
+               [nzSrc]="getPostImg(img)">
+        </nz-image-group>
       </ng-template>
 
     </nz-card>

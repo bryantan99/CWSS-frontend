@@ -3,6 +3,8 @@ import {AdminPostService} from "../../services/admin-post.service";
 import {finalize} from "rxjs/operators";
 import {AuthService} from "../../../auth/auth.service";
 import {NewPostModalComponent} from "../new-post-modal/new-post-modal.component";
+import {ImageService} from "../../services/image.service";
+import {HttpStatusConstant} from "../../constants/http-status-constant";
 
 @Component({
   selector: 'app-post-feed',
@@ -19,7 +21,8 @@ export class PostFeedComponent implements OnInit {
   editPostModalIsVisible: boolean = false;
 
   constructor(private adminPostService: AdminPostService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private imageService: ImageService) {
   }
 
   ngOnInit(): void {
@@ -46,7 +49,9 @@ export class PostFeedComponent implements OnInit {
   deletePost(postId: number) {
     this.adminPostService.deleteAdminPost(postId)
       .subscribe(resp => {
-        this.getAdminPosts();
+        if (resp && resp.status === HttpStatusConstant.OK) {
+          this.getAdminPosts();
+        }
       }, error => {
         console.log("There's an error when deleting new post.", error);
       })
@@ -64,5 +69,9 @@ export class PostFeedComponent implements OnInit {
     if (hasChange) {
       this.getAdminPosts();
     }
+  }
+
+  getPostImg(img: any) {
+    return this.imageService.getPostImg(img.postId, img.mediaDirectory);
   }
 }
