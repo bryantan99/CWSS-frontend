@@ -2,15 +2,22 @@
   <div *nzModalContent>
     <form nz-form [formGroup]="postForm">
       <nz-form-item>
-        <nz-form-control>
+        <nz-form-label nzRequired [nzSpan]="24" class="fw-bold">Post Description</nz-form-label>
+        <nz-form-control [nzSpan]="24" [nzErrorTip]="postDescriptionErrorTpl">
           <ckeditor [editorUrl]="EDITOR_URL" [config]="EDITOR_CONFIG" formControlName="postDescription"></ckeditor>
+          <ng-template #postDescriptionErrorTpl let-ctrl>
+            <ng-container *ngIf="ctrl?.hasError('required')">Please enter post description!</ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-control>
-          <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
-            <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Post Media(s) <i nz-icon nzType="info-circle" nzTheme="outline" class="ms-2" nz-tooltip nzTooltipTitle="Only JPG and PNG are acceptable."></i></nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-upload nzMultiple [nzLimit]="5" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzAccept]="['image/png', 'image/jpeg']">
+            <button nz-button [disabled]="fileList.length >= MAX_FILE_LIMIT">
+              <i nz-icon nzType="upload"></i>Select {{ fileList?.length || 0 }} / 5 Images
+            </button>
           </nz-upload>
         </nz-form-control>
       </nz-form-item>

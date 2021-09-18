@@ -22,9 +22,12 @@ export class NewPostModalComponent implements OnInit {
   isUploading: boolean = false;
   EDITOR_CONFIG = CkEditorConstants.DEFAULT_CONFIG;
   EDITOR_URL: string = CkEditorConstants.EDITOR_URL;
+  readonly MAX_FILE_LIMIT: number = 5;
+  readonly ACCEPTABLE_FILE_FORMAT = ['image/jpeg', 'image/png'];
 
   constructor(private fb: FormBuilder,
-              private adminPostService: AdminPostService) { }
+              private adminPostService: AdminPostService) {
+  }
 
   ngOnInit(): void {
     this.postForm = this.fb.group({
@@ -46,6 +49,12 @@ export class NewPostModalComponent implements OnInit {
   }
 
   handleOkCreate(): void {
+    for (const key in this.postForm.controls) {
+      this.postForm.controls[key].markAsDirty();
+      this.postForm.controls[key].markAsTouched();
+      this.postForm.controls[key].updateValueAndValidity();
+    }
+
     if (this.postForm.valid) {
       this.isSubmitted = true;
       this.adminPostService.addAdminPost(this.postForm.value, this.fileList)
@@ -94,7 +103,7 @@ export class NewPostModalComponent implements OnInit {
   }
 
   beforeUpload = (file: NzUploadFile): boolean => {
-    if (!this.fileList.some(e => e.name === file.name)) {
+    if (!this.fileList.some(e => e.name === file.name) && this.fileList.length < this.MAX_FILE_LIMIT && this.ACCEPTABLE_FILE_FORMAT.includes(file.type)) {
       this.fileList = this.fileList.concat(file);
     }
     return false;
