@@ -14,7 +14,7 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="24" class="fw-bold">Post Media(s) <i nz-icon nzType="info-circle" nzTheme="outline" class="ms-2" nz-tooltip nzTooltipTitle="Only JPG and PNG are acceptable."></i></nz-form-label>
         <nz-form-control [nzSpan]="24">
-          <nz-upload nzMultiple [nzLimit]="5" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzAccept]="['image/png', 'image/jpeg']">
+          <nz-upload nzMultiple [nzLimit]="5" nzListType="picture" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzRemove]="removeFile" [nzAccept]="['image/png', 'image/jpeg']">
             <button nz-button [disabled]="fileList.length >= MAX_FILE_LIMIT">
               <i nz-icon nzType="upload"></i>Select {{ fileList?.length || 0 }} / 5 Images
             </button>

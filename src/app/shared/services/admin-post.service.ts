@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {NzUploadFile} from "ng-zorro-antd/upload";
 import {ResponseModel} from "../models/response-model";
@@ -9,17 +9,18 @@ import {ResponseModel} from "../models/response-model";
 })
 export class AdminPostService {
 
-  private apiServerUrl = 'http://localhost:8080';
+  private readonly APP_URL = 'http://localhost:8080';
 
-  GET_ADMIN_POST = this.apiServerUrl + "/post/get-admin-posts";
-  ADD_ADMIN_POST = this.apiServerUrl + "/post/add-admin-post";
-  private readonly DELETE_ADMIN_POST = this.apiServerUrl + "/post";
-  readonly GET_POST = this.apiServerUrl + "/post/get-post";
-  readonly UPDATE_POST = this.apiServerUrl + "/post/update-post";
+  private readonly GET_POSTS = this.APP_URL + "/post";
+  private readonly GET_POST = this.APP_URL + "/post/postId";
+  private readonly ADD_POST = this.APP_URL + "/post";
+  private readonly DELETE_POST = this.APP_URL + "/post/postId";
+  private readonly UPDATE_POST = this.APP_URL + "/post/update";
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-  addAdminPost(newPostForm: any, fileList?: NzUploadFile[]):Observable<any> {
+  addAdminPost(newPostForm: any, fileList?: NzUploadFile[]): Observable<any> {
     const formData = new FormData();
 
     if (fileList) {
@@ -29,19 +30,21 @@ export class AdminPostService {
     }
     formData.append('form', JSON.stringify(newPostForm));
 
-    return this.http.post(this.ADD_ADMIN_POST, formData);
+    return this.http.post(this.ADD_POST, formData);
   }
 
-  getAdminPost():Observable<any> {return this.http.get(this.GET_ADMIN_POST);}
+  getPosts(): Observable<ResponseModel<any>> {
+    return this.http.get<ResponseModel<any>>(this.GET_POSTS);
+  }
 
-  deleteAdminPost(postId: number):Observable<ResponseModel<any>> {
-    const url = this.DELETE_ADMIN_POST + "/" + postId;
+  deleteAdminPost(postId: number): Observable<ResponseModel<any>> {
+    const url = this.DELETE_POST.replace("postId", postId.toString(10));
     return this.http.delete<ResponseModel<any>>(url);
   }
 
-  getOneAdminPost(postId: number) {
-    const params = new HttpParams().set("postId", postId.toString(10));
-    return this.http.get(this.GET_POST, {params: params});
+  getPost(postId: number): Observable<ResponseModel<any>> {
+    const url = this.GET_POST.replace("postId", postId.toString(10));
+    return this.http.get<ResponseModel<any>>(url);
   }
 
   updatePost(form: any, fileList: NzUploadFile[]): Observable<any> {

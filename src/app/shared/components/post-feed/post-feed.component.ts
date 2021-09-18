@@ -33,17 +33,18 @@ export class PostFeedComponent implements OnInit {
   getAdminPosts() {
     this.adminPost = [];
     this.isLoading = true;
-    this.adminPostService.getAdminPost()
+    this.adminPostService.getPosts()
       .pipe(finalize(() => {
         this.isLoading = false;
       }))
       .subscribe(resp => {
-        this.adminPost = resp ? resp : [];
+        if (resp && resp.status === HttpStatusConstant.OK) {
+          this.adminPost = resp.data ? resp.data : [];
+        }
       }, error => {
         console.log("There's an error when getting admin posts.", error);
         this.isLoading = false;
       })
-
   }
 
   deletePost(postId: number) {

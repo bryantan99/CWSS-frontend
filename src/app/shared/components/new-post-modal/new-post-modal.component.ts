@@ -3,6 +3,9 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AdminPostService} from "../../services/admin-post.service";
 import {CkEditorConstants} from "../../constants/ck-editor-constants";
 import {NzUploadFile} from "ng-zorro-antd/upload";
+import {HttpStatusConstant} from "../../constants/http-status-constant";
+import {ImageService} from "../../services/image.service";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
   selector: 'app-new-post-modal',
@@ -26,13 +29,16 @@ export class NewPostModalComponent implements OnInit {
   readonly ACCEPTABLE_FILE_FORMAT = ['image/jpeg', 'image/png'];
 
   constructor(private fb: FormBuilder,
-              private adminPostService: AdminPostService) {
+              private adminPostService: AdminPostService,
+              private imageService: ImageService,
+              private noticationService: NotificationService) {
   }
 
   ngOnInit(): void {
     this.postForm = this.fb.group({
       postId: [null],
-      postDescription: ['', Validators.required]
+      postDescription: ['', Validators.required],
+      postMediaIdsToBeDeleted: [[]]
     });
     this.nzTitle = this.nzEdit ? "Edit Post" : "Create New Post";
   }
@@ -109,6 +115,19 @@ export class NewPostModalComponent implements OnInit {
     return false;
   };
 
+  removeFile = (file: NzUploadFile): boolean => {
+    const index = this.fileList.indexOf(file);
+    if (index > -1) {
+      const postIdsToBeDeleted : number[] = this.postForm.get('postMediaIdsToBeDeleted').value ? this.postForm.get('postMediaIdsToBeDeleted').value : [];
+      postIdsToBeDeleted.push(parseInt(file.uid));
+      this.postForm.patchValue({
+        postIdsToBeDeleted: postIdsToBeDeleted
+      })
+      this.fileList.splice(index, 1);
+    }
+    return false;
+  }
+
   private resetForm() {
     this.postForm.reset();
     this.fileList = [];
@@ -119,10 +138,13 @@ export class NewPostModalComponent implements OnInit {
   }
 
   private getPost(postId: number) {
-    this.adminPostService.getOneAdminPost(postId).subscribe(resp => {
-      this.patchForm(resp);
+    this.adminPostService.getPost(postId).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK && resp.data) {
+        this.patchForm(resp.data);
+      }
     }, error => {
-      console.log("There's an error when retrieving post with Id " + postId);
+      this.noticationService.createErrorNotification("There\'s an error when retrieving post ID: " + postId.toString(10));
+      console.log(error.error);
     })
   }
 
@@ -131,5 +153,21 @@ export class NewPostModalComponent implements OnInit {
       postId: resp.postId,
       postDescription: resp.postDescription
     });
+
+    if (resp.postMediaBeanSet) {
+      const mediaList: { mediaId: number, postId: number, mediaType: string, mediaDirectory: string }[] = resp.postMediaBeanSet;
+      const list = [];
+      for (const media of mediaList) {
+        const obj: NzUploadFile = {
+          uid: media.mediaId.toString(10),
+          name: media.mediaDirectory,
+          status: 'done',
+          url: this.imageService.getPostImg(media.postId, media.mediaDirectory),
+          thumbUrl: this.imageService.getPostImg(media.postId, media.mediaDirectory)
+        }
+        list.push(obj);
+      }
+      this.fileList = [...list];
+    }
   }
 }
