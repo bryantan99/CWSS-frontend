@@ -4,6 +4,7 @@ import {TableColumnItemModel} from "../../../shared/models/table-column-item-mod
 import {NotificationService} from "../../../shared/services/notification.service";
 import {finalize} from "rxjs/operators";
 import {AdminUserService} from "../../../shared/services/admin-user.service";
+import {HttpStatusConstant} from "../../../shared/constants/http-status-constant";
 
 @Component({
   selector: 'app-admin-user',
@@ -52,8 +53,10 @@ export class AdminManagementComponent implements OnInit {
         this.isLoading = false;
       }))
       .subscribe(resp => {
-        this.listOfData = resp ? resp : [];
-        this.listOfDisplayData = [...this.listOfData];
+        if (resp && resp.status === HttpStatusConstant.OK) {
+          this.listOfData = resp.data ? resp.data : [];
+          this.listOfDisplayData = [...this.listOfData];
+        }
       }, error => {
         console.log("There's an error when retrieving community users.", error);
         this.isLoading = false;
@@ -74,9 +77,11 @@ export class AdminManagementComponent implements OnInit {
   }
 
   deleteUser(username: string) {
-    this.adminUserService.deleteStaff(username).subscribe(() => {
-      this.notificationService.createSuccessNotification("User account has been deleted.")
-      this.getAdminUsers();
+    this.adminUserService.deleteStaff(username).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.notificationService.createSuccessNotification("User account has been deleted.")
+        this.getAdminUsers();
+      }
     }, error => {
       this.notificationService.createErrorNotification("There\'s an error when deleting user account.")
     });

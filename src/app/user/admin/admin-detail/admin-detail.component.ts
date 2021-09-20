@@ -7,6 +7,7 @@ import {phoneNumberValidator} from "../../../shared/validators/custom-validators
 import {NotificationService} from "../../../shared/services/notification.service";
 import {AdminUserService} from "../../../shared/services/admin-user.service";
 import {finalize} from "rxjs/operators";
+import {HttpStatusConstant} from "../../../shared/constants/http-status-constant";
 
 @Component({
   selector: 'app-admin-detail',
@@ -50,7 +51,7 @@ export class AdminDetailComponent implements OnInit {
           this.isSubmitting = false;
         })
       ).subscribe(resp => {
-        if (resp) {
+        if (resp && resp.status === HttpStatusConstant.OK) {
           this.notificationService.createSuccessNotification("New staff has been created.");
           this.closeModal(true);
         }

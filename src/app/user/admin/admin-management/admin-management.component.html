@@ -37,7 +37,7 @@
     <td>{{ data?.email || '-' }}</td>
     <td>{{ data?.contactNo }}</td>
     <td class="text-center">
-      <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
+      <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1" *ngIf="data?.deletable; else noActionTpl">
         <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
       </button>
       <nz-dropdown-menu #menu1="nzDropdownMenu">
@@ -63,3 +63,5 @@
 
 <app-admin-detail [isVisible]="adminDetailModalIsVisible"
                   (modalIsVisibleEmitter)="modalVisibleHasChanged($event)"></app-admin-detail>
+
+<ng-template #noActionTpl>-</ng-template>
