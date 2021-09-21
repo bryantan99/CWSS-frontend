@@ -12,7 +12,7 @@ import {
   passwordValidator,
   phoneNumberValidator
 } from "../../shared/validators/custom-validators";
-import {uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
+import {uniqueEmailValidator, uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
 import {AuthService} from "../../auth/auth.service";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 
@@ -48,6 +48,10 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
     return this.personalDetailForm.get('username') as FormControl;
   }
 
+  get emailFormControl() {
+    return this.personalDetailForm.get('email') as FormControl;
+  }
+
   get passwordFormControl() {
     return this.personalDetailForm.get('password') as FormControl;
   }
@@ -71,8 +75,9 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
 
     if (this.isSignUp) {
       this.usernameFormControl.setValidators([Validators.required]);
-      this.usernameFormControl.setAsyncValidators([uniqueUsernameValidator(this.authService)])
-      this.passwordFormControl.setValidators([Validators.required, passwordValidator()])
+      this.usernameFormControl.setAsyncValidators([uniqueUsernameValidator(this.authService)]);
+      this.emailFormControl.setAsyncValidators([uniqueEmailValidator(this.authService)]);
+      this.passwordFormControl.setValidators([Validators.required, passwordValidator()]);
       this.confirmPasswordFormControl.setValidators([Validators.required, confirmPasswordMatchValidator(this.passwordFormControl)]);
     } else {
       this.passwordFormControl.disable();

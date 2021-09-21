@@ -10,7 +10,7 @@ export class PasswordResetService {
 
   private readonly APP_URL = "http://localhost:8080";
   private readonly REQUEST_RESET_PASSWORD = this.APP_URL + "/account/request-password-reset";
-  private readonly VALIDATE_OTP = this.APP_URL + "/account/validate-otp";
+  private readonly VALIDATE_OTP = this.APP_URL + "/account/validation/otp";
   private readonly RESET_PASSWORD = this.APP_URL + "/account/reset-password"
 
   constructor(private http: HttpClient) {

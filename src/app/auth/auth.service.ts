@@ -12,7 +12,8 @@ export class AuthService {
   private readonly API_SERVER_URL = 'http://localhost:8080';
 
   private readonly LOGIN = this.API_SERVER_URL + "/authenticate";
-  private readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/is-valid-username";
+  private readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/validation/username";
+  private readonly IS_UNIQUE_EMAIL = this.API_SERVER_URL + "/account/validation/email";
   private readonly CURRENT_LOGGED_IN_USERNAME = this.API_SERVER_URL + "/account/current-username";
 
   constructor(private http: HttpClient) {
@@ -62,6 +63,11 @@ export class AuthService {
   isUniqueUsername(username: string): Observable<any> {
     const params = new HttpParams().set("username", username);
     return this.http.get(this.IS_UNIQUE_USERNAME, {params: params});
+  }
+
+  isUniqueEmail(email: string): Observable<ResponseModel<any>> {
+    const params = new HttpParams().set("email", email);
+    return this.http.get<ResponseModel<any>>(this.IS_UNIQUE_EMAIL, {params: params});
   }
 
   getCurrentLoggedInUsername(): Observable<ResponseModel<any>> {

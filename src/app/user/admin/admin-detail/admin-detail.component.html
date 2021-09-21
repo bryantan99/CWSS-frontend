@@ -33,6 +33,7 @@
           <ng-template #emailErrorTpl let-control>
             <ng-container *ngIf="control.hasError('email')">Please enter valid e-mail address.</ng-container>
             <ng-container *ngIf="control.hasError('required')">Please input your e-mail address.</ng-container>
+            <ng-container *ngIf="control.hasError('emailTaken')">Email has already been taken.</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DropdownConstant} from "../../../shared/constants/dropdown-constant";
-import {uniqueUsernameValidator} from "../../../shared/validators/custom-async-validator";
+import {uniqueEmailValidator, uniqueUsernameValidator} from "../../../shared/validators/custom-async-validator";
 import {AuthService} from "../../../auth/auth.service";
 import {phoneNumberValidator} from "../../../shared/validators/custom-validators";
 import {NotificationService} from "../../../shared/services/notification.service";
@@ -37,6 +37,7 @@ export class AdminDetailComponent implements OnInit {
     });
 
     this.adminForm.controls["username"].setAsyncValidators(uniqueUsernameValidator(this.authService));
+    this.adminForm.controls["email"].setAsyncValidators(uniqueEmailValidator(this.authService));
   }
 
   handleCancel() {

@@ -31,7 +31,8 @@
         <input nz-input type="email" formControlName="email">
         <ng-template #emailErrorTpl let-control>
           <p>
-            <span *ngIf="control.hasError('email') || control.hasError('required')">Please input a valid email<br></span>
+            <span *ngIf="control.hasError('email') || control.hasError('required')">Please input a valid email!<br></span>
+            <span *ngIf="control.hasError('emailTaken')">Email has already been taken!<br></span>
           </p>
         </ng-template>
       </nz-form-control>
