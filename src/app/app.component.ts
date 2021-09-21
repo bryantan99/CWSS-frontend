@@ -2,8 +2,8 @@ import {Component} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {AppService} from "./app.service";
-import {finalize} from "rxjs/operators";
 import {AuthService} from "./auth/auth.service";
+import {User} from "./shared/models/user";
 
 @Component({
   selector: 'app-root',
@@ -12,6 +12,7 @@ import {AuthService} from "./auth/auth.service";
 })
 export class AppComponent {
 
+  user: User;
   isCollapsed = false;
   appName = "HSS";
 
@@ -19,21 +20,16 @@ export class AppComponent {
               private http: HttpClient,
               private router: Router,
               private authService: AuthService) {
+    this.authService.user.subscribe(resp => {
+      this.user = resp;
+    });
+  }
+
+  get isAdmin() {
+    return this.user && (this.user.roleList.includes("ROLE_ADMIN") || this.user.roleList.includes("ROLE_SUPER_ADMIN"));
   }
 
   logout() {
-    this.http.post('logout', {}).pipe(
-      finalize(() => {
-        this.app.authenticated = false;
-        this.router.navigateByUrl('/home');
-      })).subscribe();
-  }
-
-  hasUserLoggedIn():boolean {
-    return this.authService.isUserLoggedIn();
-  }
-
-  isAdminUser() {
-    return this.authService.isAdminLoggedIn();
+    this.authService.logOut();
   }
 }

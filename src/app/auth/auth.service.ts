@@ -1,13 +1,18 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
+import {User} from "../shared/models/user";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  private userSubject: BehaviorSubject<User>
+  user: Observable<User>;
 
   private readonly API_SERVER_URL = 'http://localhost:8080';
 
@@ -16,7 +21,14 @@ export class AuthService {
   private readonly IS_UNIQUE_EMAIL = this.API_SERVER_URL + "/account/validation/email";
   private readonly CURRENT_LOGGED_IN_USERNAME = this.API_SERVER_URL + "/account/current-username";
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private router: Router) {
+    this.userSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('user')));
+    this.user = this.userSubject.asObservable();
+  }
+
+  get userValue(): User {
+    return this.userSubject.value;
   }
 
   //  Store JWT Token in session if authentication is successful
@@ -24,10 +36,12 @@ export class AuthService {
     return this.http.post<any>(this.LOGIN, loginForm)
       .pipe(
         map(userData => {
+          sessionStorage.setItem("user", JSON.stringify(userData));
           sessionStorage.setItem("username", loginForm.username);
           // sessionStorage.setItem("roleList", userData?.roleList);
           let tokenStr = "Bearer " + userData.jwtToken;
           sessionStorage.setItem("token", tokenStr);
+          this.userSubject.next(userData);
           return userData;
         })
       );
@@ -56,8 +70,10 @@ export class AuthService {
   }
 
   logOut() {
+    sessionStorage.removeItem("user");
     sessionStorage.removeItem("username");
-    // sessionStorage.removeItem("roleList");
+    this.userSubject.next(null);
+    this.router.navigate(['/login']);
   }
 
   isUniqueUsername(username: string): Observable<any> {

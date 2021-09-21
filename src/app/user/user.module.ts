@@ -5,7 +5,6 @@ import {SignupComponent} from './signup/signup.component';
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppRoutingModule} from "../app-routing.module";
-import {LogoutComponent} from './logout/logout.component';
 import {SignupPersonalDetailFormComponent} from './signup-personal-detail-form/signup-personal-detail-form.component';
 import {SignupAddressFormComponent} from './signup-address-form/signup-address-form.component';
 import {SignupOccupationFormComponent} from './signup-occupation-form/signup-occupation-form.component';
@@ -22,7 +21,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
   declarations: [
     LoginComponent,
     SignupComponent,
-    LogoutComponent,
     SignupPersonalDetailFormComponent,
     SignupAddressFormComponent,
     SignupOccupationFormComponent,
@@ -44,7 +42,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
   ],
   exports: [
     LoginComponent,
-    LogoutComponent,
     SignupComponent
   ]
 })

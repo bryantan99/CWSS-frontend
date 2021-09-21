@@ -4,7 +4,6 @@ import {HomepageComponent} from "./homepage/homepage/homepage.component";
 import {LoginComponent} from "./user/login/login.component";
 import {SignupComponent} from "./user/signup/signup.component";
 import {AboutComponent} from "./homepage/about/about.component";
-import {LogoutComponent} from "./user/logout/logout.component";
 import {CommunityUserComponent} from "./user/community-user/community-user.component";
 import {CommunityUserProfileComponent} from "./user/community-user-profile/community-user-profile.component";
 import {UserAssistanceComponent} from "./assistance/user-assistance/user-assistance.component";
@@ -14,14 +13,14 @@ import {UpdateProfileComponent} from "./user/update-profile/update-profile.compo
 import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
 import {ResetPasswordComponent} from "./user/reset-password/reset-password.component";
 import {AssistanceDetailComponent} from "./assistance/assistance-detail/assistance-detail.component";
+import {AuthGuardService} from "./shared/services/auth-guard.service";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent},
   { path: 'login', component: LoginComponent},
-  { path: 'logout', component: LogoutComponent},
   { path: 'signup', component: SignupComponent},
   { path: 'about', component: AboutComponent},
-  { path: 'community-user', component: CommunityUserComponent},
+  { path: 'community-user', component: CommunityUserComponent, canActivate: [AuthGuardService], data: {roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}},
   { path: 'admin-user', component: AdminManagementComponent},
   { path: 'community-user/profile', component: CommunityUserProfileComponent},
   { path: 'user/assistance', component: UserAssistanceComponent},

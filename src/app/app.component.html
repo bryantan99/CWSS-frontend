@@ -11,27 +11,27 @@
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-menu-item nzMatchRouter *ngIf="!hasUserLoggedIn()" routerLink="/login">
+      <li nz-menu-item nzMatchRouter *ngIf="!user" routerLink="/login">
         <i nz-icon nzType="login"></i>
         <a nz-button nzType="link">Login</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="!hasUserLoggedIn()" routerLink="/signup">
+      <li nz-menu-item nzMatchRouter *ngIf="!user" routerLink="/signup">
         <i nz-icon nzType="user-add"></i>
         <a nz-button nzType="link">Sign up</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="isAdminUser()" routerLink="/community-user">
+      <li nz-menu-item nzMatchRouter *ngIf="isAdmin" routerLink="/community-user">
         <i nz-icon nzType="user"></i>
         <a nz-button nzType="link">User</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="isAdminUser()" routerLink="/admin-user">
+      <li nz-menu-item nzMatchRouter *ngIf="isAdmin" routerLink="/admin-user">
         <i nz-icon nzType="user"></i>
         <a nz-button nzType="link">Admin</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="hasUserLoggedIn()" [routerLink]="isAdminUser() ? '/admin/assistance' : 'user/assistance'">
+      <li nz-menu-item nzMatchRouter *ngIf="user" [routerLink]="isAdmin ? '/admin/assistance' : 'user/assistance'">
         <i nz-icon nzType="alert"></i>
           <a nz-button nzType="link">Assistance</a>
       </li>
@@ -41,7 +41,7 @@
         <a nz-button nzType="link">About Us</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="hasUserLoggedIn()" routerLink="/logout">
+      <li nz-menu-item nzMatchRouter *ngIf="user" (click)="logout()">
         <i nz-icon nzType="logout"></i>
         <a nz-button nzType="link">Logout</a>
       </li>
