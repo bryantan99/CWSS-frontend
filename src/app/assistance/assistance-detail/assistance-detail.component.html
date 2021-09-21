@@ -11,7 +11,7 @@
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
           <li nz-menu-item *ngIf="assistanceRecord?.assistanceStatus ==='pending' || isAdmin">
-            <a>Edit/Update</a>
+            <a (click)="onEditMode()">Edit/Update</a>
           </li>
           <li nz-menu-item *ngIf="assistanceRecord?.assistanceStatus === 'pending'">
             <a nz-popconfirm
@@ -25,84 +25,108 @@
       </nz-dropdown-menu>
     </nz-page-header-extra>
     <nz-page-header-content>
-      <nz-row class="mb-2">
-        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Request ID<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
-        <nz-col [nzSm]="24" [nzMd]="16">
-          {{ assistanceRecord?.assistanceId || "-"}}
-        </nz-col>
-      </nz-row>
+      <form nz-form [formGroup]="form">
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Request ID</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <span>{{ assistanceRecord?.assistanceId || "-"}}</span>
+          </nz-form-control>
+        </nz-form-item>
 
-      <nz-row class="mb-2">
-        <div nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Title<span class="float-end">&nbsp;:&nbsp;</span></div>
-        <div nz-col [nzSm]="24" [nzMd]="16">
-          {{ assistanceRecord?.assistanceTitle || "-" }}
-        </div>
-      </nz-row>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Title</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <span>{{ assistanceRecord?.assistanceTitle || "-" }}</span>
+          </nz-form-control>
+        </nz-form-item>
 
-      <nz-row class="mb-2">
-        <div nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Description<span class="float-end">&nbsp;:&nbsp;</span></div>
-        <div nz-col [nzSm]="24" [nzMd]="16">
-          {{ assistanceRecord?.assistanceDescription || "-" }}
-        </div>
-      </nz-row>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Description</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <span>{{ assistanceRecord?.assistanceDescription || "-" }}</span>
+          </nz-form-control>
+        </nz-form-item>
 
-      <nz-row class="mb-2">
-        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Status<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
-        <nz-col [nzSm]="24" [nzMd]="16">
-          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'pending'" nzColor="gold">Pending</nz-tag>
-          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'processing'" nzColor="blue">Processing</nz-tag>
-          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'completed'" nzColor="green">Completed</nz-tag>
-          <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
-          <span *ngIf="!assistanceRecord?.assistanceStatus">-</span>
-        </nz-col>
-      </nz-row>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Status</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <div *ngIf="!nzEdit">
+              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'pending'" nzColor="gold">Pending</nz-tag>
+              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'processing'" nzColor="blue">Processing</nz-tag>
+              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'completed'" nzColor="green">Completed</nz-tag>
+              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
+              <span *ngIf="!assistanceRecord?.assistanceStatus">-</span>
+            </div>
+            <div *ngIf="nzEdit">
+              <nz-select formControlName="status">
+                <nz-option [nzValue]="'pending'" [nzLabel]="'Pending'"></nz-option>
+                <nz-option [nzValue]="'processing'" [nzLabel]="'Processing'"></nz-option>
+                <nz-option [nzValue]="'completed'" [nzLabel]="'Completed'"></nz-option>
+                <nz-option [nzValue]="'cancelled'" [nzLabel]="'Cancelled'"></nz-option>
+              </nz-select>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
 
-      <nz-row class="mb-2">
-        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Person In Charge<span class="float-end">&nbsp;:&nbsp;</span>
-        </nz-col>
-        <nz-col [nzSm]="24" [nzMd]="16">
-          {{ assistanceRecord?.adminBean?.fullName || "-" }}
-        </nz-col>
-      </nz-row>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Person In Charge</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <span *ngIf="!nzEdit">{{ assistanceRecord?.adminBean?.fullName || "-" }}</span>
+            <div *ngIf="nzEdit">
+              <nz-select nzAllowClear nzShowSearch [nzPlaceHolder]="'Choose an admin'" formControlName="personInCharge">
+                <nz-option *ngFor="let choice of adminChoices" [nzValue]="choice?.value" [nzLabel]="choice?.text"></nz-option>
+              </nz-select>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
 
-      <nz-row class="mb-2">
-        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Created Date<span class="float-end">&nbsp;:&nbsp;</span>
-        </nz-col>
-        <nz-col [nzSm]="24" [nzMd]="16">
-          {{ (assistanceRecord?.createdDate | date: 'medium') || "-"}}
-        </nz-col>
-      </nz-row>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Created Date</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <span>{{ (assistanceRecord?.createdDate | date: 'medium') || "-"}}</span>
+          </nz-form-control>
+        </nz-form-item>
 
-      <nz-row class="mb-2">
-        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Last Updated Date<span class="float-end">&nbsp;:&nbsp;</span>
-        </nz-col>
-        <nz-col [nzSm]="24" [nzMd]="16">
-          {{ (assistanceRecord?.lastUpdatedDate | date: 'medium') || "-"}}
-        </nz-col>
-      </nz-row>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Last Updated Date</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <span>{{(assistanceRecord?.lastUpdatedDate | date: 'medium') || "-"}}</span>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="mb-2" *ngIf="nzEdit">
+          <nz-form-label [nzSm]="24" [nzMd]="7" nzNoColon></nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <button nz-button nzType="primary" class="me-2 mb-2" (click)="submit()">Update</button>
+            <button nz-button nzType="default" class="me-2 mb-2" (click)="cancelEdit()">Cancel</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
     </nz-page-header-content>
   </nz-page-header>
 
   <nz-page-header>
     <nz-page-header-title style="text-overflow: unset; white-space: initial">Help-seeker's Detail</nz-page-header-title>
     <nz-page-header-content>
-      <nz-row class="mb-2">
-        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Name<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
-        <nz-col [nzSm]="24" [nzMd]="16">
-          <a nz-typography [routerLink]="['/community-user/profile']"
-             [queryParams]="{username: assistanceRecord?.communityUserBean?.username}"
-             *ngIf="assistanceRecord?.communityUserBean">{{ assistanceRecord?.communityUserBean?.fullName }}
-          </a>
-          <span *ngIf="!assistanceRecord?.communityUserBean">-</span>
-        </nz-col>
-      </nz-row>
+      <form nz-form>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Name</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <a nz-typography [routerLink]="['/community-user/profile']"
+               [queryParams]="{username: assistanceRecord?.communityUserBean?.username}"
+               *ngIf="assistanceRecord?.communityUserBean">{{ assistanceRecord?.communityUserBean?.fullName }}
+            </a>
+            <span *ngIf="!assistanceRecord?.communityUserBean">-</span>
+          </nz-form-control>
+        </nz-form-item>
 
-      <nz-row class="mb-2">
-        <nz-col [nzSm]="24" [nzMd]="7" class="fw-bold">Contact No.<span class="float-end">&nbsp;:&nbsp;</span></nz-col>
-        <nz-col [nzSm]="24" [nzMd]="16">
-          {{ assistanceRecord?.communityUserBean?.contactNo || "-" }}
-        </nz-col>
-      </nz-row>
+        <nz-form-item class="mb-2">
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Contact No.</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16">
+            <span>{{ assistanceRecord?.communityUserBean?.contactNo || "-" }}</span>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
     </nz-page-header-content>
   </nz-page-header>
 </nz-spin>
