@@ -24,7 +24,7 @@ export class AuthService {
       .pipe(
         map(userData => {
           sessionStorage.setItem("username", loginForm.username);
-          sessionStorage.setItem("roleList", userData?.roleList);
+          // sessionStorage.setItem("roleList", userData?.roleList);
           let tokenStr = "Bearer " + userData.jwtToken;
           sessionStorage.setItem("token", tokenStr);
           return userData;
@@ -34,9 +34,12 @@ export class AuthService {
 
   hasRole(roleName: string) {
     let found = false;
-    const roleList: string = sessionStorage.getItem("roleList");
-    if (roleList) {
-      found = roleList.includes(roleName);
+    const decodedJwt = this.decodeJwtToken();
+    if (decodedJwt) {
+      const roleList = decodedJwt.roleList;
+      if (roleList) {
+        found = roleList.includes(roleName);
+      }
     }
     return found;
   }
@@ -53,7 +56,7 @@ export class AuthService {
 
   logOut() {
     sessionStorage.removeItem("username");
-    sessionStorage.removeItem("roleList");
+    // sessionStorage.removeItem("roleList");
   }
 
   isUniqueUsername(username: string): Observable<any> {
@@ -63,5 +66,16 @@ export class AuthService {
 
   getCurrentLoggedInUsername(): Observable<ResponseModel<any>> {
     return this.http.get<ResponseModel<any>>(this.CURRENT_LOGGED_IN_USERNAME);
+  }
+
+  private decodeJwtToken() {
+    let jwtToken = sessionStorage.getItem("token");
+    if (!jwtToken) {
+      return null;
+    }
+
+    jwtToken = jwtToken.replace("Bearer ", "");
+    const jwtTokenArr = jwtToken.split(".");
+    return JSON.parse(atob(jwtTokenArr[1]));
   }
 }
