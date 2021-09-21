@@ -35,7 +35,7 @@ export class AuthService {
 
   hasRole(roleName: string) {
     let found = false;
-    const decodedJwt = this.decodeJwtToken();
+    const decodedJwt = AuthService.decodeJwtToken();
     if (decodedJwt) {
       const roleList = decodedJwt.roleList;
       if (roleList) {
@@ -52,7 +52,7 @@ export class AuthService {
 
   isAdminLoggedIn() {
     let user = sessionStorage.getItem("username");
-    return !(user === null) && this.hasRole("ROLE_ADMIN") || this.hasRole("ROLE_SUPER_ADMIN");
+    return !(user === null) && (this.hasRole("ROLE_ADMIN") || this.hasRole("ROLE_SUPER_ADMIN"));
   }
 
   logOut() {
@@ -74,7 +74,7 @@ export class AuthService {
     return this.http.get<ResponseModel<any>>(this.CURRENT_LOGGED_IN_USERNAME);
   }
 
-  private decodeJwtToken() {
+  private static decodeJwtToken() {
     let jwtToken = sessionStorage.getItem("token");
     if (!jwtToken) {
       return null;
