@@ -43,16 +43,9 @@ export class SignupComponent implements OnInit {
   }
 
   submitForm() {
-    this.personalDetailFormComponent.setDirty();
     this.form.controls['personalDetail'].updateValueAndValidity({emitEvent: false});
-
-    this.addressFormComponent.setDirty();
     this.form.controls['address'].updateValueAndValidity({emitEvent: false});
-
-    this.occupationFormComponent.setDirty();
     this.form.controls['occupation'].updateValueAndValidity({emitEvent: false});
-
-    this.healthFormComponent.setDirty();
     this.form.controls['health'].updateValueAndValidity({emitEvent: false});
 
     if (!this.form.valid) {
@@ -87,7 +80,6 @@ export class SignupComponent implements OnInit {
   }
 
   movePage(newIndex: number) {
-    // this.updateTouchAndDirty(this.stepIndex);
     this.stepIndex = newIndex;
     this.displayChildForm(newIndex);
   }
@@ -109,23 +101,6 @@ export class SignupComponent implements OnInit {
     )
   }
 
-  private updateTouchAndDirty(indexBeforeMovePage: number) {
-    switch (indexBeforeMovePage) {
-      case 1:
-        this.personalDetailFormComponent.setDirty();
-        break;
-      case 2:
-        this.addressFormComponent.setDirty();
-        break;
-      case 3:
-        this.occupationFormComponent.setDirty();
-        break;
-      case 4:
-        this.healthFormComponent.setDirty();
-        break;
-    }
-  }
-
   private displayChildForm(newIndex: number) {
     this.showInfoPage = newIndex === 0;
     this.showPersonalDetailForm = newIndex === 1;
@@ -139,5 +114,19 @@ export class SignupComponent implements OnInit {
     const content: string = "Your submission will be reviewed by the admin. Please schedule an appointment with the admin " +
       "to review the submission. You should bring along supporting documents to support your details provided in occupation and health section."
     this.notificationService.success(title, content);
+  }
+
+  formIsValid(): boolean {
+    if (this.stepIndex === 1) {
+      return this.personalDetailFormComponent.getValidity();
+    } else if (this.stepIndex === 2) {
+      return this.addressFormComponent.getValidity();
+    } else if (this.stepIndex === 3) {
+      return this.occupationFormComponent.getValidity();
+    } else if (this.stepIndex === 4) {
+      return this.healthFormComponent.getValidity();
+    } else {
+      return true;
+    }
   }
 }

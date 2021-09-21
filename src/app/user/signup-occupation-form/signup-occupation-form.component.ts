@@ -117,4 +117,8 @@ export class SignupOccupationFormComponent implements OnInit, ControlValueAccess
       this.occupationForm.get('employerContactNo').updateValueAndValidity();
     }
   }
+
+  getValidity(): boolean {
+    return this.occupationForm.valid;
+  }
 }

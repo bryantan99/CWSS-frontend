@@ -59,7 +59,7 @@
     <nz-form-item *ngIf="isSignUp">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Password</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="passwordErrorTpl">
-        <input nz-input type="password" formControlName="password">
+        <input nz-input type="password" formControlName="password" (ngModelChange)="matchPassword()">
         <ng-template #passwordErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input password<br></span>
@@ -72,7 +72,7 @@
     <nz-form-item *ngIf="isSignUp">
       <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Confirm Password</nz-form-label>
       <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="confirmPasswordErrorTpl">
-        <input nz-input type="password" formControlName="confirmPassword">
+        <input nz-input type="password" formControlName="confirmPassword" (ngModelChange)="matchPassword()">
         <ng-template #confirmPasswordErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input confirm password<br></span>

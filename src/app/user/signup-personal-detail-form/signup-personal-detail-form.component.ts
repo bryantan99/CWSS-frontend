@@ -8,7 +8,6 @@ import {
   Validators
 } from "@angular/forms";
 import {
-  confirmPasswordMatchValidator,
   passwordValidator,
   phoneNumberValidator
 } from "../../shared/validators/custom-validators";
@@ -78,7 +77,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
       this.usernameFormControl.setAsyncValidators([uniqueUsernameValidator(this.authService)]);
       this.emailFormControl.setAsyncValidators([uniqueEmailValidator(this.authService)]);
       this.passwordFormControl.setValidators([Validators.required, passwordValidator()]);
-      this.confirmPasswordFormControl.setValidators([Validators.required, confirmPasswordMatchValidator(this.passwordFormControl)]);
+      this.confirmPasswordFormControl.setValidators([Validators.required]);
     } else {
       this.passwordFormControl.disable();
       this.confirmPasswordFormControl.disable();
@@ -117,6 +116,19 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   setDirty() {
     for (const i in this.personalDetailForm.controls) {
       this.personalDetailForm.controls[i].markAsDirty();
+    }
+  }
+
+  getValidity(): boolean {
+    return this.personalDetailForm.valid;
+  }
+
+  matchPassword() {
+    this.confirmPasswordFormControl.setErrors(null);
+    const passwordValue = this.passwordFormControl.value;
+    const confirmPasswordValue = this.confirmPasswordFormControl.value;
+    if (passwordValue !== confirmPasswordValue) {
+      this.confirmPasswordFormControl.setErrors({passwordNotMatch: true})
     }
   }
 }

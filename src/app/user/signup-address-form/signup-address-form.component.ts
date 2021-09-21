@@ -80,4 +80,8 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
       this.addressForm.controls[i].markAsDirty();
     }
   }
+
+  getValidity(): boolean {
+    return this.addressForm.valid;
+  }
 }

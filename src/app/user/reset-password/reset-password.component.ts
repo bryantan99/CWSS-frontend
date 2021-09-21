@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {NotificationService} from "../../shared/services/notification.service";
 import {PasswordResetService} from "../../shared/services/password-reset.service";
-import {confirmPasswordMatchValidator} from "../../shared/validators/custom-validators";
 import {finalize} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
@@ -52,7 +51,7 @@ export class ResetPasswordComponent implements OnInit {
       confirmPassword: ['', Validators.required]
     });
 
-    this.confirmPasswordFormControl.setValidators([Validators.required, confirmPasswordMatchValidator(this.passwordFormControl)])
+    this.confirmPasswordFormControl.setValidators([Validators.required]);
   }
 
   requestPasswordReset() {
@@ -121,6 +120,15 @@ export class ResetPasswordComponent implements OnInit {
   clearError() {
     if (this.otpFormControl.hasError('mismatch')) {
       this.otpFormControl.setErrors(null);
+    }
+  }
+
+  matchPassword() {
+    this.confirmPasswordFormControl.setErrors(null);
+    const passwordValue = this.passwordFormControl.value;
+    const confirmPasswordValue = this.confirmPasswordFormControl.value;
+    if (passwordValue !== confirmPasswordValue) {
+      this.confirmPasswordFormControl.setErrors({passwordNotMatch: true})
     }
   }
 }

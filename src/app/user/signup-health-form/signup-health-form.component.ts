@@ -135,4 +135,8 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
       this.notificationService.error("Error", "There's an error when retrieving disease dropdown choice list.");
     })
   }
+
+  getValidity(): boolean {
+    return this.healthForm.valid;
+  }
 }
