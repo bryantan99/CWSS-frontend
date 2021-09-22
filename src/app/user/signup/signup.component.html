@@ -1,14 +1,4 @@
 <form [formGroup]="form">
-
-  <nz-steps nzProgressDot [nzCurrent]="stepIndex">
-    <nz-step nzTitle="Info"></nz-step>
-    <nz-step nzTitle="Personal Details"></nz-step>
-    <nz-step nzTitle="Address"></nz-step>
-    <nz-step nzTitle="Occupation"></nz-step>
-    <nz-step nzTitle="Health"></nz-step>
-  </nz-steps>
-
-  <nz-divider></nz-divider>
   <app-signup-info [isVisible]="showInfoPage"></app-signup-info>
   <app-signup-personal-detail-form [isSignUp]="true" [isVisible]="showPersonalDetailForm" formControlName="personalDetail"></app-signup-personal-detail-form>
   <app-signup-address-form [isVisible]="showAddressForm" formControlName="address"></app-signup-address-form>
