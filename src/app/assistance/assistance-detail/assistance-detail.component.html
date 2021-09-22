@@ -35,48 +35,63 @@
 
         <nz-form-item class="mb-2">
           <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Title</nz-form-label>
-          <nz-form-control [nzSm]="24" [nzMd]="16">
-            <span>{{ assistanceRecord?.assistanceTitle || "-" }}</span>
+          <nz-form-control [nzSm]="24" [nzMd]="16" [nzErrorTip]="titleErrorTpl"
+                           *ngIf="nzEdit && !isAdmin; else displayTitleTpl">
+            <input nz-input type="text" formControlName="title">
+            <ng-template #titleErrorTpl let-control>
+              <div *ngIf="control.invalid && (control.touched || control.dirty)">
+                <div *ngIf="control.errors?.required">Please input title!</div>
+              </div>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item class="mb-2">
           <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Description</nz-form-label>
-          <nz-form-control [nzSm]="24" [nzMd]="16">
-            <span>{{ assistanceRecord?.assistanceDescription || "-" }}</span>
+          <nz-form-control [nzSm]="24" [nzMd]="16" [nzErrorTip]="descErrorTpl"
+                           *ngIf="nzEdit && !isAdmin; else displayDescTpl">
+            <textarea nz-input [rows]="4" formControlName="description"></textarea>
+            <ng-template #descErrorTpl let-control>
+              <div *ngIf="control.invalid && (control.dirty || control.touched)">
+                <div *ngIf="control.errors?.required">
+                  Please input assistance description!
+                </div>
+              </div>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item class="mb-2">
           <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Status</nz-form-label>
-          <nz-form-control [nzSm]="24" [nzMd]="16">
-            <div *ngIf="!nzEdit">
-              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'pending'" nzColor="gold">Pending</nz-tag>
-              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'processing'" nzColor="blue">Processing</nz-tag>
-              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'completed'" nzColor="green">Completed</nz-tag>
-              <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
-              <span *ngIf="!assistanceRecord?.assistanceStatus">-</span>
-            </div>
-            <div *ngIf="nzEdit">
-              <nz-select formControlName="status">
-                <nz-option [nzValue]="'pending'" [nzLabel]="'Pending'"></nz-option>
-                <nz-option [nzValue]="'processing'" [nzLabel]="'Processing'"></nz-option>
-                <nz-option [nzValue]="'completed'" [nzLabel]="'Completed'"></nz-option>
-                <nz-option [nzValue]="'cancelled'" [nzLabel]="'Cancelled'"></nz-option>
-              </nz-select>
-            </div>
+          <nz-form-control [nzSm]="24" [nzMd]="16" [nzErrorTip]="statusErrorTpl"
+                           *ngIf="nzEdit && isAdmin; else displayStatusTpl">
+            <nz-select formControlName="status">
+              <nz-option [nzValue]="'pending'" [nzLabel]="'Pending'"></nz-option>
+              <nz-option [nzValue]="'processing'" [nzLabel]="'Processing'"></nz-option>
+              <nz-option [nzValue]="'completed'" [nzLabel]="'Completed'"></nz-option>
+              <nz-option [nzValue]="'cancelled'" [nzLabel]="'Cancelled'"></nz-option>
+            </nz-select>
+            <ng-template #statusErrorTpl let-control>
+              <div *ngIf="control.invalid && (control.dirty || control.touched)">
+                <div *ngIf="control.errors?.required">Please select a status!</div>
+              </div>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item class="mb-2">
-          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Person In Charge</nz-form-label>
-          <nz-form-control [nzSm]="24" [nzMd]="16">
-            <span *ngIf="!nzEdit">{{ assistanceRecord?.adminBean?.fullName || "-" }}</span>
-            <div *ngIf="nzEdit">
-              <nz-select nzAllowClear nzShowSearch [nzPlaceHolder]="'Choose an admin'" formControlName="personInCharge">
-                <nz-option *ngFor="let choice of adminChoices" [nzValue]="choice?.value" [nzLabel]="choice?.text"></nz-option>
+          <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Person In-Charge</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="16" [nzErrorTip]="picErrorTpl"
+                           *ngIf="nzEdit && isAdmin; else displayPicTpl">
+              <nz-select nzShowSearch [nzPlaceHolder]="'Choose an admin'" formControlName="personInCharge">
+                <nz-option *ngFor="let choice of adminChoices" [nzValue]="choice?.value"
+                           [nzLabel]="choice?.text"></nz-option>
               </nz-select>
-            </div>
+            <ng-template #picErrorTpl let-control>
+              <div *ngIf="control.invalid && (control.dirty || control.touched)">
+                <div *ngIf="control.errors?.required">Please select a person in-charge!</div>
+              </div>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
 
@@ -97,7 +112,7 @@
         <nz-form-item class="mb-2" *ngIf="nzEdit">
           <nz-form-label [nzSm]="24" [nzMd]="7" nzNoColon></nz-form-label>
           <nz-form-control [nzSm]="24" [nzMd]="16">
-            <button nz-button nzType="primary" class="me-2 mb-2" (click)="submit()">Update</button>
+            <button nz-button nzType="primary" class="me-2 mb-2" [disabled]="(!form.touched && !form.dirty) || !form.valid" (click)="submit()">Update</button>
             <button nz-button nzType="default" class="me-2 mb-2" (click)="cancelEdit()">Cancel</button>
           </nz-form-control>
         </nz-form-item>
@@ -140,3 +155,31 @@
     <app-assistance-comment [assistanceId]="assistanceId"></app-assistance-comment>
   </ng-container>
 </nz-drawer>
+
+<ng-template #displayTitleTpl>
+  <nz-form-control [nzSm]="24" [nzMd]="16">
+    {{ assistanceRecord?.assistanceTitle || "-" }}
+  </nz-form-control>
+</ng-template>
+
+<ng-template #displayDescTpl>
+  <nz-form-control [nzSm]="24" [nzMd]="16">
+    {{ assistanceRecord?.assistanceDescription || "-" }}
+  </nz-form-control>
+</ng-template>
+
+<ng-template #displayStatusTpl>
+  <nz-form-control [nzSm]="24" [nzMd]="16">
+    <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'pending'" nzColor="gold">Pending</nz-tag>
+    <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'processing'" nzColor="blue">Processing</nz-tag>
+    <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'completed'" nzColor="green">Completed</nz-tag>
+    <nz-tag *ngIf="assistanceRecord?.assistanceStatus === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
+    <span *ngIf="!assistanceRecord?.assistanceStatus">-</span>
+  </nz-form-control>
+</ng-template>
+
+<ng-template #displayPicTpl>
+  <nz-form-control [nzSm]="24" [nzMd]="16">
+    <span>{{ assistanceRecord?.adminBean?.fullName || "-" }}</span>
+  </nz-form-control>
+</ng-template>

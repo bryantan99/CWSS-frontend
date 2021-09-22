@@ -105,8 +105,10 @@ export class AssistanceDetailComponent implements OnInit {
   private initForm() {
     this.form = this.fb.group({
       assistanceId: [this.assistanceId, Validators.required],
-      status: ['', Validators.required],
-      personInCharge: ['']
+      title: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      status: ['', [Validators.required]],
+      personInCharge: ['', [Validators.required]]
     });
   }
 
@@ -148,6 +150,8 @@ export class AssistanceDetailComponent implements OnInit {
   private patchForm() {
     this.form.patchValue({
       assistanceId: this.assistanceId,
+      title: this.assistanceRecord.assistanceTitle,
+      description: this.assistanceRecord.assistanceDescription,
       status: this.assistanceRecord.assistanceStatus,
       personInCharge: this.assistanceRecord.adminBean ? this.assistanceRecord.adminBean.username : ""
     });
