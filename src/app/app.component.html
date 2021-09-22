@@ -1,42 +1,43 @@
 <nz-layout class="layout">
-  <nz-sider nzCollapsible
-            nzBreakpoint="lg"
-            [nzCollapsedWidth]="0"
-            [(nzCollapsed)]="isCollapsed"
-            [nzTrigger]="null">
-    <div class="sidebar-logo">
+  <nz-drawer [nzVisible]="!isCollapsed"
+             [nzPlacement]="'left'"
+             (nzOnClose)="minimizeSidebar()"
+             [nzBodyStyle]="sidebarStyle"
+             [nzCloseIcon]="null">
+    <div class="sidebar-logo" (click)="minimizeSidebar()">
       <a [routerLink]="''">
         <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
         <h1>{{appName}}</h1>
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-menu-item nzMatchRouter *ngIf="!user" routerLink="/login">
+      <li nz-menu-item nzMatchRouter *ngIf="!user" routerLink="/login" (click)="minimizeSidebar()">
         <i nz-icon nzType="login"></i>
         <a nz-button nzType="link">Login</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="!user" routerLink="/signup">
+      <li nz-menu-item nzMatchRouter *ngIf="!user" routerLink="/signup" (click)="minimizeSidebar()">
         <i nz-icon nzType="user-add"></i>
         <a nz-button nzType="link">Sign up</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="isAdmin" routerLink="/community-user">
+      <li nz-menu-item nzMatchRouter *ngIf="isAdmin" routerLink="/community-user" (click)="minimizeSidebar()">
         <i nz-icon nzType="user"></i>
         <a nz-button nzType="link">User</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="isAdmin" routerLink="/admin-user">
+      <li nz-menu-item nzMatchRouter *ngIf="isAdmin" routerLink="/admin-user" (click)="minimizeSidebar()">
         <i nz-icon nzType="user"></i>
         <a nz-button nzType="link">Admin</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="user" [routerLink]="isAdmin ? '/admin/assistance' : 'user/assistance'">
+      <li nz-menu-item nzMatchRouter *ngIf="user" [routerLink]="isAdmin ? '/admin/assistance' : 'user/assistance'"
+          (click)="minimizeSidebar()">
         <i nz-icon nzType="alert"></i>
-          <a nz-button nzType="link">Assistance</a>
+        <a nz-button nzType="link">Assistance</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter routerLink="/about">
+      <li nz-menu-item nzMatchRouter routerLink="/about" (click)="minimizeSidebar()">
         <i nz-icon nzType="info"></i>
         <a nz-button nzType="link">About Us</a>
       </li>
@@ -46,7 +47,7 @@
         <a nz-button nzType="link">Logout</a>
       </li>
     </ul>
-  </nz-sider>
+  </nz-drawer>
   <nz-layout>
     <nz-header>
       <div class="app-header">

@@ -13,8 +13,12 @@ import {User} from "./shared/models/user";
 export class AppComponent {
 
   user: User;
-  isCollapsed = false;
+  isCollapsed = true;
   appName = "HSS";
+  sidebarStyle: any = {
+    padding: '0px',
+    background: '#001529'
+  };
 
   constructor(private app: AppService,
               private http: HttpClient,
@@ -30,6 +34,11 @@ export class AppComponent {
   }
 
   logout() {
+    this.minimizeSidebar();
     this.authService.logOut();
+  }
+
+  minimizeSidebar() {
+    this.isCollapsed = true;
   }
 }
