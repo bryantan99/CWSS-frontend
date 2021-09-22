@@ -4,6 +4,7 @@
              (nzOnClose)="minimizeSidebar()"
              [nzBodyStyle]="sidebarStyle"
              [nzCloseIcon]="null">
+  <ng-container *nzDrawerContent>
     <div class="sidebar-logo" (click)="minimizeSidebar()">
       <a [routerLink]="''">
         <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
@@ -47,6 +48,7 @@
         <a nz-button nzType="link">Logout</a>
       </li>
     </ul>
+  </ng-container>
   </nz-drawer>
   <nz-layout>
     <nz-header>
