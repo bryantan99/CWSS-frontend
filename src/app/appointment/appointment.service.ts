@@ -14,6 +14,7 @@ export class AppointmentService {
   private readonly GET_USER_APPOINTMENTS = this.APP_URL + "/appointment/user"
   private readonly CANCEL_APPOINTMENT = this.APP_URL + "/appointment/appointmentId"
   private readonly UPDATE_APPOINTMENT_DATETIME = this.APP_URL + "/appointment/update-datetime";
+  private readonly CONFIRM_APPOINTMENT = this.APP_URL + "/appointment/confirm";
 
   constructor(private http: HttpClient) {
   }
@@ -39,5 +40,9 @@ export class AppointmentService {
 
   updateAppointmentDatetime(form: { datetime: Date; appointmentId: any }) {
     return this.http.post<ResponseModel<any>>(this.UPDATE_APPOINTMENT_DATETIME, form);
+  }
+
+  confirmAppointment(form: { appointmentId: number }) {
+    return this.http.post<ResponseModel<any>>(this.CONFIRM_APPOINTMENT, form);
   }
 }

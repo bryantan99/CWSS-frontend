@@ -20,18 +20,22 @@
     <td>{{data.appointmentPurpose}}</td>
     <td>{{(data.appointmentStartTime | date: 'short')}} -<br>{{(data.appointmentEndTime | date: 'short')}}</td>
     <td>
-      <nz-tag *ngIf="data?.appointmentStatus === 'pending'" nzColor="gold">Pending</nz-tag>
+      <nz-tag *ngIf="data?.appointmentStatus === 'pending_user'" nzColor="gold">Pending User</nz-tag>
+      <nz-tag *ngIf="data?.appointmentStatus === 'pending_admin'" nzColor="gold">Pending Admin</nz-tag>
       <nz-tag *ngIf="data?.appointmentStatus === 'confirmed'" nzColor="green">Confirmed</nz-tag>
       <nz-tag *ngIf="data?.appointmentStatus === 'completed'" nzColor="green">Completed</nz-tag>
       <nz-tag *ngIf="data?.appointmentStatus === 'cancelled'" nzColor="magenta">Cancelled</nz-tag>
       <span *ngIf="!data?.appointmentStatus">-</span>
     </td>
     <td>
-      <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu">
+      <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu" *ngIf="data?.appointmentStatus !== 'cancelled'; else noActionTpl">
         Actions <i nz-icon nzType="down"></i>
       </button>
       <nz-dropdown-menu #actionMenu="nzDropdownMenu">
         <ul nz-menu>
+          <li nz-menu-item *ngIf="(data?.appointmentStatus === 'pending_user' && !isAdmin) || (data?.appointmentStatus === 'pending_admin' && isAdmin)">
+            <a (click)="confirmAppointment(data?.appointmentId)">Confirm Appointment</a>
+          </li>
           <li nz-menu-item>
             <a (click)="openDatetimeModal(data?.appointmentId)">Change Appointment Datetime</a>
           </li>
@@ -101,3 +105,7 @@
     <button nz-button nzType="primary" [disabled]="!changeAppointmentDatetimeForm.valid" (click)="changeDatetime()">Update</button>
   </div>
 </nz-modal>
+
+<ng-template #noActionTpl>
+  -
+</ng-template>

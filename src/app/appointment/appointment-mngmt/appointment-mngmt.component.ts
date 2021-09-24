@@ -160,4 +160,20 @@ export class AppointmentMngmtComponent implements OnInit {
       time: [null, [Validators.required]]
     });
   }
+
+  confirmAppointment(appointmentId: number) {
+    const form = {
+      appointmentId: appointmentId
+    };
+
+    this.appointmentService.confirmAppointment(form).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.notificationService.createSuccessNotification("Successfully confirmed appointment.")
+        this.getAppointments();
+      }
+    }, error => {
+      this.notificationService.createErrorNotification("There\'s an error when confirming appointment's datetime.");
+      console.log(error.error);
+    })
+  }
 }
