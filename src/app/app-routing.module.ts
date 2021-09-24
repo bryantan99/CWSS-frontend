@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {HomepageComponent} from "./homepage/homepage/homepage.component";
 import {LoginComponent} from "./user/login/login.component";
 import {SignupComponent} from "./user/signup/signup.component";
@@ -14,25 +14,37 @@ import {AdminManagementComponent} from "./user/admin/admin-management/admin-mana
 import {ResetPasswordComponent} from "./user/reset-password/reset-password.component";
 import {AssistanceDetailComponent} from "./assistance/assistance-detail/assistance-detail.component";
 import {AuthGuardService} from "./shared/services/auth-guard.service";
+import {AppointmentMngmtComponent} from "./appointment/appointment-mngmt/appointment-mngmt.component";
 
 const routes: Routes = [
-  { path: '', component: HomepageComponent},
-  { path: 'login', component: LoginComponent},
-  { path: 'signup', component: SignupComponent},
-  { path: 'about', component: AboutComponent},
-  { path: 'community-user', component: CommunityUserComponent, canActivate: [AuthGuardService], data: {roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}},
-  { path: 'admin-user', component: AdminManagementComponent},
-  { path: 'community-user/profile', component: CommunityUserProfileComponent},
-  { path: 'user/assistance', component: UserAssistanceComponent},
-  { path: 'admin/assistance', component: AdminAssistanceComponent},
-  { path: 'assistance/detail', component: AssistanceDetailComponent},
-  { path: 'assistance-record', component: AssistanceRecordComponent},
-  { path: 'community-user/profile/update', component: UpdateProfileComponent},
-  { path: 'reset', component: ResetPasswordComponent }
+  {path: '', component: HomepageComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'signup', component: SignupComponent},
+  {path: 'about', component: AboutComponent},
+  {
+    path: 'community-user',
+    component: CommunityUserComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}
+  },
+  {path: 'admin-user', component: AdminManagementComponent},
+  {path: 'community-user/profile', component: CommunityUserProfileComponent},
+  {path: 'user/assistance', component: UserAssistanceComponent},
+  {path: 'admin/assistance', component: AdminAssistanceComponent},
+  {path: 'assistance/detail', component: AssistanceDetailComponent},
+  {path: 'assistance-record', component: AssistanceRecordComponent},
+  {path: 'community-user/profile/update', component: UpdateProfileComponent},
+  {path: 'reset', component: ResetPasswordComponent},
+  {
+    path: 'appointment',
+    component: AppointmentMngmtComponent,
+    canActivate: [AuthGuardService]
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'})],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

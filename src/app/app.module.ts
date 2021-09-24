@@ -19,6 +19,7 @@ import {UserModule} from "./user/user.module";
 import {AppService} from "./app.service";
 import {BasicAuthInterceptorService} from "./shared/services/basic-auth-interceptor.service";
 import {AssistanceModule} from "./assistance/assistance.module";
+import {AppointmentModule} from "./appointment/appointment.module";
 
 registerLocaleData(en);
 
@@ -39,7 +40,8 @@ registerLocaleData(en);
     FormsModule,
     ReactiveFormsModule,
     UserModule,
-    AssistanceModule
+    AssistanceModule,
+    AppointmentModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }, AppService, {provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
