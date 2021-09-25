@@ -36,10 +36,10 @@ export class AuthService {
   login(loginForm: { username: string, password: string }) {
     return this.http.post<any>(this.LOGIN, loginForm)
       .pipe(
-        map(userData => {
+        map(resp => {
+          const userData = resp.data;
           sessionStorage.setItem("user", JSON.stringify(userData));
           sessionStorage.setItem("username", loginForm.username);
-          // sessionStorage.setItem("roleList", userData?.roleList);
           let tokenStr = "Bearer " + userData.jwtToken;
           sessionStorage.setItem("token", tokenStr);
           this.userSubject.next(userData);

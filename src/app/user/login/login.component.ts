@@ -3,7 +3,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidationService} from "../../shared/services/custom-validation.service";
 import {AuthService} from "../../auth/auth.service";
 import {finalize} from "rxjs/operators";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 
 @Component({
   selector: 'app-login',
@@ -13,15 +14,15 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   submitted: boolean = false;
-  invalidLogin: boolean = false;
-  incorrectLogin: boolean = false;
+  errorMsg: string;
 
   passwordIsVisible: boolean = false;
 
   constructor(private fb: FormBuilder,
               private customValidator: CustomValidationService,
               private authService: AuthService,
-              private router: Router
+              private router: Router,
+              private route: ActivatedRoute
   ) {
   }
 
@@ -42,19 +43,18 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginForm.value)
       .pipe(finalize(() => {
         this.submitted = false;
-        this.validateLoginStatus();
       }))
-      .subscribe(resp => {
-        this.router.navigate(['']);
-      }, error => {
-        this.invalidLogin = true;
-        console.log("Encountered problem when logging in.", error);
-        this.validateLoginStatus();
+      .subscribe({
+        next: () => {
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.router.navigateByUrl(returnUrl);
+        }, error: error => {
+          if (error.status !== HttpStatusConstant.NO_RESPONSE) {
+            this.errorMsg = error.error.message;
+          } else {
+            this.errorMsg = "Internal server error. Please contact the administrator.";
+          }
+        }
       });
   }
-
-  private validateLoginStatus() {
-    this.incorrectLogin = !this.authService.isUserLoggedIn();
-  }
-
 }
