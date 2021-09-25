@@ -4,10 +4,12 @@ import {SharedModule} from "../shared/shared.module";
 import {AppRoutingModule} from "../app-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AppointmentMngmtComponent } from './appointment-mngmt/appointment-mngmt.component';
+import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
 
 @NgModule({
   declarations: [
-    AppointmentMngmtComponent
+    AppointmentMngmtComponent,
+    AppointmentFormComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppointmentService} from "../appointment.service";
 import {AuthService} from "../../auth/auth.service";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
@@ -7,12 +7,15 @@ import {NotificationService} from "../../shared/services/notification.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {finalize} from "rxjs/operators";
 import {TableColumnItemModel} from "../../shared/models/table-column-item-model";
+import {AppointmentFormComponent} from "../appointment-form/appointment-form.component";
 
 @Component({
   selector: 'app-appointment-mngmt',
   templateUrl: './appointment-mngmt.component.html'
 })
 export class AppointmentMngmtComponent implements OnInit {
+  @ViewChild(AppointmentFormComponent) appointmentFormComponent: AppointmentFormComponent;
+
   dataSet;
   displayData: any;
   pageIndex = 1;
@@ -37,6 +40,9 @@ export class AppointmentMngmtComponent implements OnInit {
     ],
     filterFn: (list: string[], item: any) => list.some(status => item.appointmentStatus.indexOf(status) !== -1)
   };
+  appointmentModalIsVisible: boolean = false;
+  formIsValid: boolean = false;
+  isSubmitting: boolean = false;
 
   constructor(private appointmentService: AppointmentService,
               private authService: AuthService,
@@ -193,5 +199,32 @@ export class AppointmentMngmtComponent implements OnInit {
   resetFilterByAppointmentDate() {
     this.selectedDate = null;
     this.filterByAppointmentDate();
+  }
+
+  openAppointmentModal() {
+    this.appointmentModalIsVisible = true;
+  }
+
+  cancelScheduleAppointment() {
+    this.appointmentModalIsVisible = false;
+  }
+
+  formValidityHasChanges(data: boolean) {
+    this.formIsValid = data;
+  }
+
+  scheduleAppointment() {
+    this.appointmentFormComponent.submitForm();
+  }
+
+  isSubmittingHasChanges(data: boolean) {
+    this.isSubmitting = data;
+  }
+
+  closeModalAndRefreshList(data: boolean) {
+    if (data) {
+      this.appointmentModalIsVisible = false;
+      this.getAppointments();
+    }
   }
 }

@@ -1,3 +1,14 @@
+<ng-template #tableTitle>
+  <nz-row>
+    <nz-col [nzSm]="24" [nzMd]="6">
+      <h4>Appointment</h4>
+    </nz-col>
+    <nz-col [nzSm]="24" [nzMd]="18" class="text-end">
+      <button nz-button (click)="openAppointmentModal()">Schedule Appointment</button>
+    </nz-col>
+  </nz-row>
+</ng-template>
+
 <nz-table #appointmentTable
           [nzTitle]="tableTitle"
           [(nzPageIndex)]="pageIndex"
@@ -11,7 +22,8 @@
     <th>Appointment Purpose</th>
     <th nzCustomFilter>
       Appointment Datetime
-      <nz-filter-trigger [(nzVisible)]="datetimeFilterIsVisible" [nzActive]="selectedDate !== null" [nzDropdownMenu]="menu">
+      <nz-filter-trigger [(nzVisible)]="datetimeFilterIsVisible" [nzActive]="selectedDate !== null"
+                         [nzDropdownMenu]="menu">
         <i nz-icon nzType="search"></i>
       </nz-filter-trigger>
     </th>
@@ -59,10 +71,6 @@
   </tbody>
 </nz-table>
 
-<ng-template #tableTitle>
-  <h4>Appointment</h4>
-</ng-template>
-
 <nz-modal *ngIf="dateTimeModalIsVisible"
           [nzVisible]="dateTimeModalIsVisible"
           nzTitle="Change Appointment's Datetime"
@@ -105,6 +113,24 @@
     <button nz-button nzType="default" (click)="cancelChangeDatetime()">Cancel</button>
     <button nz-button nzType="primary" [disabled]="!changeAppointmentDatetimeForm.valid" (click)="changeDatetime()">
       Update
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal nzTitle="Schedule New Appointment"
+          (nzOnCancel)="cancelScheduleAppointment()"
+          [nzVisible]="appointmentModalIsVisible">
+  <ng-container *nzModalContent>
+    <app-appointment-form [isAdmin]="isAdmin"
+                          [user]="user"
+                          (formValidityEventEmitter)="formValidityHasChanges($event)"
+                          (isSubmittingEventEmitter)="isSubmittingHasChanges($event)"
+                          (isSubmittedSuccessfullyEventEmitter)="closeModalAndRefreshList($event)"></app-appointment-form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelScheduleAppointment()">Cancel</button>
+    <button nz-button nzType="primary" [disabled]="!formIsValid" [nzLoading]="isSubmitting"
+            (click)="scheduleAppointment()">Schedule
     </button>
   </div>
 </nz-modal>

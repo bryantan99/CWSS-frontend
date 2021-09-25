@@ -13,6 +13,7 @@ export class DropdownChoiceService {
   private readonly API_SERVER_URL = environment.apiUrl;
   private readonly GET_DISEASE_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/get-disease-choice-list";
   private readonly GET_ADMIN_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/admin";
+  private readonly GET_COMMUNITY_USER_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/community-user";
 
   constructor(private http: HttpClient) { }
 
@@ -22,5 +23,9 @@ export class DropdownChoiceService {
 
   getAdminDropdownChoices(): Observable<ResponseModel<any>> {
     return this.http.get<ResponseModel<any>>(this.GET_ADMIN_DROPDOWN_CHOICE);
+  }
+
+  getCommunityUserDropdownChoices() {
+    return this.http.get<ResponseModel<any>>(this.GET_COMMUNITY_USER_DROPDOWN_CHOICE);
   }
 }
