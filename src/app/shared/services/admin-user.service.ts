@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {ResponseModel} from "../models/response-model";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminUserService {
 
-  private readonly APP_SERVER_URL = "http://localhost:8080";
+  private readonly APP_SERVER_URL = environment.apiUrl;
   private readonly GET_ADMINS_PROFILES = this.APP_SERVER_URL + "/admins/profiles";
   private readonly ADD_STAFF = this.APP_SERVER_URL + "/admin";
   private readonly DELETE_STAFF = this.APP_SERVER_URL + "/admin";

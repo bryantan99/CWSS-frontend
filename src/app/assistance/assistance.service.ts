@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssistanceService {
 
-  private readonly APP_URL = "http://localhost:8080";
+  private readonly APP_URL = environment.apiUrl;
 
   private readonly FIND_USER_ASSISTANCE_RECORD = this.APP_URL + "/assistance/current-user";
   private readonly FIND_ALL_ASSISTANCE_RECORD = this.APP_URL + "/assistance";

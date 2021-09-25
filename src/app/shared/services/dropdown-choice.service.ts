@@ -3,13 +3,14 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DropdownChoiceModel} from "../models/dropdown-choice-model";
 import {ResponseModel} from "../models/response-model";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DropdownChoiceService {
 
-  private readonly API_SERVER_URL ="http://localhost:8080";
+  private readonly API_SERVER_URL = environment.apiUrl;
   private readonly GET_DISEASE_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/get-disease-choice-list";
   private readonly GET_ADMIN_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/admin";
 

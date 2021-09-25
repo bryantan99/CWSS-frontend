@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {CommunityUserTableModel} from "../models/community-user-table-model";
 import {Observable} from "rxjs";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommunityUserService {
 
-  readonly API_SERVER_URL = "http://localhost:8080";
+  readonly API_SERVER_URL = environment.apiUrl;
   readonly GET_COMMUNITY_USERS_TABLE_DATA = this.API_SERVER_URL + "/community-user/get-community-users";
   readonly GET_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/view-profile";
   readonly APPROVE_USER_ACCOUNT = this.API_SERVER_URL + "/community-user/approve-user";

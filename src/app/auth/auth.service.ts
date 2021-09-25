@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
 import {User} from "../shared/models/user";
 import {Router} from "@angular/router";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService {
   private userSubject: BehaviorSubject<User>
   user: Observable<User>;
 
-  private readonly API_SERVER_URL = 'http://localhost:8080';
+  private readonly API_SERVER_URL = environment.apiUrl;
 
   private readonly LOGIN = this.API_SERVER_URL + "/authenticate";
   private readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/validation/username";

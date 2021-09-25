@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseModel} from "../models/response-model";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PasswordResetService {
 
-  private readonly APP_URL = "http://localhost:8080";
+  private readonly APP_URL = environment.apiUrl;
   private readonly REQUEST_RESET_PASSWORD = this.APP_URL + "/account/request-password-reset";
   private readonly VALIDATE_OTP = this.APP_URL + "/account/validation/otp";
   private readonly RESET_PASSWORD = this.APP_URL + "/account/reset-password"

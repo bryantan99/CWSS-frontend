@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
 
-  private readonly APP_URL = "http://localhost:8080";
+  private readonly APP_URL = environment.apiUrl;
   private readonly GET_APPOINTMENT = this.APP_URL + "/appointment/appointmentId";
   private readonly GET_ALL_APPOINTMENTS = this.APP_URL + "/appointment"
   private readonly GET_USER_APPOINTMENTS = this.APP_URL + "/appointment/user"

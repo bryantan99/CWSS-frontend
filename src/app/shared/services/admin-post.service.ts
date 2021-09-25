@@ -3,13 +3,14 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {NzUploadFile} from "ng-zorro-antd/upload";
 import {ResponseModel} from "../models/response-model";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminPostService {
 
-  private readonly APP_URL = 'http://localhost:8080';
+  private readonly APP_URL = environment.apiUrl;
 
   private readonly GET_POSTS = this.APP_URL + "/post";
   private readonly GET_POST = this.APP_URL + "/post/postId";
