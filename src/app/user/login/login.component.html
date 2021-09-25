@@ -1,8 +1,8 @@
 <form nz-form [formGroup]="loginForm">
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" class="fw-bold">Username</nz-form-label>
-    <nz-form-control [nzErrorTip]="userErrorTpl">
+    <nz-form-label [nzSm]="24" [nzMd]="6" nzRequired class="fw-bold">Username</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="17" [nzErrorTip]="userErrorTpl">
       <input nz-input type="text" formControlName="username" id="username" />
       <ng-template #userErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')">
@@ -13,8 +13,8 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" class="fw-bold">Password</nz-form-label>
-    <nz-form-control [nzErrorTip]="passwordErrorTpl">
+    <nz-form-label [nzSm]="24" [nzMd]="6" nzRequired class="fw-bold">Password</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="17" [nzErrorTip]="passwordErrorTpl">
       <nz-input-group [nzSuffix]="suffixTemplate">
         <input [type]="passwordIsVisible ? 'text' : 'password'" nz-input formControlName="password" id="password"/>
         <ng-template #passwordErrorTpl let-control>
@@ -36,21 +36,21 @@
     </nz-col>
   </nz-form-item>
 
-  <nz-form-item>
-    <nz-col [nzSm]="6" [nzXs]="24"></nz-col>
-    <nz-col [nzSm]="18" [nzXs]="24">
-      <div nz-col [nzSpan]="6">
-        <a [routerLink]="['/reset']">Forgot password</a>
-      </div>
-    </nz-col>
-  </nz-form-item>
-
   <nz-row>
     <nz-col [nzSm]="6" nzXs="24"></nz-col>
     <nz-col [nzSm]="18" nzXs="24">
       <button nz-button nzType="primary" [nzLoading]="submitted" [disabled]="!loginForm.valid" (click)="submitForm()">Log In</button>
-      or <a [routerLink]="'../signup'"> register now! </a>
     </nz-col>
   </nz-row>
+
+  <nz-divider></nz-divider>
+
+  <nz-form-item class="mb-2">
+    <nz-col [nzSm]="6" [nzXs]="24"></nz-col>
+    <nz-col [nzSm]="18" [nzXs]="24">
+        <p nz-typography>Forgot password? <a [routerLink]="['/reset']">Reset here</a>.</p>
+        <p nz-typography>Don't have an account? <a [routerLink]="['/signup']">Register here</a>.</p>
+    </nz-col>
+  </nz-form-item>
 
 </form>
