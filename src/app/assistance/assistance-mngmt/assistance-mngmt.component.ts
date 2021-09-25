@@ -6,44 +6,42 @@ import {NotificationService} from "../../shared/services/notification.service";
 import {finalize} from "rxjs/operators";
 import {AssistanceFormComponent} from "../assistance-form/assistance-form.component";
 import {Router} from "@angular/router";
+import {User} from "../../shared/models/user";
 
 @Component({
-  selector: 'app-community-user-assistance',
-  templateUrl: './user-assistance.component.html'
+  selector: 'app-assistance-mngmt',
+  templateUrl: './assistance-mngmt.component.html'
 })
-export class UserAssistanceComponent implements OnInit {
+export class AssistanceMngmtComponent implements OnInit {
   @ViewChild(AssistanceFormComponent) assistanceFormComponent: AssistanceFormComponent;
+
+  user: User;
+  isAdmin: boolean = false;
 
   listOfAssistanceRecord: any[] = [];
   pageSize: number = 10;
   pageIndex: number = 1;
   assistanceDetailIsVisible: boolean = false;
   isEdit: boolean = false;
-  nzTitle: string;
-  username: string;
+  readonly nzTitle = 'Request New Assistance';
   isLoading: boolean = false;
 
   constructor(private assistanceService: AssistanceService,
               private authService: AuthService,
               private notificationService: NotificationService,
               private router: Router) {
+    this.authService.user.subscribe(resp => {
+      this.user = resp;
+      this.isAdmin = this.authService.isAdminLoggedIn();
+    });
   }
 
   ngOnInit(): void {
-    this.authService.getCurrentLoggedInUsername().subscribe(resp => {
-      if (resp && resp.status === HttpStatusConstant.OK && resp.data) {
-        this.username = resp.data;
-        this.findUserAssistanceRecord();
-      }
-    }, error => {
-      this.notificationService.createErrorNotification("There\'s an error when retrieving current logged in user.");
-      console.log(error.error);
-    });
+    this.getAssistanceRecords();
   }
 
   openAddAssistanceModal() {
     this.isEdit = true;
-    this.nzTitle = "Request New Assistance"
     this.assistanceDetailIsVisible = true;
   }
 
@@ -55,9 +53,34 @@ export class UserAssistanceComponent implements OnInit {
     this.assistanceFormComponent.submit();
   }
 
-  private findUserAssistanceRecord() {
+  private getAssistanceRecords() {
     this.isLoading = true;
-    this.assistanceService.findUserAssistanceRecords(this.username)
+    if (this.isAdmin) {
+      this.findAssistanceRecords();
+    } else {
+      this.findUserAssistanceRecord();
+    }
+  }
+
+  private findAssistanceRecords() {
+    this.assistanceService.findAllAssistanceRecords()
+      .pipe(finalize(() => {
+        this.isLoading = false;
+      }))
+      .subscribe(resp => {
+        if (resp && resp.status === HttpStatusConstant.OK) {
+          this.listOfAssistanceRecord = resp.data ? resp.data : [];
+        }
+      }, error => {
+        this.isLoading = false;
+        this.listOfAssistanceRecord = [];
+        this.notificationService.createErrorNotification("There\'s an error when retrieving all assistance requests.");
+        console.log(error.error);
+      });
+  }
+
+  private findUserAssistanceRecord() {
+    this.assistanceService.findUserAssistanceRecords(this.user.username)
       .pipe(finalize(() => {
         this.isLoading = false;
       }))

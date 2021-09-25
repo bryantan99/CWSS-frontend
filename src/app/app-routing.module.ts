@@ -6,9 +6,7 @@ import {SignupComponent} from "./user/signup/signup.component";
 import {AboutComponent} from "./homepage/about/about.component";
 import {CommunityUserComponent} from "./user/community-user/community-user.component";
 import {CommunityUserProfileComponent} from "./user/community-user-profile/community-user-profile.component";
-import {UserAssistanceComponent} from "./assistance/user-assistance/user-assistance.component";
-import {AdminAssistanceComponent} from "./assistance/admin-assistance/admin-assistance.component";
-import {AssistanceRecordComponent} from "./assistance/assistance-record/assistance-record.component";
+import {AssistanceMngmtComponent} from "./assistance/assistance-mngmt/assistance-mngmt.component";
 import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
 import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
 import {ResetPasswordComponent} from "./user/reset-password/reset-password.component";
@@ -52,25 +50,14 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: 'user/assistance',
-    component: UserAssistanceComponent,
+    path: 'assistance',
+    component: AssistanceMngmtComponent,
     canActivate: [AuthGuardService]
-  },
-  {
-    path: 'admin/assistance',
-    component: AdminAssistanceComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: [RoleConstant.ROLE_SUPER_ADMIN, RoleConstant.ROLE_ADMIN]}
   },
   {
     path: 'assistance/detail',
     component: AssistanceDetailComponent,
     canActivate: [AuthGuardService]
-  },
-  {
-    path: 'assistance-record',
-    component: AssistanceRecordComponent,
-    canActivate: [AuthGuardService],
   },
   {
     path: 'community-user/profile/update',

@@ -1,9 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {AdminAssistanceComponent} from './admin-assistance/admin-assistance.component';
-import {UserAssistanceComponent} from './user-assistance/user-assistance.component';
+import {AssistanceMngmtComponent} from './assistance-mngmt/assistance-mngmt.component';
 import {SharedModule} from "../shared/shared.module";
-import {AssistanceRecordComponent} from './assistance-record/assistance-record.component';
 import {AppRoutingModule} from "../app-routing.module";
 import {AssistanceFormComponent} from './assistance-form/assistance-form.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -12,7 +10,7 @@ import {AssistanceCommentComponent} from './assistance-comment/assistance-commen
 
 
 @NgModule({
-  declarations: [AdminAssistanceComponent, UserAssistanceComponent, AssistanceRecordComponent, AssistanceFormComponent, AssistanceDetailComponent, AssistanceCommentComponent],
+  declarations: [AssistanceMngmtComponent, AssistanceFormComponent, AssistanceDetailComponent, AssistanceCommentComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -1,18 +1,22 @@
-<nz-page-header
-  class="site-page-header"
-  nzTitle="Assistance Record"
->
-  <nz-page-header-extra>
-    <button nz-button (click)="openAddAssistanceModal()">Request Assistance</button>
-  </nz-page-header-extra>
-</nz-page-header>
+<ng-template #tableHeaderTpl>
+  <nz-row>
+    <nz-col [nzSm]="24" [nzMd]="6">
+      <h4>Assistance Record</h4>
+    </nz-col>
+    <nz-col [nzSm]="24" [nzMd]="18" class="text-end">
+      <button *ngIf="user && !isAdmin"  nz-button (click)="openAddAssistanceModal()">Request Assistance</button>
+    </nz-col>
+  </nz-row>
+</ng-template>
 
 <nz-table #assistanceRecordTable
           [(nzPageIndex)]="pageIndex"
           [(nzPageSize)]="pageSize"
           [nzData]="listOfAssistanceRecord"
           [nzLoading]="isLoading"
-          [nzScroll]="{x: '960px'}">
+          [nzScroll]="{x: '960px'}"
+          [nzTitle]="tableHeaderTpl"
+          *ngIf="user && !isAdmin">
   <thead>
   <tr>
     <th>No.</th>
@@ -55,6 +59,46 @@
           </li>
         </ul>
       </nz-dropdown-menu>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-table #basicTable
+          [nzLoading]="isLoading"
+          [nzPageIndex]="pageIndex"
+          [nzPageSize]="pageSize"
+          [nzData]="listOfAssistanceRecord"
+          [nzScroll]="{x: '960px'}"
+          [nzTitle]="tableHeaderTpl"
+          *ngIf="user && isAdmin">
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>Assistance ID</th>
+    <th>Issue Title</th>
+    <th>Help-seeker Name</th>
+    <th>Admin-In-Charge</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let record of basicTable.data; let i = index">
+    <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+    <td>{{ record?.assistanceId || "-" }}</td>
+    <td>{{ record?.assistanceTitle || "-" }}</td>
+    <td>{{ record?.userFullName || "-" }}</td>
+    <td>{{ record?.adminFullName || "-" }}</td>
+    <td>
+      <nz-tag *ngIf="record?.status === 'pending'" nzColor="gold">Pending</nz-tag>
+      <nz-tag *ngIf="record?.status === 'processing'" nzColor="blue">Processing</nz-tag>
+      <nz-tag *ngIf="record?.status === 'completed'" nzColor="green">Completed</nz-tag>
+      <nz-tag *ngIf="record?.status === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
+      <span *ngIf="!record?.status">-</span>
+    </td>
+    <td>
+      <a [routerLink]="['/assistance/detail']" [queryParams]="{assistanceId: record?.assistanceId}">View</a>
     </td>
   </tr>
   </tbody>
