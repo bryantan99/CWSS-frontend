@@ -15,26 +15,72 @@ import {ResetPasswordComponent} from "./user/reset-password/reset-password.compo
 import {AssistanceDetailComponent} from "./assistance/assistance-detail/assistance-detail.component";
 import {AuthGuardService} from "./shared/services/auth-guard.service";
 import {AppointmentMngmtComponent} from "./appointment/appointment-mngmt/appointment-mngmt.component";
+import {RoleConstant} from "./shared/constants/role-constant";
 
 const routes: Routes = [
-  {path: '', component: HomepageComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'signup', component: SignupComponent},
-  {path: 'about', component: AboutComponent},
+  {
+    path: '',
+    component: HomepageComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'signup',
+    component: SignupComponent
+  },
+  {
+    path: 'about',
+    component: AboutComponent
+  },
   {
     path: 'community-user',
     component: CommunityUserComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}
+    data: {roles: [RoleConstant.ROLE_SUPER_ADMIN, RoleConstant.ROLE_ADMIN]}
   },
-  {path: 'admin-user', component: AdminManagementComponent},
-  {path: 'community-user/profile', component: CommunityUserProfileComponent},
-  {path: 'user/assistance', component: UserAssistanceComponent},
-  {path: 'admin/assistance', component: AdminAssistanceComponent},
-  {path: 'assistance/detail', component: AssistanceDetailComponent},
-  {path: 'assistance-record', component: AssistanceRecordComponent},
-  {path: 'community-user/profile/update', component: UpdateProfileComponent},
-  {path: 'reset', component: ResetPasswordComponent},
+  {
+    path: 'admin-user',
+    component: AdminManagementComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: [RoleConstant.ROLE_SUPER_ADMIN]}
+  },
+  {
+    path: 'community-user/profile',
+    component: CommunityUserProfileComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'user/assistance',
+    component: UserAssistanceComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'admin/assistance',
+    component: AdminAssistanceComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: [RoleConstant.ROLE_SUPER_ADMIN, RoleConstant.ROLE_ADMIN]}
+  },
+  {
+    path: 'assistance/detail',
+    component: AssistanceDetailComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'assistance-record',
+    component: AssistanceRecordComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'community-user/profile/update',
+    component: UpdateProfileComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'reset',
+    component: ResetPasswordComponent
+  },
   {
     path: 'appointment',
     component: AppointmentMngmtComponent,
