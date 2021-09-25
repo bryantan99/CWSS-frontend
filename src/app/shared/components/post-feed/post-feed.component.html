@@ -10,12 +10,12 @@
 
       <ng-template #titleTemplate>
         <nz-row>
-          <nz-col [nzXs]="24" [nzSm]="12">
+          <nz-col [nzSm]="24" [nzMd]="6">
             <span>{{post.adminBean?.fullName}}</span><br>
-            <small>{{post.createdDate | date: 'medium'}}</small>
+            <small>{{post.createdDate | date: 'short'}}</small>
           </nz-col>
 
-          <nz-col [nzXs]="24" [nzSm]="12" *ngIf="isAdminLoggedIn">
+          <nz-col [nzSm]="24" [nzMd]="18" *ngIf="isAdminLoggedIn">
             <button class="float-end" nz-button nz-dropdown [nzDropdownMenu]="menu4">Action<i nz-icon nzType="down"></i>
             </button>
             <nz-dropdown-menu #menu4="nzDropdownMenu">
@@ -27,10 +27,6 @@
               </ul>
             </nz-dropdown-menu>
           </nz-col>
-
-          <app-new-post-modal [isVisible]="editPostModalIsVisible"
-                              (modalIsVisibleEmitter)="modalVisibleHasChange($event)"
-                              (addNewPostEmitter)="postListHasChanges($event)"></app-new-post-modal>
         </nz-row>
 
       </ng-template>
@@ -54,3 +50,7 @@
     <nz-empty></nz-empty>
   </ng-template>
 </nz-spin>
+
+<app-new-post-modal [isVisible]="editPostModalIsVisible"
+                    (modalIsVisibleEmitter)="modalVisibleHasChange($event)"
+                    (addNewPostEmitter)="postListHasChanges($event)"></app-new-post-modal>
