@@ -6,6 +6,7 @@ import {User} from "../../shared/models/user";
 import {NotificationService} from "../../shared/services/notification.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {finalize} from "rxjs/operators";
+import {TableColumnItemModel} from "../../shared/models/table-column-item-model";
 
 @Component({
   selector: 'app-appointment-mngmt',
@@ -16,7 +17,7 @@ export class AppointmentMngmtComponent implements OnInit {
   displayData: any;
   pageIndex = 1;
   pageSize = 10;
-  selectedDate: Date;
+  selectedDate: Date = null;
 
   user: User;
   isAdmin: boolean;
@@ -25,6 +26,17 @@ export class AppointmentMngmtComponent implements OnInit {
   changeAppointmentDatetimeForm: FormGroup;
   appointment;
   isLoading: boolean = false;
+  datetimeFilterIsVisible: false;
+  appointmentStatusColumnItem: TableColumnItemModel = {
+    listOfFilter: [
+      {text: 'Pending User', value: 'pending_user'},
+      {text: 'Pending Admin', value: 'pending_admin'},
+      {text: 'Confirmed', value: 'confirmed'},
+      {text: 'Completed', value: 'completed'},
+      {text: 'Cancelled', value: 'cancelled'},
+    ],
+    filterFn: (list: string[], item: any) => list.some(status => item.appointmentStatus.indexOf(status) !== -1)
+  };
 
   constructor(private appointmentService: AppointmentService,
               private authService: AuthService,
@@ -63,7 +75,8 @@ export class AppointmentMngmtComponent implements OnInit {
       })
   }
 
-  filterList($event: any) {
+  filterByAppointmentDate() {
+    this.datetimeFilterIsVisible = false;
     if (!this.selectedDate) {
       this.getAppointments();
       return;
@@ -175,5 +188,10 @@ export class AppointmentMngmtComponent implements OnInit {
       this.notificationService.createErrorNotification("There\'s an error when confirming appointment's datetime.");
       console.log(error.error);
     })
+  }
+
+  resetFilterByAppointmentDate() {
+    this.selectedDate = null;
+    this.filterByAppointmentDate();
   }
 }

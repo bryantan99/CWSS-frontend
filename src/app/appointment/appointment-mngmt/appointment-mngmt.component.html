@@ -9,8 +9,15 @@
   <tr>
     <th nzWidth="80px">No.</th>
     <th>Appointment Purpose</th>
-    <th>Appointment Datetime</th>
-    <th>Appointment Status</th>
+    <th nzCustomFilter>
+      Appointment Datetime
+      <nz-filter-trigger [(nzVisible)]="datetimeFilterIsVisible" [nzActive]="selectedDate !== null" [nzDropdownMenu]="menu">
+        <i nz-icon nzType="search"></i>
+      </nz-filter-trigger>
+    </th>
+    <th [nzFilters]="appointmentStatusColumnItem.listOfFilter" [nzFilterFn]="appointmentStatusColumnItem.filterFn">
+      Appointment Status
+    </th>
     <th>Action</th>
   </tr>
   </thead>
@@ -28,12 +35,14 @@
       <span *ngIf="!data?.appointmentStatus">-</span>
     </td>
     <td>
-      <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu" *ngIf="data?.appointmentStatus !== 'cancelled'; else noActionTpl">
+      <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu"
+              *ngIf="data?.appointmentStatus !== 'cancelled'; else noActionTpl">
         Actions <i nz-icon nzType="down"></i>
       </button>
       <nz-dropdown-menu #actionMenu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item *ngIf="(data?.appointmentStatus === 'pending_user' && !isAdmin) || (data?.appointmentStatus === 'pending_admin' && isAdmin)">
+          <li nz-menu-item
+              *ngIf="(data?.appointmentStatus === 'pending_user' && !isAdmin) || (data?.appointmentStatus === 'pending_admin' && isAdmin)">
             <a (click)="confirmAppointment(data?.appointmentId)">Confirm Appointment</a>
           </li>
           <li nz-menu-item>
@@ -52,14 +61,6 @@
 
 <ng-template #tableTitle>
   <h4>Appointment</h4>
-
-  <nz-row>
-    <nz-col class="fw-bold text-start" [nzXs]="24" [nzSm]="7" [nzMd]="4">Date</nz-col>
-    <nz-col [nzXs]="24" [nzSm]="16" [nzMd]="20">
-      <nz-date-picker [(ngModel)]="selectedDate" (ngModelChange)="filterList($event)"></nz-date-picker>
-    </nz-col>
-  </nz-row>
-
 </ng-template>
 
 <nz-modal *ngIf="dateTimeModalIsVisible"
@@ -102,10 +103,25 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button nzType="default" (click)="cancelChangeDatetime()">Cancel</button>
-    <button nz-button nzType="primary" [disabled]="!changeAppointmentDatetimeForm.valid" (click)="changeDatetime()">Update</button>
+    <button nz-button nzType="primary" [disabled]="!changeAppointmentDatetimeForm.valid" (click)="changeDatetime()">
+      Update
+    </button>
   </div>
 </nz-modal>
 
 <ng-template #noActionTpl>
   -
 </ng-template>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown p-2">
+    <div class="search-box">
+      <nz-date-picker [(ngModel)]="selectedDate"></nz-date-picker>
+      <br>
+      <button nz-button nzSize="small" nzType="primary" (click)="filterByAppointmentDate()" class="mt-2 me-2">
+        Search
+      </button>
+      <button nz-button nzSize="small" class="mt-2 me-2" (click)="resetFilterByAppointmentDate()">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
