@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {finalize} from "rxjs/operators";
 import {NotificationService} from "../../shared/services/notification.service";
+import {GeneralConstant} from "../../shared/constants/general-constant";
 
 @Component({
   selector: 'app-community-user-profile',
@@ -16,6 +17,7 @@ export class CommunityUserProfileComponent implements OnInit {
   healthTablePageSize: number = 10;
   healthTablePageIndex: number = 1;
   isLoading: boolean = false;
+  readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
 
   constructor(private route: ActivatedRoute,
               private location: Location,

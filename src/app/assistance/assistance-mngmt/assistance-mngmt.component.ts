@@ -7,6 +7,7 @@ import {finalize} from "rxjs/operators";
 import {AssistanceFormComponent} from "../assistance-form/assistance-form.component";
 import {Router} from "@angular/router";
 import {User} from "../../shared/models/user";
+import {GeneralConstant} from "../../shared/constants/general-constant";
 
 @Component({
   selector: 'app-assistance-mngmt',
@@ -25,6 +26,7 @@ export class AssistanceMngmtComponent implements OnInit {
   isEdit: boolean = false;
   readonly nzTitle = 'Request New Assistance';
   isLoading: boolean = false;
+  readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
 
   constructor(private assistanceService: AssistanceService,
               private authService: AuthService,

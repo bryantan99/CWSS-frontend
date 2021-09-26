@@ -1,9 +1,9 @@
 <ng-template #tableHeaderTpl>
   <nz-row>
-    <nz-col [nzSm]="24" [nzMd]="6">
+    <nz-col [nzSm]="24" [nzMd]="8">
       <h4>Assistance Record</h4>
     </nz-col>
-    <nz-col [nzSm]="24" [nzMd]="18" class="text-end">
+    <nz-col [nzSm]="24" [nzMd]="16" class="text-end">
       <button *ngIf="user && !isAdmin"  nz-button (click)="openAddAssistanceModal()">Request Assistance</button>
     </nz-col>
   </nz-row>
@@ -19,11 +19,10 @@
           *ngIf="user && !isAdmin">
   <thead>
   <tr>
-    <th>No.</th>
-    <th>ID</th>
-    <th>Title</th>
+    <th nzWidth="80px">No.</th>
+    <th>Issue Title</th>
     <th>Status</th>
-    <th>Person In Charge</th>
+    <th>Admin In-Charge</th>
     <th>Created Date</th>
     <th>Action</th>
   </tr>
@@ -32,7 +31,6 @@
   <tr *ngFor="let data of assistanceRecordTable.data;
       let i = index">
     <td>{{ (pageIndex - 1) * pageSize + 1 + i}}</td>
-    <td>{{ data?.assistanceId || "-" }}</td>
     <td>{{ data?.assistanceTitle || "-" }}</td>
     <td>
       <ng-container *ngIf="data?.status; else noStatusTpl">
@@ -44,10 +42,10 @@
       <ng-template #noStatusTpl>-</ng-template>
     </td>
     <td>{{ data?.adminFullName || "-" }}</td>
-    <td>{{ (data?.createdDate | date: 'medium') || "-" }}</td>
+    <td>{{ (data?.createdDate | date: DATE_FORMAT) || "-" }}</td>
     <td>
-      <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
-        <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
+      <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
+        Actions<i nz-icon nzType="down"></i>
       </button>
       <nz-dropdown-menu #menu1="nzDropdownMenu">
         <ul nz-menu>
@@ -74,11 +72,11 @@
           *ngIf="user && isAdmin">
   <thead>
   <tr>
-    <th>No.</th>
-    <th>Assistance ID</th>
+    <th nzWidth="80px">No.</th>
+    <th nzWidth="120px">Assistance ID</th>
     <th>Issue Title</th>
-    <th>Help-seeker Name</th>
-    <th>Admin-In-Charge</th>
+    <th>Help-seeker</th>
+    <th>Admin In-Charge</th>
     <th>Status</th>
     <th>Action</th>
   </tr>
@@ -98,7 +96,16 @@
       <span *ngIf="!record?.status">-</span>
     </td>
     <td>
-      <a [routerLink]="['/assistance/detail']" [queryParams]="{assistanceId: record?.assistanceId}">View</a>
+      <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="adminActionMenu">
+        Actions<i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #adminActionMenu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item [routerLink]="['/assistance/detail']" [queryParams]="{assistanceId: record?.assistanceId}">
+            View Request
+          </li>
+        </ul>
+      </nz-dropdown-menu>
     </td>
   </tr>
   </tbody>

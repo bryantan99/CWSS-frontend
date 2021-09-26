@@ -8,6 +8,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {finalize} from "rxjs/operators";
 import {TableColumnItemModel} from "../../shared/models/table-column-item-model";
 import {AppointmentFormComponent} from "../appointment-form/appointment-form.component";
+import {GeneralConstant} from "../../shared/constants/general-constant";
 
 @Component({
   selector: 'app-appointment-mngmt',
@@ -43,6 +44,7 @@ export class AppointmentMngmtComponent implements OnInit {
   appointmentModalIsVisible: boolean = false;
   formIsValid: boolean = false;
   isSubmitting: boolean = false;
+  readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
 
   constructor(private appointmentService: AppointmentService,
               private authService: AuthService,

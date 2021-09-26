@@ -129,7 +129,7 @@
           <nz-tag [nzColor]="'green'" *ngIf="data?.approvedBy && data?.approvedDate" nz-popover [nzPopoverContent]="validatedContentTpl">Validated</nz-tag>
           <nz-tag [nzColor]="'gold'" *ngIf="!(data?.approvedBy && data?.approvedDate)">Pending</nz-tag>
           <ng-template #validatedContentTpl>
-            Validated by {{data?.approvedBy | titlecase}} on {{(data?.approvedDate | date: 'medium') || '-'}}
+            Validated by {{data?.approvedBy | titlecase}} on {{(data?.approvedDate | date: DATE_FORMAT) || '-'}}
           </ng-template>
         </td>
       </tr>

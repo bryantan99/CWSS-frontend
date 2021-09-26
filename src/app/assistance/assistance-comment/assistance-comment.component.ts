@@ -4,6 +4,7 @@ import {AssistanceService} from "../assistance.service";
 import {NotificationService} from "../../shared/services/notification.service";
 import {finalize} from "rxjs/operators";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
+import {GeneralConstant} from "../../shared/constants/general-constant";
 
 @Component({
   selector: 'app-assistance-comment',
@@ -22,6 +23,7 @@ export class AssistanceCommentComponent implements OnInit {
   isLoading: boolean = false;
   pageIndex: number = 1;
   pageSize: number = 5;
+  readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
 
   constructor(private assistanceService: AssistanceService,
               private notificationService: NotificationService) {

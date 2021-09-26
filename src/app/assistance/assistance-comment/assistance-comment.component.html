@@ -20,7 +20,7 @@
          [nzRenderItem]="item"
          [nzItemLayout]="'horizontal'">
   <ng-template #item let-item>
-    <nz-comment [nzAuthor]="item?.createdByFullName || '-'" [nzDatetime]="item?.createdDate | date: 'medium'">
+    <nz-comment [nzAuthor]="item?.createdByFullName || '-'" [nzDatetime]="item?.createdDate | date: DATE_FORMAT">
       <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
       <nz-comment-content>
         <p>{{ item?.commentDesc }}</p>

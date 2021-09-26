@@ -9,6 +9,7 @@ import {AuthService} from "../../auth/auth.service";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {GeneralConstant} from "../../shared/constants/general-constant";
 
 @Component({
   selector: 'app-assistance-detail',
@@ -25,6 +26,7 @@ export class AssistanceDetailComponent implements OnInit {
   adminChoices: DropdownChoiceModel[] = [];
   form: FormGroup;
   isSubmitting: boolean = false;
+  readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
 
   constructor(private assistanceService: AssistanceService,
               private notificationService: NotificationService,
