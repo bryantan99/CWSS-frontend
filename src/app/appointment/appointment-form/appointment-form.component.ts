@@ -26,6 +26,7 @@ export class AppointmentFormComponent implements OnInit {
   today = new Date();
   disabledDate = (current: Date): boolean => differenceInCalendarDays(current, this.today) <= 0;
   isSubmitting: boolean = false;
+  timeslotList: DropdownChoiceModel[] = [];
 
   constructor(private fb: FormBuilder,
               private appointmentService: AppointmentService,
@@ -37,6 +38,7 @@ export class AppointmentFormComponent implements OnInit {
     this.initDropdownChoice();
     this.initForm();
     this.form.statusChanges.subscribe((status: string) => {
+      console.log(this.form);
       this.formValidityEventEmitter.emit(status === "VALID");
     });
   }
@@ -52,6 +54,13 @@ export class AppointmentFormComponent implements OnInit {
 
     if (this.isAdmin) {
       this.form.controls['username'].setValidators([Validators.required]);
+      this.form.patchValue({
+        adminUsername: this.user.username
+      });
+    } else {
+      this.form.patchValue({
+        username: this.user.username
+      });
     }
   }
 
@@ -92,7 +101,7 @@ export class AppointmentFormComponent implements OnInit {
 
     const datetime = this.combineDatetime();
 
-    const form  = {
+    const form = {
       datetime: datetime,
       purpose: this.form.controls['purpose'].value,
       username: this.form.controls['username'].value ? this.form.controls['username'].value : null,
@@ -126,7 +135,23 @@ export class AppointmentFormComponent implements OnInit {
   private combineDatetime(): Date {
     const date = new Date(this.form.controls['date'].value);
     const time = new Date(this.form.controls['time'].value);
-    date.setHours(time.getHours(), 0, 0, 0);
+    date.setHours(time.getHours(), 30, 0, 0);
     return date;
+  }
+
+  initTimeSlotDropdownChoice() {
+    this.form.patchValue({
+      time : null
+    }, {emitEvent: false, onlySelf: true});
+
+    const date = new Date(this.form.controls['date'].value);
+    const adminUsername = this.form.controls['adminUsername'].value ? this.form.controls['adminUsername'].value : null;
+    this.dropdownChoiceService.getAppointmentTimeslotChoices(date, adminUsername).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.timeslotList = resp.data ? resp.data : [];
+      }
+    }, error => {
+      this.notificationService.createErrorNotification("There\'s an error when retrieving available timeslot.");
+    })
   }
 }

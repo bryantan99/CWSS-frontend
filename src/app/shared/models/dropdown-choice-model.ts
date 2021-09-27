@@ -1,4 +1,5 @@
 export interface DropdownChoiceModel {
   text: string;
-  value: string;
+  value: any;
+  disabled?: boolean;
 }

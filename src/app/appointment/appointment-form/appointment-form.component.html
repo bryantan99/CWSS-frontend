@@ -2,7 +2,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="24" [nzMd]="6" class="fw-bold" nzRequired>Date</nz-form-label>
     <nz-form-control [nzSm]="24" [nzMd]="17" [nzErrorTip]="dateErrorTpl">
-      <nz-date-picker formControlName="date" [nzDisabledDate]="disabledDate"></nz-date-picker>
+      <nz-date-picker formControlName="date" (ngModelChange)="initTimeSlotDropdownChoice()" [nzDisabledDate]="disabledDate"></nz-date-picker>
       <ng-template #dateErrorTpl let-control>
         <div *ngIf="control.invalid && (control.touched || control.dirty)">
           <div *ngIf="control.errors?.required">
@@ -13,10 +13,21 @@
     </nz-form-control>
   </nz-form-item>
 
+  <nz-form-item *ngIf="!isAdmin">
+    <nz-form-label [nzSm]="24" [nzMd]="6" class="fw-bold">Admin</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="17">
+      <nz-select nzAllowClear nzShowSearch nzPlaceHolder="Select admin" formControlName="adminUsername" (ngModelChange)="initTimeSlotDropdownChoice()">
+        <nz-option *ngFor="let choice of adminChoice" [nzLabel]="choice?.text" [nzValue]="choice.value"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
   <nz-form-item>
     <nz-form-label [nzSm]="24" [nzMd]="6" class="fw-bold" nzRequired>Time</nz-form-label>
     <nz-form-control [nzSm]="24" [nzMd]="17" [nzErrorTip]="timeErrorTpl">
-      <nz-time-picker formControlName="time" nzUse12Hours [nzFormat]="'hh:mm a'"></nz-time-picker>
+      <nz-select nzAllowClear nzShowSearch formControlName="time">
+        <nz-option *ngFor="let choice of timeslotList" [nzLabel]="choice?.text" [nzValue]="choice?.value" [nzDisabled]="choice?.disabled"></nz-option>
+      </nz-select>
       <ng-template #timeErrorTpl let-control>
         <div *ngIf="control.invalid && (control.touched || control.dirty)">
           <div *ngIf="control.errors?.required">
@@ -42,7 +53,7 @@
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item *ngIf="isAdmin; else userDropdownTpl">
+  <nz-form-item *ngIf="isAdmin">
     <nz-form-label [nzSm]="24" [nzMd]="6" class="fw-bold" nzRequired>User</nz-form-label>
     <nz-form-control [nzSm]="24" [nzMd]="17" [nzErrorTip]="userErrorTpl">
       <nz-select nzAllowClear nzShowSearch formControlName="username" nzPlaceHolder="Select user">
@@ -58,14 +69,4 @@
     </nz-form-control>
   </nz-form-item>
 
-  <ng-template #userDropdownTpl>
-    <nz-form-item>
-      <nz-form-label [nzSm]="24" [nzMd]="6" class="fw-bold">Admin</nz-form-label>
-      <nz-form-control [nzSm]="24" [nzMd]="17">
-        <nz-select nzAllowClear nzShowSearch nzPlaceHolder="Select admin" formControlName="adminUsername">
-          <nz-option *ngFor="let choice of adminChoice" [nzLabel]="choice?.text" [nzValue]="choice.value"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-  </ng-template>
 </form>
