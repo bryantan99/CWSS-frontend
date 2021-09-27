@@ -17,8 +17,8 @@ import {GeneralConstant} from "../../shared/constants/general-constant";
 export class AppointmentMngmtComponent implements OnInit {
   @ViewChild(AppointmentFormComponent) appointmentFormComponent: AppointmentFormComponent;
 
-  dataSet;
-  displayData: any;
+  dataSet: any[] = [];
+  displayData: any[] = [];
   pageIndex = 1;
   pageSize = 10;
   selectedDate: Date = null;
@@ -45,6 +45,7 @@ export class AppointmentMngmtComponent implements OnInit {
   formIsValid: boolean = false;
   isSubmitting: boolean = false;
   readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
+  filterForm: FormGroup;
 
   constructor(private appointmentService: AppointmentService,
               private authService: AuthService,
@@ -57,6 +58,7 @@ export class AppointmentMngmtComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initFilterForm();
     this.getAppointments();
   }
 
@@ -227,6 +229,21 @@ export class AppointmentMngmtComponent implements OnInit {
     if (data) {
       this.appointmentModalIsVisible = false;
       this.getAppointments();
+    }
+  }
+
+  private initFilterForm() {
+    this.filterForm = this.fb.group({
+      appointmentId: ['']
+    });
+  }
+
+  filterByAppointmentId() {
+    const appointmentId = this.filterForm.controls['appointmentId'].value ? this.filterForm.controls['appointmentId'].value : null;
+    if (appointmentId) {
+      this.displayData = this.dataSet.filter(obj => obj.appointmentId === parseInt(appointmentId));
+    } else {
+      this.displayData = [...this.dataSet];
     }
   }
 }

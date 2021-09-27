@@ -1,5 +1,7 @@
+<app-appointment-schedule></app-appointment-schedule>
+
 <ng-template #tableTitle>
-  <nz-row>
+  <nz-row class="mb-4">
     <nz-col [nzSm]="24" [nzMd]="6">
       <h4>Appointment</h4>
     </nz-col>
@@ -7,6 +9,14 @@
       <button nz-button (click)="openAppointmentModal()">Schedule Appointment</button>
     </nz-col>
   </nz-row>
+  <form nz-form [formGroup]="filterForm">
+    <nz-form-item>
+      <nz-form-label [nzSm]="24" [nzMd]="2" class="fw-bold text-start">ID</nz-form-label>
+      <nz-form-control [nzSm]="24" [nzMd]="4">
+        <input nz-input placeholder="Filter by appointment ID" formControlName="appointmentId" (ngModelChange)="filterByAppointmentId()">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </ng-template>
 
 <nz-table #appointmentTable

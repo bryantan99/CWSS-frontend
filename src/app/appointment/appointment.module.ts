@@ -5,11 +5,13 @@ import {AppRoutingModule} from "../app-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AppointmentMngmtComponent } from './appointment-mngmt/appointment-mngmt.component';
 import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
+import { AppointmentScheduleComponent } from './appointment-schedule/appointment-schedule.component';
 
 @NgModule({
   declarations: [
     AppointmentMngmtComponent,
-    AppointmentFormComponent
+    AppointmentFormComponent,
+    AppointmentScheduleComponent
   ],
   imports: [
     CommonModule,

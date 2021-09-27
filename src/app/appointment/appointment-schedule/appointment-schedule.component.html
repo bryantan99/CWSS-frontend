@@ -1,0 +1,18 @@
+<nz-list class="mb-4" [nzLoading]="isLoading">
+  <nz-list-header>
+    <h4>Upcoming Appointment</h4><br>
+    <form nz-form [formGroup]="form">
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzMd]="2" class="fw-bold text-start">Date</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzMd]="20">
+          <nz-date-picker [nzAllowClear]="false" formControlName="date" (ngModelChange)="getConfirmedAppointments()"
+                          [nzDisabledDate]="disabledDate"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-list-header>
+  <div *ngIf="appointmentList?.length > 0">
+    <nz-list-item *ngFor="let item of appointmentList"><span [innerHTML]="generateString(item)"></span></nz-list-item>
+  </div>
+  <nz-empty class="mt-4" *ngIf="!appointmentList || appointmentList.length <= 0" nzNotFoundContent="There is no scheduled appointment on this date."></nz-empty>
+</nz-list>

@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
 import {environment} from "../../environments/environment";
+import {format, parseISO} from "date-fns";
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class AppointmentService {
   private readonly UPDATE_APPOINTMENT_DATETIME = this.APP_URL + "/appointment/update-datetime";
   private readonly CONFIRM_APPOINTMENT = this.APP_URL + "/appointment/confirm";
   private readonly SCHEDULE_APPOINTMENT = this.APP_URL + "/appointment";
+  private readonly GET_SCHEDULED_APPOINTMENT = this.APP_URL + "/appointment/upcoming";
 
   constructor(private http: HttpClient) {
   }
@@ -50,5 +52,13 @@ export class AppointmentService {
 
   scheduleAppointment(form: any) {
     return this.http.post<ResponseModel<any>>(this.SCHEDULE_APPOINTMENT, form);
+  }
+
+  getConfirmedAppointments(date?: Date): Observable<ResponseModel<any>> {
+    if (date) {
+      let params = new HttpParams().set("date", format(parseISO(date.toISOString()), 'yyyyMMdd'));
+      return this.http.get<ResponseModel<any>>(this.GET_SCHEDULED_APPOINTMENT, {params: params});
+    }
+    return this.http.get<ResponseModel<any>>(this.GET_SCHEDULED_APPOINTMENT);
   }
 }

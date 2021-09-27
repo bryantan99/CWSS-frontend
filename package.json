@@ -21,6 +21,7 @@
     "@angular/router": "~11.2.14",
     "bootstrap": "^5.0.1",
     "ckeditor4-angular": "^2.2.1",
+    "moment": "^2.29.1",
     "ng-zorro-antd": "^11.4.2",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
