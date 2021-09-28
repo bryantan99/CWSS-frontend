@@ -35,11 +35,7 @@ export class NewPostModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.postForm = this.fb.group({
-      postId: [null],
-      postDescription: ['', Validators.required],
-      postMediaIdsToBeDeleted: [[]]
-    });
+    this.initForm();
     this.nzTitle = this.nzEdit ? "Edit Post" : "Create New Post";
   }
 
@@ -118,7 +114,7 @@ export class NewPostModalComponent implements OnInit {
   removeFile = (file: NzUploadFile): boolean => {
     const index = this.fileList.indexOf(file);
     if (index > -1) {
-      const postIdsToBeDeleted : number[] = this.postForm.get('postMediaIdsToBeDeleted').value ? this.postForm.get('postMediaIdsToBeDeleted').value : [];
+      const postIdsToBeDeleted: number[] = this.postForm.get('postMediaIdsToBeDeleted').value ? this.postForm.get('postMediaIdsToBeDeleted').value : [];
       postIdsToBeDeleted.push(parseInt(file.uid));
       this.postForm.patchValue({
         postIdsToBeDeleted: postIdsToBeDeleted
@@ -151,7 +147,8 @@ export class NewPostModalComponent implements OnInit {
   private patchForm(resp: any) {
     this.postForm.patchValue({
       postId: resp.postId,
-      postDescription: resp.postDescription
+      postDescription: resp.postDescription,
+      postMediaIdsToBeDeleted: []
     });
 
     if (resp.postMediaBeanSet) {
@@ -169,5 +166,13 @@ export class NewPostModalComponent implements OnInit {
       }
       this.fileList = [...list];
     }
+  }
+
+  private initForm() {
+    this.postForm = this.fb.group({
+      postId: [null],
+      postDescription: ['', Validators.required],
+      postMediaIdsToBeDeleted: [[]]
+    });
   }
 }
