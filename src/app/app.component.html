@@ -32,6 +32,12 @@
         <a nz-button nzType="link">Admin</a>
       </li>
 
+      <li nz-menu-item nzMatchRouter *ngIf="user" [routerLink]="'/profile'"
+          (click)="minimizeSidebar()">
+        <i nz-icon nzType="profile"></i>
+        <a nz-button nzType="link">Profile</a>
+      </li>
+
       <li nz-menu-item nzMatchRouter *ngIf="user" [routerLink]="'/assistance'"
           (click)="minimizeSidebar()">
         <i nz-icon nzType="alert"></i>
