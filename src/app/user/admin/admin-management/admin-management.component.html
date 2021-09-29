@@ -42,6 +42,7 @@
       </button>
       <nz-dropdown-menu #menu1="nzDropdownMenu">
         <ul nz-menu>
+          <li nz-menu-item (click)="viewProfile(data?.username)">View Profile</li>
           <li nz-menu-item
               nz-popconfirm
               [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'"

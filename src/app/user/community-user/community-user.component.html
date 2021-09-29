@@ -53,7 +53,7 @@
     </button>
     <nz-dropdown-menu #menu1="nzDropdownMenu">
       <ul nz-menu>
-        <li nz-menu-item [routerLink]="['/community-user/profile']" [queryParams]="{username: data.username}">View User Profile</li>
+        <li nz-menu-item [routerLink]="['/profile']" [queryParams]="{username: data.username}">View User Profile</li>
         <li nz-menu-item nz-popconfirm [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'" (nzOnConfirm)="deleteUser(data.username)">Delete User</li>
       </ul>
     </nz-dropdown-menu>

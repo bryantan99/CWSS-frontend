@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {ResponseModel} from "../models/response-model";
 import {environment} from "../../../environments/environment";
 
@@ -11,8 +11,10 @@ export class AdminUserService {
 
   private readonly APP_SERVER_URL = environment.apiUrl;
   private readonly GET_ADMINS_PROFILES = this.APP_SERVER_URL + "/admins/profiles";
+  private readonly GET_ADMIN_PROFILE = this.APP_SERVER_URL + "/admin/profile";
   private readonly ADD_STAFF = this.APP_SERVER_URL + "/admin";
   private readonly DELETE_STAFF = this.APP_SERVER_URL + "/admin";
+  private readonly UPDATE_ADMIN_PROFILE = this.APP_SERVER_URL + "/admin/profile";
 
   constructor(private http: HttpClient) {
   }
@@ -28,5 +30,14 @@ export class AdminUserService {
 
   addNewStaff(form: any): Observable<ResponseModel<any>> {
     return this.http.post<ResponseModel<any>>(this.ADD_STAFF, form);
+  }
+
+  getProfile(username: string) {
+    const params = new HttpParams().set("username", username);
+    return this.http.get<ResponseModel<any>>(this.GET_ADMIN_PROFILE, {params: params});
+  }
+
+  updateAdmin(form: any): Observable<ResponseModel<any>> {
+    return this.http.post<ResponseModel<any>>(this.UPDATE_ADMIN_PROFILE, form);
   }
 }

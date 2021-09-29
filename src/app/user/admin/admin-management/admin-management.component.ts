@@ -5,6 +5,7 @@ import {NotificationService} from "../../../shared/services/notification.service
 import {finalize} from "rxjs/operators";
 import {AdminUserService} from "../../../shared/services/admin-user.service";
 import {HttpStatusConstant} from "../../../shared/constants/http-status-constant";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-admin-user',
@@ -37,7 +38,8 @@ export class AdminManagementComponent implements OnInit {
   adminDetailModalIsVisible: boolean = false;
 
   constructor(private adminUserService: AdminUserService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -96,5 +98,9 @@ export class AdminManagementComponent implements OnInit {
     if (data.refresh) {
       this.getAdminUsers();
     }
+  }
+
+  viewProfile(username: string) {
+    this.router.navigate(['/profile'], {queryParams: {adminUsername: username}});
   }
 }

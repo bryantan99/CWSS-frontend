@@ -1,0 +1,225 @@
+<div *ngIf="adminProfile">
+  <nz-page-header class="site-page-header" nzBackIcon>
+    <nz-page-header-title>{{ (adminProfile?.fullName | titlecase) || "-" }} Profile</nz-page-header-title>
+    <nz-page-header-extra>
+      <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu">Actions<i nz-icon nzType="down"></i></button>
+      <nz-dropdown-menu #actionMenu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="enterEditAdminMode()">Update Profile</li>
+          <li nz-menu-item>Delete Admin</li>
+        </ul>
+      </nz-dropdown-menu>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <form nz-form [formGroup]="adminForm">
+        <nz-form-item>
+          <nz-form-label [nzSm]="24" [nzMd]="4" class="fw-bold">Name</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="17">
+            <span>{{ adminProfile?.fullName || "-" }}</span>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="!nzEditAdmin">
+          <nz-form-label [nzSm]="24" [nzMd]="4" class="fw-bold">E-mail</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="17">
+            <span>{{ adminProfile?.email || "-" }}</span>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="nzEditAdmin">
+          <nz-form-label [nzSm]="24" [nzMd]="4" class="fw-bold">E-mail</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="17" [nzErrorTip]="emailErrorTpl">
+            <input nz-input type="email" formControlName="email" (ngModelChange)="validateEmail()">
+          </nz-form-control>
+          <ng-template #emailErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.touched || control.dirty)">
+              <div *ngIf="control.errors?.required">
+                Please input email!
+              </div>
+              <div *ngIf="control.errors?.email">
+                Please input valid email!
+              </div>
+              <div *ngIf="control.errors?.emailTaken">
+                This email has already been taken!
+              </div>
+            </div>
+          </ng-template>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="!nzEditAdmin">
+          <nz-form-label [nzSm]="24" [nzMd]="4" class="fw-bold">Contact No</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="17">
+            <span>{{ adminProfile?.contactNo || "-" }}</span>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="nzEditAdmin">
+          <nz-form-label [nzSm]="24" [nzMd]="4" class="fw-bold">Contact No</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="17" [nzErrorTip]="contactNoErrorTpl">
+            <input nz-input type="text" formControlName="contactNo">
+            <ng-template #contactNoErrorTpl let-control>
+              <div *ngIf="control.invalid && (control.touched || control.dirty)">
+                <div *ngIf="control.errors?.required">
+                  Please input contact number!
+                </div>
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="nzEditAdmin">
+          <nz-form-label [nzSm]="24" [nzMd]="4" nzNoColon></nz-form-label>
+          <nz-form-control [nzSm]="24" [nzMd]="17">
+            <nz-space *ngIf="nzEditAdmin">
+              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!adminForm.valid" (click)="submitAdminForm()" [nzLoading]="isSubmitting">Update</button>
+              <button *nzSpaceItem nz-button nzType="default" (click)="cancelNzEdit()">Cancel</button>
+            </nz-space>
+          </nz-form-control>
+        </nz-form-item>
+
+      </form>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<div *ngIf="userProfile">
+  <nz-alert *ngIf="userProfile.accIsActivate !== 'Y'"
+            nzType="warning"
+            nzMessage="Account is not activated"
+            [nzDescription]="accountNotActivatedTemplate"
+            nzShowIcon
+            class="mb-4">
+  </nz-alert>
+
+  <nz-page-header>
+    <nz-page-header-title>{{ (userProfile?.personalDetail?.fullName | titlecase) || "-"}} Profile</nz-page-header-title>
+    <nz-page-header-extra>
+      <button *ngIf="userProfile?.accIsActivate === 'Y'" nz-button [routerLink]="['/community-user/profile/update']" [queryParams]="{username: userProfile?.username}">Update Profile</button>
+    </nz-page-header-extra>
+  </nz-page-header>
+
+  <nz-spin [nzSpinning]="isLoading">
+    <nz-card nzTitle="Personal Detail" class="mb-4">
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Full Name</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.fullName | uppercase) || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Gender</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.gender ? (userProfile.personalDetail.gender | gender | uppercase) : '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Ethnic</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.personalDetail?.ethnic | ethnic | uppercase) || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">NRIC</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.nric || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Contact No.</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.contactNo || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Email</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.email || '-'}}</nz-col>
+      </nz-row>
+    </nz-card>
+
+    <nz-card nzTitle="Address" class="mb-4">
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 1</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine1 || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 2</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine2 || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Postcode</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.postcode || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">City</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.city || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">State</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.address?.state | state | uppercase) || '-'}}</nz-col>
+      </nz-row>
+    </nz-card>
+
+    <nz-card nzTitle="Occupation" class="mb-4">
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employment Status</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.employmentType | employmentType | uppercase) || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Occupation Name</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.occupationName | uppercase) || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Salary</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">RM {{((userProfile?.occupation?.salary | number: '1.2-2')) || '0.00'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Company</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.employerCompany || '-'}}</nz-col>
+      </nz-row>
+
+      <nz-row class="mb-2">
+        <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employer Contact No.</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.occupation?.employerContactNo || '-'}}</nz-col>
+      </nz-row>
+    </nz-card>
+
+    <nz-card nzTitle="Health" class="mb-4">
+      <nz-table #healthTable
+                [(nzPageIndex)]="healthTablePageIndex"
+                [(nzPageSize)]="healthTablePageSize"
+                [nzData]="userProfile?.healthModelList"
+                [nzScroll]="{x: '960px'}">
+        <thead>
+        <tr>
+          <th nzWidth="80px">No.</th>
+          <th nzWidth="150px">Disease Name</th>
+          <th nzWidth="500px">Description</th>
+          <th nzWidth="120px">Validation Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of healthTable.data; let i = index">
+          <td>{{(healthTablePageIndex - 1) * healthTablePageSize + i + 1}}</td>
+          <td>{{data?.diseaseName || '-'}}</td>
+          <td>{{data?.diseaseDescription || '-'}}</td>
+          <td>
+            <nz-tag [nzColor]="'green'" *ngIf="data?.approvedBy && data?.approvedDate" nz-popover [nzPopoverContent]="validatedContentTpl">Validated</nz-tag>
+            <nz-tag [nzColor]="'gold'" *ngIf="!(data?.approvedBy && data?.approvedDate)">Pending</nz-tag>
+            <ng-template #validatedContentTpl>
+              Validated by {{data?.approvedBy | titlecase}} on {{(data?.approvedDate | date: DATE_FORMAT) || '-'}}
+            </ng-template>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </nz-spin>
+</div>
+
+<ng-template #accountNotActivatedTemplate>
+  <p nz-typography>Account details are provided by the user and has not been verified.<br> Please verify the details before approving the account.</p>
+  <button nz-button nzType="primary" class="me-2 mb-2" (click)="approveAccount(userProfile?.personalDetail?.username)">Approve</button>
+  <button nz-button nzDanger nzType="primary" (click)="rejectAccount(userProfile?.personalDetail?.username)">Reject</button>
+</ng-template>

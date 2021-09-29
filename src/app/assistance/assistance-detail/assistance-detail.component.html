@@ -127,7 +127,7 @@
         <nz-form-item class="mb-2">
           <nz-form-label [nzSm]="24" [nzMd]="7" class="fw-bold text-start">Name</nz-form-label>
           <nz-form-control [nzSm]="24" [nzMd]="16">
-            <a nz-typography [routerLink]="['/community-user/profile']"
+            <a nz-typography [routerLink]="['/profile']"
                [queryParams]="{username: assistanceRecord?.communityUserBean?.username}"
                *ngIf="assistanceRecord?.communityUserBean">{{ assistanceRecord?.communityUserBean?.fullName }}
             </a>

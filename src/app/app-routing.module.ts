@@ -5,7 +5,6 @@ import {LoginComponent} from "./user/login/login.component";
 import {SignupComponent} from "./user/signup/signup.component";
 import {AboutComponent} from "./homepage/about/about.component";
 import {CommunityUserComponent} from "./user/community-user/community-user.component";
-import {CommunityUserProfileComponent} from "./user/community-user-profile/community-user-profile.component";
 import {AssistanceMngmtComponent} from "./assistance/assistance-mngmt/assistance-mngmt.component";
 import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
 import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
@@ -14,6 +13,7 @@ import {AssistanceDetailComponent} from "./assistance/assistance-detail/assistan
 import {AuthGuardService} from "./shared/services/auth-guard.service";
 import {AppointmentMngmtComponent} from "./appointment/appointment-mngmt/appointment-mngmt.component";
 import {RoleConstant} from "./shared/constants/role-constant";
+import {ProfileComponent} from "./user/profile/profile.component";
 
 const routes: Routes = [
   {
@@ -45,11 +45,6 @@ const routes: Routes = [
     data: {roles: [RoleConstant.ROLE_SUPER_ADMIN]}
   },
   {
-    path: 'community-user/profile',
-    component: CommunityUserProfileComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
     path: 'assistance',
     component: AssistanceMngmtComponent,
     canActivate: [AuthGuardService]
@@ -72,7 +67,17 @@ const routes: Routes = [
     path: 'appointment',
     component: AppointmentMngmtComponent,
     canActivate: [AuthGuardService]
-  }
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: '**',
+    redirectTo: '/',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({

@@ -130,7 +130,7 @@ export class UpdateProfileComponent implements OnInit {
     this.communityUserService.updateProfile(this.form.value).subscribe(resp => {
       if (resp) {
         this.notificationService.createSuccessNotification("User Profile has been updated.");
-        this.router.navigate(['/community-user/profile'], {queryParams: {username: this.username}});
+        this.router.navigate(['/profile'], {queryParams: {username: this.username}});
       }
     }, error => {
       this.notificationService.createErrorNotification("There's an error when submitting form.");
