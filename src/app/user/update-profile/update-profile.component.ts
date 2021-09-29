@@ -9,6 +9,7 @@ import {NotificationService} from "../../shared/services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CommunityUserService} from "../../shared/services/community-user.service";
 import {Location} from "@angular/common";
+import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 
 @Component({
   selector: 'app-update-profile',
@@ -43,7 +44,8 @@ export class UpdateProfileComponent implements OnInit {
               private location: Location,
               private router: Router,
               private route: ActivatedRoute,
-              private communityUserService: CommunityUserService) {}
+              private communityUserService: CommunityUserService) {
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -58,8 +60,8 @@ export class UpdateProfileComponent implements OnInit {
 
   private getUserProfile(username: string) {
     this.communityUserService.getCommunityUser(this.username).subscribe(resp => {
-      if (resp) {
-        this.userProfile = resp;
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.userProfile = resp.data;
         this.patchFormValue();
       }
     })
@@ -67,6 +69,9 @@ export class UpdateProfileComponent implements OnInit {
 
   private patchFormValue() {
     this.form.controls['personalDetail'].patchValue(this.userProfile.personalDetail);
+    this.form.controls['personalDetail'].patchValue({
+      email: this.userProfile.email
+    });
     this.form.controls['personalDetail'].updateValueAndValidity();
 
     this.form.controls['address'].patchValue(this.userProfile.address);
@@ -78,7 +83,7 @@ export class UpdateProfileComponent implements OnInit {
     const healthIssueList: any[] = this.userProfile.healthModelList;
     if (healthIssueList) {
       let mappedHealthIssues: any[] = healthIssueList.map(toHealthDiseaseFormGroup)
-      for (let i = 0 ; i < mappedHealthIssues.length ; i++) {
+      for (let i = 0; i < mappedHealthIssues.length; i++) {
         this.addDiseaseFormGroup();
       }
       this.form.controls['health'].patchValue({diseaseList: mappedHealthIssues});

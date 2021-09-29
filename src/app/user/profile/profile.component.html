@@ -71,7 +71,9 @@
           <nz-form-label [nzSm]="24" [nzMd]="4" nzNoColon></nz-form-label>
           <nz-form-control [nzSm]="24" [nzMd]="17">
             <nz-space *ngIf="nzEditAdmin">
-              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!adminForm.valid" (click)="submitAdminForm()" [nzLoading]="isSubmitting">Update</button>
+              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!adminForm.valid" (click)="submitAdminForm()"
+                      [nzLoading]="isSubmitting">Update
+              </button>
               <button *nzSpaceItem nz-button nzType="default" (click)="cancelNzEdit()">Cancel</button>
             </nz-space>
           </nz-form-control>
@@ -94,7 +96,26 @@
   <nz-page-header>
     <nz-page-header-title>{{ (userProfile?.personalDetail?.fullName | titlecase) || "-"}} Profile</nz-page-header-title>
     <nz-page-header-extra>
-      <button *ngIf="userProfile?.accIsActivate === 'Y'" nz-button [routerLink]="['/community-user/profile/update']" [queryParams]="{username: userProfile?.username}">Update Profile</button>
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu">
+        Actions
+        <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item
+              *ngIf="userProfile?.accIsActivate === 'Y'"
+              [routerLink]="['/community-user/profile/update']"
+              [queryParams]="{username: userProfile?.personalDetail?.username}">
+            Update Profile
+          </li>
+          <li nz-menu-item
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure you want to delete this user's account?"
+              (nzOnConfirm)="rejectAccount(userProfile?.personalDetail?.username)">
+            Delete Account
+          </li>
+        </ul>
+      </nz-dropdown-menu>
     </nz-page-header-extra>
   </nz-page-header>
 
@@ -107,7 +128,8 @@
 
       <nz-row class="mb-2">
         <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Gender</nz-col>
-        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.personalDetail?.gender ? (userProfile.personalDetail.gender | gender | uppercase) : '-'}}</nz-col>
+        <nz-col [nzXs]="24"
+                [nzMd]="20">{{userProfile?.personalDetail?.gender ? (userProfile.personalDetail.gender | gender | uppercase) : '-'}}</nz-col>
       </nz-row>
 
       <nz-row class="mb-2">
@@ -161,7 +183,8 @@
     <nz-card nzTitle="Occupation" class="mb-4">
       <nz-row class="mb-2">
         <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Employment Status</nz-col>
-        <nz-col [nzXs]="24" [nzMd]="20">{{(userProfile?.occupation?.employmentType | employmentType | uppercase) || '-'}}</nz-col>
+        <nz-col [nzXs]="24"
+                [nzMd]="20">{{(userProfile?.occupation?.employmentType | employmentType | uppercase) || '-'}}</nz-col>
       </nz-row>
 
       <nz-row class="mb-2">
@@ -205,7 +228,9 @@
           <td>{{data?.diseaseName || '-'}}</td>
           <td>{{data?.diseaseDescription || '-'}}</td>
           <td>
-            <nz-tag [nzColor]="'green'" *ngIf="data?.approvedBy && data?.approvedDate" nz-popover [nzPopoverContent]="validatedContentTpl">Validated</nz-tag>
+            <nz-tag [nzColor]="'green'" *ngIf="data?.approvedBy && data?.approvedDate" nz-popover
+                    [nzPopoverContent]="validatedContentTpl">Validated
+            </nz-tag>
             <nz-tag [nzColor]="'gold'" *ngIf="!(data?.approvedBy && data?.approvedDate)">Pending</nz-tag>
             <ng-template #validatedContentTpl>
               Validated by {{data?.approvedBy | titlecase}} on {{(data?.approvedDate | date: DATE_FORMAT) || '-'}}
@@ -219,7 +244,11 @@
 </div>
 
 <ng-template #accountNotActivatedTemplate>
-  <p nz-typography>Account details are provided by the user and has not been verified.<br> Please verify the details before approving the account.</p>
-  <button nz-button nzType="primary" class="me-2 mb-2" (click)="approveAccount(userProfile?.personalDetail?.username)">Approve</button>
-  <button nz-button nzDanger nzType="primary" (click)="rejectAccount(userProfile?.personalDetail?.username)">Reject</button>
+  <p nz-typography>Account details are provided by the user and has not been verified.<br> Please verify the details
+    before approving the account.</p>
+  <button nz-button nzType="primary" class="me-2 mb-2" (click)="approveAccount(userProfile?.personalDetail?.username)">
+    Approve
+  </button>
+  <button nz-button nzDanger nzType="primary" (click)="rejectAccount(userProfile?.personalDetail?.username)">Reject
+  </button>
 </ng-template>
