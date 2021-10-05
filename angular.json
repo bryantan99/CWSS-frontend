@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/chis-app",
-            "index": "src/index.html",
+            "index": "src/index-dev.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
@@ -40,6 +40,10 @@
           },
           "configurations": {
             "production": {
+              "index": {
+                "input": "src/index.html",
+                "output": "index.html"
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
