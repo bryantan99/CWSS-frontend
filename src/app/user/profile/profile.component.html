@@ -71,7 +71,7 @@
           <nz-form-label [nzSm]="24" [nzMd]="4" nzNoColon></nz-form-label>
           <nz-form-control [nzSm]="24" [nzMd]="17">
             <nz-space *ngIf="nzEditAdmin">
-              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!adminForm.valid" (click)="submitAdminForm()"
+              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!adminForm.valid || !adminForm.touched || !adminForm.dirty" (click)="submitAdminForm()"
                       [nzLoading]="isSubmitting">Update
               </button>
               <button *nzSpaceItem nz-button nzType="default" (click)="cancelNzEdit()">Cancel</button>
