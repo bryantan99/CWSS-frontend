@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {HomepageComponent} from "./homepage/homepage/homepage.component";
 import {LoginComponent} from "./user/login/login.component";
 import {SignupComponent} from "./user/signup/signup.component";
 import {AboutComponent} from "./homepage/about/about.component";
@@ -14,11 +13,12 @@ import {AuthGuardService} from "./shared/services/auth-guard.service";
 import {AppointmentMngmtComponent} from "./appointment/appointment-mngmt/appointment-mngmt.component";
 import {RoleConstant} from "./shared/constants/role-constant";
 import {ProfileComponent} from "./user/profile/profile.component";
+import {PostFeedComponent} from "./shared/components/post-feed/post-feed.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: HomepageComponent
+    component: PostFeedComponent
   },
   {
     path: 'login',

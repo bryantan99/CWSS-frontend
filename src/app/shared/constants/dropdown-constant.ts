@@ -29,7 +29,7 @@ export class DropdownConstant {
   ]
 
   public static ETHNIC_DROPDOWN = [
-    {text: "Malay", value: "M"},
+    {text: "Bumiputera", value: "B"},
     {text: "Chinese", value: "C"},
     {text: "Indian", value: "I"},
     {text: "Other", value: "O"},
