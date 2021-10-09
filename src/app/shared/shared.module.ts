@@ -11,6 +11,7 @@ import {StatePipe} from "./pipes/state.pipe";
 import {EmploymentTypePipe} from "./pipes/employment-type.pipe";
 import {EthnicPipe} from "./pipes/ethnic.pipe";
 import {GoogleMapsModule} from "@angular/google-maps";
+import {HighchartsChartModule} from "highcharts-angular";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import {GoogleMapsModule} from "@angular/google-maps";
     FormsModule,
     CKEditorModule,
     GoogleMapsModule,
+    HighchartsChartModule,
     ...SHARED_ZORRO_MODULES
   ],
   exports: [
@@ -29,6 +31,7 @@ import {GoogleMapsModule} from "@angular/google-maps";
     NewPostModalComponent,
     PostFeedComponent,
     GoogleMapsModule,
+    HighchartsChartModule,
     ...SHARED_ZORRO_MODULES,
     GenderPipe,
     StatePipe,

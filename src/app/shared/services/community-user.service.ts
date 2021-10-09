@@ -20,8 +20,26 @@ export class CommunityUserService {
   constructor(private http: HttpClient) {
   }
 
-  getCommunityUsers(address?: boolean, occupation?: boolean, healthIssue?: boolean): Observable<ResponseModel<any>> {
+  getCommunityUsers(name?: string,
+                    nric?: string,
+                    gender?: string,
+                    ethnic?: string,
+                    address?: boolean,
+                    occupation?: boolean,
+                    healthIssue?: boolean): Observable<ResponseModel<any>> {
     let params = new HttpParams();
+    if (name) {
+      params = params.set("name", name);
+    }
+    if (nric) {
+      params = params.set("nric", nric);
+    }
+    if (gender && gender != 'A') {
+      params = params.set("gender", gender);
+    }
+    if (ethnic && ethnic != 'A') {
+      params = params.set("ethnic", ethnic);
+    }
     if (address) {
       params = params.set("address", "Y");
     }

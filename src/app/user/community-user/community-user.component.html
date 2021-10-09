@@ -27,45 +27,113 @@
 <!--  </map-info-window>-->
 <!--</google-map>-->
 
+<nz-drawer
+  nzTitle="Filter Data"
+  [nzVisible]="queryDrawerIsVisible"
+  (nzOnClose)="closeQueryDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <form nz-form [formGroup]="queryForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Name</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="name">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">NRIC No.</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="nric">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Gender</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="gender">
+            <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
+            <nz-option [nzLabel]="'Male'" [nzValue]="'M'"></nz-option>
+            <nz-option [nzLabel]="'Female'" [nzValue]="'F'"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Ethnic</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="ethnic">
+            <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
+            <nz-option [nzLabel]="'Bumiputera'" [nzValue]="'B'"></nz-option>
+            <nz-option [nzLabel]="'Chinese'" [nzValue]="'C'"></nz-option>
+            <nz-option [nzLabel]="'Indian'" [nzValue]="'I'"></nz-option>
+            <nz-option [nzLabel]="'Other'" [nzValue]="'O'"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-space>
+            <button *nzSpaceItem nz-button nzType="primary" (click)="getCommunityUsers()">Search
+            </button>
+            <button *nzSpaceItem nz-button nzType="default" (click)="resetQueryForm()">Reset</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-drawer>
+
+<nz-row class="mt-4">
+  <nz-col [nzSm]="24" [nzMd]="12">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="genderPieChartOption"
+      style="width: 100%; height: 300px; display: block;"
+    ></highcharts-chart>
+  </nz-col>
+  <nz-col [nzSm]="24" [nzMd]="12">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="ethnicPieChartOptions"
+      style="width: 100%; height: 300px; display: block;"
+    ></highcharts-chart>
+  </nz-col>
+  <nz-col [nzSm]="24" [nzMd]="12">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="locationPieChartOptions"
+      style="width: 100%; height: 300px; display: block;"
+    ></highcharts-chart>
+  </nz-col>
+</nz-row>
+
+
+<ng-template #titleTpl>
+  <nz-row>
+    <nz-col [nzSpan]="24" class="text-end">
+      <button nz-button nzType="primary" class="me-4" (click)="openQueryDrawer()">Filter Settings</button>
+    </nz-col>
+  </nz-row>
+</ng-template>
+
 <nz-table class="mt-4"
           #userTable
           [nzLoading]="isLoading"
-          [nzData]="displayData"
+          [nzData]="users"
           [(nzPageIndex)]="pageIndex"
           [(nzPageSize)]="pageSize"
-          [nzScroll]="{x: '1080px'}"
+          [nzScroll]="{x: '1280px'}"
+          [nzShowTotal]="totalTpl"
+          [nzTitle]="titleTpl"
           nzShowSizeChanger>
   <thead>
   <tr>
     <th nzWidth="60px">No.</th>
-    <th nzWidth="140px" nzCustomFilter>
-      Name
-      <nz-filter-trigger [(nzVisible)]="fullNameFilterIsVisible" [nzActive]="fullNameSearchValue.length > 0"
-                         [nzDropdownMenu]="fullNameFilterMenu">
-        <i nz-icon nzType="search"></i>
-      </nz-filter-trigger>
-    </th>
-    <th nzWidth="140px">
-      NRIC No.
-      <nz-filter-trigger [(nzVisible)]="nricFilterIsVisible" [nzActive]="nricSearchValue.length > 0"
-                         [nzDropdownMenu]="nricFilterMenu">
-        <i nz-icon nzType="search"></i>
-      </nz-filter-trigger>
-    </th>
-    <th nzWidth="100px"
-        [nzFilters]="genderColumnItem.listOfFilter"
-        [nzFilterFn]="genderColumnItem.filterFn"
-        [nzFilterMultiple]="false">
-      Gender
-    </th>
+    <th nzWidth="140px">Name</th>
+    <th nzWidth="140px">NRIC No.</th>
+    <th nzWidth="100px">Gender</th>
     <th nzWidth="140px">Ethnic</th>
-    <th nzWidth="140px">Contact No.</th>
+    <th nzWidth=" 140px">Contact No.</th>
     <th>Address</th>
-    <th nzWidth="140px"
-        [nzFilters]="accountStatusColumnItem.listOfFilter"
-        [nzFilterFn]="accountStatusColumnItem.filterFn"
-        [nzFilterMultiple]="false">Account Status
-    </th>
+    <th nzWidth="140px">Account Status</th>
     <th nzWidth="160px">Action</th>
   </tr>
   </thead>
@@ -97,18 +165,6 @@
   </tbody>
 </nz-table>
 
-<nz-dropdown-menu #fullNameFilterMenu="nzDropdownMenu">
-  <div class="ant-table-filter-dropdown p-2">
-    <input class="mb-2" type="text" nz-input placeholder="Search name" [(ngModel)]="fullNameSearchValue"/>
-    <button nz-button nzSize="small" nzType="primary" (click)="searchFullName()" class="me-2">Search</button>
-    <button nz-button nzSize="small" (click)="resetFullName()">Reset</button>
-  </div>
-</nz-dropdown-menu>
-
-<nz-dropdown-menu #nricFilterMenu="nzDropdownMenu">
-  <div class="ant-table-filter-dropdown p-2">
-    <input class="mb-2" type="text" nz-input placeholder="Search NRIC" [(ngModel)]="nricSearchValue"/>
-    <button nz-button nzSize="small" nzType="primary" (click)="searchNric()" class="me-2">Search</button>
-    <button nz-button nzSize="small" (click)="resetNric()">Reset</button>
-  </div>
-</nz-dropdown-menu>
+<ng-template #totalTpl let-total>
+  Total {{ total }} records
+</ng-template>

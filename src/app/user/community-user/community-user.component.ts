@@ -5,6 +5,8 @@ import {TableColumnItemModel} from "../../shared/models/table-column-item-model"
 import {NotificationService} from "../../shared/services/notification.service";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {GoogleMap, MapInfoWindow, MapMarker} from "@angular/google-maps";
+import * as Highcharts from 'highcharts';
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-community-user',
@@ -29,22 +31,10 @@ export class CommunityUserComponent implements OnInit {
   markers = [];
   infoContent = '';
   users: any[] = [];
-  displayData: any = [];
   isLoading: boolean = false;
   pageIndex: number = 1;
   pageSize: number = 10;
 
-  fullNameFilterIsVisible: boolean = false;
-  fullNameSearchValue = '';
-  nricFilterIsVisible: boolean = false;
-  nricSearchValue = '';
-  genderColumnItem: TableColumnItemModel = {
-    listOfFilter: [
-      {text: "Male", value: "M"},
-      {text: "Female", value: "F"},
-    ],
-    filterFn: (value: string, item: any) => item.personalDetail.gender.indexOf(value) !== -1
-  }
   accountStatusColumnItem: TableColumnItemModel = {
     listOfFilter: [
       {text: "Activated", value: "Y"},
@@ -52,19 +42,27 @@ export class CommunityUserComponent implements OnInit {
     ],
     filterFn: (value: string, item: any) => item.accIsActivate.indexOf(value) !== -1
   }
+  Highcharts: typeof Highcharts = Highcharts;
+  genderPieChartOption: any;
+  ethnicPieChartOptions: any;
+  locationPieChartOptions: any;
+  queryForm: FormGroup;
+  queryDrawerIsVisible: boolean = false;
 
   constructor(private communityUserService: CommunityUserService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
+    this.initQueryForm();
     this.getCommunityUsers();
   }
 
   private initMarker() {
     this.markers = [];
     let i = 1;
-    for (const user of this.displayData) {
+    for (const user of this.users) {
       user.index = i;
       if (user.address) {
         this.markers.push({
@@ -85,8 +83,6 @@ export class CommunityUserComponent implements OnInit {
       }
       i += 1;
     }
-    console.log("user: ", this.users);
-    console.log("markers: ", this.markers);
   }
 
   openInfo(marker: MapMarker, content) {
@@ -94,24 +90,31 @@ export class CommunityUserComponent implements OnInit {
     this.info.open(marker);
   }
 
-  private getCommunityUsers() {
+  getCommunityUsers() {
     this.isLoading = true;
-    this.communityUserService.getCommunityUsers(true)
+    this.communityUserService.getCommunityUsers(
+      this.queryForm.controls['name'].value,
+      this.queryForm.controls['nric'].value,
+      this.queryForm.controls['gender'].value,
+      this.queryForm.controls['ethnic'].value,
+      true,
+      false,
+      false)
       .pipe(finalize(() => {
         this.isLoading = false;
       }))
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.users = resp.data ? resp.data : [];
-          this.displayData = [...this.users];
           this.initMarker();
+          this.initCharts();
         }
       }, error => {
         this.users = [];
-        this.displayData = [...this.users];
         this.notificationService.createErrorNotification("There\'s an error when retrieving community users.");
         console.log(error.error);
       });
+    this.queryDrawerIsVisible = false;
   }
 
   generateAddress(address: any) {
@@ -122,44 +125,167 @@ export class CommunityUserComponent implements OnInit {
     return fullAddress;
   }
 
-  searchFullName(): void {
-    this.fullNameFilterIsVisible = false;
-    this.displayData = this.users.filter((item: any) => {
-      //  Filter by fullName & nric if nric is present
-      if (this.nricSearchValue) {
-        return item.personalDetail.fullName.toLowerCase().indexOf(this.fullNameSearchValue.toLowerCase()) !== -1 &&
-          item.personalDetail.nric.toLowerCase().indexOf(this.nricSearchValue.toLowerCase()) !== -1
-      }
+  private initCharts() {
+    this.initGenderPieChartOption();
+    this.initEthnicPieChartOption();
+    this.initLocationPieChartOption();
+  }
 
-      //  Filter by fullName only
-      return item.personalDetail.fullName.toLowerCase().indexOf(this.fullNameSearchValue.toLowerCase()) !== -1
+  private initGenderPieChartOption() {
+    const data = [];
+    let map: Map<string, number> = new Map();
+    if (this.users) {
+      map = this.users.reduce((acc, e) => acc.set(e.personalDetail.gender, (acc.get(e.personalDetail.gender) || 0) + 1), new Map());
+    }
+    map.forEach((value, key) => {
+      data.push({
+        name: key,
+        y: value
+      })
     });
-    this.initMarker();
+
+    this.genderPieChartOption = {
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: 'Gender'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: {point.percentage:.2f}%'
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%'
+        }
+      },
+      plotOptions: {
+        pie: {
+          dataLabels: {
+            enabled: true,
+            format: '{point.name}: {point.percentage:.2f} %'
+          }
+        }
+      },
+      series: [{
+        name: 'Gender',
+        colorByPoint: true,
+        data: data
+      }]
+    }
   }
 
-  resetFullName(): void {
-    this.fullNameSearchValue = '';
-    this.searchFullName();
-  }
-
-  searchNric() {
-    this.nricFilterIsVisible = false;
-    this.displayData = this.users.filter((item: any) => {
-
-      //  Filter by nric and fullname if full name is present
-      if (this.fullNameSearchValue) {
-        return item.personalDetail.nric.toLowerCase().indexOf(this.nricSearchValue.toLowerCase()) !== -1 &&
-          item.personalDetail.fullName.toLowerCase().indexOf(this.fullNameSearchValue.toLowerCase()) !== -1;
-      }
-
-      //  Filter by nric only
-      return item.personalDetail.nric.toLowerCase().indexOf(this.nricSearchValue.toLowerCase()) !== -1;
+  private initEthnicPieChartOption() {
+    const data = [];
+    let map: Map<string, number> = new Map();
+    if (this.users) {
+      map = this.users.reduce((acc, e) => acc.set(e.personalDetail.ethnic, (acc.get(e.personalDetail.ethnic) || 0) + 1), new Map());
+    }
+    map.forEach((value, key) => {
+      data.push({
+        name: key,
+        y: value
+      })
     });
-    this.initMarker();
+
+    this.ethnicPieChartOptions = {
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: 'Ethnic'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: {point.percentage:.2f}%'
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%'
+        }
+      },
+      plotOptions: {
+        pie: {
+          dataLabels: {
+            enabled: true,
+            format: '{point.name}: {point.percentage:.2f} %'
+          }
+        }
+      },
+      series: [{
+        name: 'Ethnic',
+        colorByPoint: true,
+        data: data
+      }]
+    }
   }
 
-  resetNric() {
-    this.nricSearchValue = '';
-    this.searchNric();
+  private initLocationPieChartOption() {
+    const data = [];
+    let map: Map<string, number> = new Map();
+    if (this.users) {
+      map = this.users.reduce((acc, e) => {
+        const addressLine2 = e.address ? e.address.addressLine2 : "-";
+        acc.set(addressLine2, (acc.get(addressLine2) || 0) + 1);
+        return acc;
+      }, new Map());
+    }
+    map.forEach((value, key) => {
+      data.push({
+        name: key,
+        y: value
+      })
+    });
+
+    this.locationPieChartOptions = {
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: 'Location'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: {point.percentage:.2f}%'
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%'
+        }
+      },
+      plotOptions: {
+        pie: {
+          dataLabels: {
+            enabled: true,
+            format: '{point.name}: {point.percentage:.2f} %'
+          }
+        }
+      },
+      series: [{
+        name: 'Location',
+        colorByPoint: true,
+        data: data
+      }]
+    }
+  }
+
+  private initQueryForm() {
+    this.queryForm = this.fb.group({
+      name: [null],
+      nric: [null],
+      gender: this.fb.control('A'),
+      ethnic: this.fb.control('A')
+    })
+  }
+
+  resetQueryForm() {
+    this.initQueryForm();
+    this.getCommunityUsers();
+  }
+
+  closeQueryDrawer() {
+    this.queryDrawerIsVisible = false;
+  }
+
+  openQueryDrawer() {
+    this.queryDrawerIsVisible = true;
   }
 }
