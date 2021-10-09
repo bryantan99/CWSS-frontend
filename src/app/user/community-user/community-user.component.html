@@ -1,62 +1,97 @@
-<nz-page-header>
-  <nz-page-header-title>
-    Community User
-  </nz-page-header-title>
-</nz-page-header>
+<!--<google-map-->
+<!--  height="500px"-->
+<!--  width="100%"-->
+<!--  [zoom]="zoom"-->
+<!--  [center]="center"-->
+<!--  [options]="options"-->
+<!--&gt;-->
+<!--  <map-marker-->
+<!--    #markerElem="mapMarker"-->
+<!--    *ngFor="let marker of markers"-->
+<!--    [position]="marker.position"-->
+<!--    [label]="marker.label"-->
+<!--    [title]="marker.title"-->
+<!--    [options]="marker.options"-->
+<!--    (mapClick)="openInfo(markerElem, marker.info)"-->
+<!--  >-->
+<!--  </map-marker>-->
+<!--  <map-info-window>-->
+<!--    <form nz-form>-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label>Name</nz-form-label>-->
+<!--        <nz-form-control>-->
+<!--          {{infoContent}}-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </form>-->
+<!--  </map-info-window>-->
+<!--</google-map>-->
 
-<nz-table #fixedTable
+<nz-table class="mt-4"
+          #userTable
           [nzLoading]="isLoading"
-          [nzData]="listOfDisplayData"
+          [nzData]="displayData"
           [(nzPageIndex)]="pageIndex"
           [(nzPageSize)]="pageSize"
-          [nzScroll]="{x: '960px'}"
+          [nzScroll]="{x: '1080px'}"
           nzShowSizeChanger>
   <thead>
   <tr>
-    <th nzWidth="80px">No.</th>
-    <th nzWidth="150px"
-        [nzSortFn]="fullNameColumnItem.sortFn"
-        nzCustomFilter>
-      Full Name
-      <nz-filter-trigger [(nzVisible)]="fullNameFilterIsVisible" [nzActive]="fullNameSearchValue.length > 0" [nzDropdownMenu]="fullNameFilterMenu">
+    <th nzWidth="60px">No.</th>
+    <th nzWidth="140px" nzCustomFilter>
+      Name
+      <nz-filter-trigger [(nzVisible)]="fullNameFilterIsVisible" [nzActive]="fullNameSearchValue.length > 0"
+                         [nzDropdownMenu]="fullNameFilterMenu">
         <i nz-icon nzType="search"></i>
       </nz-filter-trigger>
     </th>
-    <th nzWidth="150px">
-      NRIC no.
-      <nz-filter-trigger [(nzVisible)]="nricFilterIsVisible" [nzActive]="nricSearchValue.length > 0" [nzDropdownMenu]="nricFilterMenu">
+    <th nzWidth="140px">
+      NRIC No.
+      <nz-filter-trigger [(nzVisible)]="nricFilterIsVisible" [nzActive]="nricSearchValue.length > 0"
+                         [nzDropdownMenu]="nricFilterMenu">
         <i nz-icon nzType="search"></i>
       </nz-filter-trigger>
     </th>
-    <th nzWidth="150px">Email</th>
     <th nzWidth="100px"
+        [nzFilters]="genderColumnItem.listOfFilter"
+        [nzFilterFn]="genderColumnItem.filterFn"
+        [nzFilterMultiple]="false">
+      Gender
+    </th>
+    <th nzWidth="140px">Ethnic</th>
+    <th nzWidth="140px">Contact No.</th>
+    <th>Address</th>
+    <th nzWidth="140px"
         [nzFilters]="accountStatusColumnItem.listOfFilter"
         [nzFilterFn]="accountStatusColumnItem.filterFn"
-        [nzFilterMultiple]="false">
-      Account Status
+        [nzFilterMultiple]="false">Account Status
     </th>
-    <th nzWidth="120px" class="text-center">Action</th>
+    <th nzWidth="160px">Action</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let data of fixedTable.data, let i = index">
+  <tr *ngFor="let data of userTable.data; let i = index">
     <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-    <td>{{ data?.fullName | uppercase }}</td>
-    <td>{{ data?.nricNo || '-' }}</td>
-    <td>{{ data?.email || '-' }}</td>
+    <td>{{data?.personalDetail?.fullName || "-"}}</td>
+    <td>{{data?.personalDetail?.nric || "-"}}</td>
+    <td>{{data?.personalDetail?.gender || "-"}}</td>
+    <td>{{(data?.personalDetail?.ethnic | ethnic) || "-"}}</td>
+    <td>{{data?.personalDetail?.contactNo || "-"}}</td>
+    <td>{{generateAddress(data?.address)}}</td>
     <td>
-      <nz-tag [nzColor]="'green'" *ngIf="data?.isActive === 'Y'">Activated</nz-tag>
-      <nz-tag [nzColor]="'orange'" *ngIf="data?.isActive !== 'Y'">Unactivated</nz-tag>
-    <td class="text-center">
-    <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
-      <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
-    </button>
-    <nz-dropdown-menu #menu1="nzDropdownMenu">
-      <ul nz-menu>
-        <li nz-menu-item [routerLink]="['/profile']" [queryParams]="{username: data.username}">View User Profile</li>
-        <li nz-menu-item nz-popconfirm [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'" (nzOnConfirm)="deleteUser(data.username)">Delete User</li>
-      </ul>
-    </nz-dropdown-menu>
+      <nz-tag [nzColor]="'green'" *ngIf="data?.accIsActivate === 'Y'">Activated</nz-tag>
+      <nz-tag [nzColor]="'orange'" *ngIf="data?.accIsActivate !== 'Y'">Unactivated</nz-tag>
+    <td>
+      <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
+        Actions<i nz-icon nzType="down" nzTheme="outline"></i>
+      </button>
+      <nz-dropdown-menu #menu1="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item [routerLink]="['/profile']" [queryParams]="{username: data.personalDetail?.username}">View
+            Profile
+          </li>
+        </ul>
+      </nz-dropdown-menu>
     </td>
   </tr>
   </tbody>

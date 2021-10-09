@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {CommunityUserTableModel} from "../models/community-user-table-model";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {ResponseModel} from "../models/response-model";
@@ -10,19 +9,29 @@ import {ResponseModel} from "../models/response-model";
 })
 export class CommunityUserService {
 
-  readonly API_SERVER_URL = environment.apiUrl;
-  readonly GET_COMMUNITY_USERS_TABLE_DATA = this.API_SERVER_URL + "/community-user/get-community-users";
-  readonly GET_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/profile";
+  private readonly API_SERVER_URL = environment.apiUrl;
+  private readonly GET_COMMUNITY_USERS = this.API_SERVER_URL + "/community-user";
+  private readonly GET_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/profile";
   private readonly APPROVE_USER_ACCOUNT = this.API_SERVER_URL + "/community-user/approve-user";
   private readonly REJECT_USER_ACCOUNT = this.API_SERVER_URL + '/community-user/reject-user';
-  readonly DELETE_COMMUNITY_USER = this.API_SERVER_URL + "/community-user/delete-user";
-  readonly UPDATE_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/update-user";
+  private readonly DELETE_COMMUNITY_USER = this.API_SERVER_URL + "/community-user/delete-user";
+  private readonly UPDATE_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/update-user";
 
   constructor(private http: HttpClient) {
   }
 
-  getCommunityUsers(): Observable<CommunityUserTableModel[]> {
-    return this.http.get<CommunityUserTableModel[]>(this.GET_COMMUNITY_USERS_TABLE_DATA);
+  getCommunityUsers(address?: boolean, occupation?: boolean, healthIssue?: boolean): Observable<ResponseModel<any>> {
+    let params = new HttpParams();
+    if (address) {
+      params = params.set("address", "Y");
+    }
+    if (occupation) {
+      params = params.set("occupation", "Y");
+    }
+    if (healthIssue) {
+      params = params.set("healthIssue", "Y");
+    }
+    return this.http.get<ResponseModel<any>>(this.GET_COMMUNITY_USERS, {params: params});
   }
 
   getCommunityUser(username: string): Observable<any> {

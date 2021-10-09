@@ -10,6 +10,7 @@ import {GenderPipe} from "./pipes/gender.pipe";
 import {StatePipe} from "./pipes/state.pipe";
 import {EmploymentTypePipe} from "./pipes/employment-type.pipe";
 import {EthnicPipe} from "./pipes/ethnic.pipe";
+import {GoogleMapsModule} from "@angular/google-maps";
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import {EthnicPipe} from "./pipes/ethnic.pipe";
     ReactiveFormsModule,
     FormsModule,
     CKEditorModule,
+    GoogleMapsModule,
     ...SHARED_ZORRO_MODULES
   ],
   exports: [
@@ -26,6 +28,7 @@ import {EthnicPipe} from "./pipes/ethnic.pipe";
     NewsfeedComponent,
     NewPostModalComponent,
     PostFeedComponent,
+    GoogleMapsModule,
     ...SHARED_ZORRO_MODULES,
     GenderPipe,
     StatePipe,
