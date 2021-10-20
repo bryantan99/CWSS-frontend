@@ -16,6 +16,7 @@ import {AdminManagementComponent} from "./admin/admin-management/admin-managemen
 import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component";
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ProfileComponent } from './profile/profile.component';
+import { CommunityUserGraphComponent } from './community-user-graph/community-user-graph.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ProfileComponent } from './profile/profile.component';
     AdminManagementComponent,
     AdminDetailComponent,
     ResetPasswordComponent,
-    ProfileComponent
+    ProfileComponent,
+    CommunityUserGraphComponent
   ],
   imports: [
     CommonModule,

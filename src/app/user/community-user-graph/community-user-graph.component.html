@@ -1,0 +1,41 @@
+<form nz-form [formGroup]="chartSettingForm">
+  <nz-form-item>
+    <nz-form-label [nzSm]="24" [nzMd]="4" class="fw-bold">Chart</nz-form-label>
+    <nz-form-control [nzSm]="24" [nzMd]="20">
+      <nz-select formControlName="graphId" (ngModelChange)="initCharts()">
+        <nz-option *ngFor="let choice of GRAPH_LIST" [nzLabel]="choice.text" [nzValue]="choice.value"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<nz-row class="mt-4">
+  <nz-col [nzSpan]="24" *ngIf="graphIdControl.value === 'gender'">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="genderPieChartOption"
+      style="width: 100%; height: 300px; display: block;"
+    ></highcharts-chart>
+  </nz-col>
+  <nz-col [nzSpan]="24" *ngIf="graphIdControl.value === 'ethnic'">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="ethnicPieChartOptions"
+      style="width: 100%; height: 300px; display: block;"
+    ></highcharts-chart>
+  </nz-col>
+  <nz-col [nzSpan]="24" *ngIf="graphIdControl.value === 'location'">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="locationColumnChartOption"
+      style="width: 100%; height: 300px; display: block;"
+    ></highcharts-chart>
+  </nz-col>
+  <nz-col [nzSpan]="24" *ngIf="graphIdControl.value ==='health'">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="healthColumnChartOption"
+      style="width: 100%; height: 300px; display: block;"
+    ></highcharts-chart>
+  </nz-col>
+</nz-row>

@@ -69,6 +69,15 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Disease</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="disease">
+            <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
+            <nz-option *ngFor="let choice of diseaseDropdownList" [nzLabel]="choice.text" [nzValue]="choice.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
         <nz-form-control>
           <nz-space>
             <button *nzSpaceItem nz-button nzType="primary" (click)="getCommunityUsers()">Search
@@ -81,30 +90,7 @@
   </ng-container>
 </nz-drawer>
 
-<nz-row class="mt-4">
-  <nz-col [nzSm]="24" [nzMd]="12">
-    <highcharts-chart
-      [Highcharts]="Highcharts"
-      [options]="genderPieChartOption"
-      style="width: 100%; height: 300px; display: block;"
-    ></highcharts-chart>
-  </nz-col>
-  <nz-col [nzSm]="24" [nzMd]="12">
-    <highcharts-chart
-      [Highcharts]="Highcharts"
-      [options]="ethnicPieChartOptions"
-      style="width: 100%; height: 300px; display: block;"
-    ></highcharts-chart>
-  </nz-col>
-  <nz-col [nzSm]="24" [nzMd]="12">
-    <highcharts-chart
-      [Highcharts]="Highcharts"
-      [options]="locationPieChartOptions"
-      style="width: 100%; height: 300px; display: block;"
-    ></highcharts-chart>
-  </nz-col>
-</nz-row>
-
+<app-community-user-graph *ngIf="users" [userData]="users" [filterSetting]="queryForm.value"></app-community-user-graph>
 
 <ng-template #titleTpl>
   <nz-row>
@@ -140,12 +126,12 @@
   <tbody>
   <tr *ngFor="let data of userTable.data; let i = index">
     <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-    <td>{{data?.personalDetail?.fullName || "-"}}</td>
-    <td>{{data?.personalDetail?.nric || "-"}}</td>
-    <td>{{data?.personalDetail?.gender || "-"}}</td>
-    <td>{{(data?.personalDetail?.ethnic | ethnic) || "-"}}</td>
-    <td>{{data?.personalDetail?.contactNo || "-"}}</td>
-    <td>{{generateAddress(data?.address)}}</td>
+    <td>{{data?.fullName || "-"}}</td>
+    <td>{{data?.nric || "-"}}</td>
+    <td>{{data?.gender || "-"}}</td>
+    <td>{{(data?.ethnic | ethnic) || "-"}}</td>
+    <td>{{data?.contactNo || "-"}}</td>
+    <td>{{data?.address?.fullAddress || "-"}}</td>
     <td>
       <nz-tag [nzColor]="'green'" *ngIf="data?.accIsActivate === 'Y'">Activated</nz-tag>
       <nz-tag [nzColor]="'orange'" *ngIf="data?.accIsActivate !== 'Y'">Unactivated</nz-tag>
@@ -155,7 +141,7 @@
       </button>
       <nz-dropdown-menu #menu1="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item [routerLink]="['/profile']" [queryParams]="{username: data.personalDetail?.username}">View
+          <li nz-menu-item [routerLink]="['/profile']" [queryParams]="{username: data?.username}">View
             Profile
           </li>
         </ul>

@@ -11,6 +11,7 @@ import {
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {NzNotificationService} from "ng-zorro-antd/notification";
+import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 
 @Component({
   selector: 'app-signup-health-form',
@@ -30,7 +31,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 })
 export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
 
-  @Input('parentDiseaseListFormValues') parentDiseaseListFormValues: {diseaseId: any; description: string}[] = [];
+  @Input('parentDiseaseListFormValues') parentDiseaseListFormValues: { diseaseId: any; description: string }[] = [];
   @Input('isVisible') isVisible: boolean;
   @Input('isSignUp') isSignUp: boolean;
   healthForm: FormGroup;
@@ -48,7 +49,7 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
     });
 
     if (this.parentDiseaseListFormValues) {
-      for (let i = 0; i < this.parentDiseaseListFormValues.length ; i++) {
+      for (let i = 0; i < this.parentDiseaseListFormValues.length; i++) {
         this.addDiseaseFormGroup();
       }
     }
@@ -130,7 +131,9 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   private initDiseaseDropdownList() {
     this.diseaseDropdownList = [];
     this.dropdownChoiceService.getDiseaseDropdownChoices().subscribe(resp => {
-      this.diseaseDropdownList = resp ? resp : [];
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.diseaseDropdownList = resp.data ? resp.data : [];
+      }
     }, error => {
       this.notificationService.error("Error", "There's an error when retrieving disease dropdown choice list.");
     })
