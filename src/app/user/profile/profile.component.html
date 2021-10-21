@@ -105,13 +105,13 @@
           <li nz-menu-item
               *ngIf="userProfile?.accIsActivate === 'Y'"
               [routerLink]="['/community-user/profile/update']"
-              [queryParams]="{username: userProfile?.personalDetail?.username}">
+              [queryParams]="{username: userProfile?.username}">
             Update Profile
           </li>
           <li nz-menu-item
               nz-popconfirm
               nzPopconfirmTitle="Are you sure you want to delete this user's account?"
-              (nzOnConfirm)="rejectAccount(userProfile?.personalDetail?.username)">
+              (nzOnConfirm)="rejectAccount(userProfile?.username)">
             Delete Account
           </li>
         </ul>
@@ -156,12 +156,12 @@
     <nz-card nzTitle="Address" class="mb-4">
       <nz-row class="mb-2">
         <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 1</nz-col>
-        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine1 || '-'}}</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.line1 || '-'}}</nz-col>
       </nz-row>
 
       <nz-row class="mb-2">
         <nz-col class="fw-bold" [nzXs]="24" [nzMd]="4">Address Line 2</nz-col>
-        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.addressLine2 || '-'}}</nz-col>
+        <nz-col [nzXs]="24" [nzMd]="20">{{userProfile?.address?.line2 || '-'}}</nz-col>
       </nz-row>
 
       <nz-row class="mb-2">
