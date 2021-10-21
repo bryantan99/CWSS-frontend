@@ -90,7 +90,11 @@
   </ng-container>
 </nz-drawer>
 
-<app-community-user-graph *ngIf="users" [userData]="users" [filterSetting]="queryForm.value"></app-community-user-graph>
+<br>
+
+<app-community-user-graph *ngIf="users"
+                          [userData]="users"
+                          [filterSetting]="queryForm.value"></app-community-user-graph>
 
 <ng-template #titleTpl>
   <nz-row>

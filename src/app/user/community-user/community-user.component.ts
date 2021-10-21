@@ -78,11 +78,13 @@ export class CommunityUserComponent implements OnInit {
     let i = 1;
     for (const user of this.users) {
       user.index = i;
-      if (user.address) {
+      if (user.address && user.address.latLng) {
+        const latitude = user.address.latLng.lat;
+        const longitude = user.address.latLng.lng;
         this.markers.push({
           position: {
-            lat: user.address.latitude,
-            lng: user.address.longitude,
+            lat: latitude,
+            lng: longitude,
           },
           label: {
             color: 'white',
