@@ -158,8 +158,8 @@ export class CommunityUserGraphComponent implements OnInit, OnChanges {
     let map: Map<string, number> = new Map();
     if (this.userData) {
       map = this.userData.reduce((acc, e) => {
-        const addressLine2 = e.address && e.address.line2 ? e.address.line2 : "-";
-        acc.set(addressLine2, (acc.get(addressLine2) || 0) + 1);
+        const zoneName = e.address.zoneName ? e.address.zoneName : "-";
+        acc.set(zoneName, (acc.get(zoneName) || 0) + 1);
         return acc;
       }, new Map());
     }
@@ -178,7 +178,7 @@ export class CommunityUserGraphComponent implements OnInit, OnChanges {
       xAxis: {
         categories: categories,
         min: 0,
-        max: 9,
+        max: 5,
         scrollbar: {
           enabled: true
         },

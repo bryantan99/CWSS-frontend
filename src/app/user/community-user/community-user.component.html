@@ -78,6 +78,15 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Zone</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="zoneId">
+            <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
+            <nz-option *ngFor="let choice of zoneDropdownList" [nzLabel]="choice.text" [nzValue]="choice.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
         <nz-form-control>
           <nz-space>
             <button *nzSpaceItem nz-button nzType="primary" (click)="getCommunityUsers()">Search

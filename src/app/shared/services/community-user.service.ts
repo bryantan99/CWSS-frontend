@@ -25,6 +25,7 @@ export class CommunityUserService {
                     gender?: string,
                     ethnic?: string,
                     diseaseId?: string,
+                    zoneId?: string,
                     address?: boolean,
                     occupation?: boolean,
                     healthIssue?: boolean): Observable<ResponseModel<any>> {
@@ -43,6 +44,9 @@ export class CommunityUserService {
     }
     if (diseaseId && diseaseId != 'A') {
       params = params.set("diseaseId", diseaseId);
+    }
+    if (zoneId && zoneId != 'A') {
+      params = params.set("zoneId", zoneId);
     }
     if (address) {
       params = params.set("address", "Y");

@@ -15,6 +15,7 @@ export class DropdownChoiceService {
   private readonly GET_ADMIN_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/admin";
   private readonly GET_COMMUNITY_USER_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/community-user";
   private readonly GET_APPOINTMENT_AVAILABLE_TIMESLOT = this.API_SERVER_URL + "/dropdown/appointment/timeslot";
+  private readonly GET_ZONE_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/zoneId";
 
   constructor(private http: HttpClient) { }
 
@@ -37,4 +38,8 @@ export class DropdownChoiceService {
     }
     return this.http.get<ResponseModel<any>>(this.GET_APPOINTMENT_AVAILABLE_TIMESLOT, {params: params});
   }
+
+    getZoneDropdownChoiceList(): Observable<ResponseModel<any>> {
+      return this.http.get<ResponseModel<any>>(this.GET_ZONE_DROPDOWN_CHOICE);
+    }
 }

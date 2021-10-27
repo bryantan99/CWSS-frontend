@@ -49,6 +49,7 @@ export class CommunityUserComponent implements OnInit {
   queryForm: FormGroup;
   queryDrawerIsVisible: boolean = false;
   diseaseDropdownList: DropdownChoiceModel[] = [];
+  zoneDropdownList: DropdownChoiceModel[] = [];
 
   constructor(private communityUserService: CommunityUserService,
               private notificationService: NotificationService,
@@ -59,6 +60,7 @@ export class CommunityUserComponent implements OnInit {
   ngOnInit(): void {
     this.initQueryForm();
     this.initDiseaseDropdownList();
+    this.initZoneDropdownList();
     this.getCommunityUsers();
   }
 
@@ -114,6 +116,7 @@ export class CommunityUserComponent implements OnInit {
       this.queryForm.controls['gender'].value,
       this.queryForm.controls['ethnic'].value,
       this.queryForm.controls['disease'].value,
+      this.queryForm.controls['zoneId'].value,
       true,
       false,
       true)
@@ -148,7 +151,8 @@ export class CommunityUserComponent implements OnInit {
       nric: [null],
       gender: this.fb.control('A'),
       ethnic: this.fb.control('A'),
-      disease: this.fb.control('A')
+      disease: this.fb.control('A'),
+      zoneId: this.fb.control('A')
     })
   }
 
@@ -163,5 +167,16 @@ export class CommunityUserComponent implements OnInit {
 
   openQueryDrawer() {
     this.queryDrawerIsVisible = true;
+  }
+
+  private initZoneDropdownList() {
+    this.zoneDropdownList = [];
+    this.dropdownChoiceService.getZoneDropdownChoiceList().subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.zoneDropdownList = resp.data ? resp.data : [];
+      }
+    }, error => {
+      this.notificationService.createErrorNotification("There's an error when retrieving zone dropdown choice list.");
+    })
   }
 }
