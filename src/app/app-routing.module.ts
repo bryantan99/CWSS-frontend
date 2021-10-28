@@ -14,6 +14,7 @@ import {AppointmentMngmtComponent} from "./appointment/appointment-mngmt/appoint
 import {RoleConstant} from "./shared/constants/role-constant";
 import {ProfileComponent} from "./user/profile/profile.component";
 import {PostFeedComponent} from "./shared/components/post-feed/post-feed.component";
+import {SettingsComponent} from "./settings/settings.component";
 
 const routes: Routes = [
   {
@@ -71,6 +72,11 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
     canActivate: [AuthGuardService]
   },
   {

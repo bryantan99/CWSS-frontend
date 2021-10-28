@@ -13,6 +13,7 @@ export class PasswordResetService {
   private readonly REQUEST_RESET_PASSWORD = this.APP_URL + "/account/request-password-reset";
   private readonly VALIDATE_OTP = this.APP_URL + "/account/validation/otp";
   private readonly RESET_PASSWORD = this.APP_URL + "/account/reset-password"
+  private readonly CHANGE_PASSWORD = this.APP_URL + "/account/change-password";
 
   constructor(private http: HttpClient) {
   }
@@ -30,5 +31,9 @@ export class PasswordResetService {
 
   resetPassword(form: any): Observable<ResponseModel<any>> {
     return this.http.post<ResponseModel<any>>(this.RESET_PASSWORD, form);
+  }
+
+  changePassword(form: {username: string, oldPassword: string, newPassword: string, confirmPassword: string}) {
+    return this.http.post<ResponseModel<any>>(this.CHANGE_PASSWORD, form);
   }
 }

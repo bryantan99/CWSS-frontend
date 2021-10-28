@@ -1,0 +1,24 @@
+<nz-row>
+  <nz-col [nzSm]="24" [nzMd]="4" class="mb-4">
+    <nz-card>
+      <form nz-form [formGroup]="form" class="w-100">
+        <nz-form-item>
+          <nz-form-label nzSpan="24" class="fw-bold">Section</nz-form-label>
+          <nz-form-control nzSpan="24">
+            <nz-select formControlName="optionId">
+              <nz-option *ngFor="let choice of options" [nzValue]="choice.value" [nzLabel]="choice.text"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-card>
+  </nz-col>
+  <nz-col [nzSm]="24" [nzMd]="20" class="ps-4">
+    <ng-container [ngSwitch]="optionIdFormControl.value">
+      <app-account-setting *ngSwitchCase="'account'"></app-account-setting>
+    </ng-container>
+  </nz-col>
+</nz-row>
+
+
+

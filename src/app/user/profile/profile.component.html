@@ -1,5 +1,5 @@
 <div *ngIf="adminProfile">
-  <nz-page-header class="site-page-header" nzBackIcon>
+  <nz-page-header class="site-page-header">
     <nz-page-header-title>{{ (adminProfile?.fullName | titlecase) || "-" }} Profile</nz-page-header-title>
     <nz-page-header-extra>
       <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu">Actions<i nz-icon nzType="down"></i></button>

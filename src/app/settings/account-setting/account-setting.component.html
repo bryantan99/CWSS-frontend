@@ -1,0 +1,86 @@
+<h4 nz-typography>Change password</h4>
+<nz-divider></nz-divider>
+<form nz-form [formGroup]="passwordForm">
+  <nz-form-item>
+    <nz-form-label nzSpan="24" class="fw-bold" nzRequired>Old Password</nz-form-label>
+    <nz-form-control nzSpan="12" [nzErrorTip]="oldPasswordErrorTip">
+      <nz-input-group [nzSuffix]="oldPwSuffixTemplate">
+        <input nz-input [type]="oldPasswordIsVisible ? 'text' : 'password'" formControlName="oldPassword">
+        <ng-template #oldPasswordErrorTip let-control>
+          <div *ngIf="control.invalid && (control.touched || control.dirty)">
+            <div *ngIf="control.errors?.required">
+              Please input old password!
+            </div>
+            <div *ngIf="control.errors?.mismatch">
+              Incorrect old password!
+            </div>
+          </div>
+        </ng-template>
+      </nz-input-group>
+      <ng-template #oldPwSuffixTemplate>
+        <i nz-icon [nzType]="oldPasswordIsVisible ? 'eye' : 'eye-invisible'"
+           (click)="oldPasswordIsVisible = !oldPasswordIsVisible"></i>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzSpan="24" class="fw-bold" nzRequired>New Password</nz-form-label>
+    <nz-form-control nzSpan="12" [nzErrorTip]="newPasswordErrorTip">
+      <nz-input-group [nzSuffix]="newPwSuffixTpl">
+        <input nz-input [type]="newPasswordIsVisible ? 'text' : 'password'" formControlName="newPassword"
+               (ngModelChange)="matchPassword()">
+        <ng-template #newPasswordErrorTip let-control>
+          <div *ngIf="control.invalid && (control.touched || control.dirty)">
+            <div *ngIf="control.errors?.required">
+              Please input new password!
+            </div>
+            <div *ngIf="control.errors?.invalidPassword">
+              New password should contain at least a digit, a lowercase letter, an uppercase letter and minimum length
+              is 8 characters.
+            </div>
+          </div>
+        </ng-template>
+      </nz-input-group>
+      <ng-template #newPwSuffixTpl>
+        <i nz-icon [nzType]="newPasswordIsVisible ? 'eye' : 'eye-invisible'"
+           (click)="newPasswordIsVisible = !newPasswordIsVisible"></i>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzSpan="24" class="fw-bold" nzRequired>Confirm Password</nz-form-label>
+    <nz-form-control nzSpan="12" [nzErrorTip]="confirmPasswordErrorTip">
+      <nz-input-group [nzSuffix]="confirmPwSuffixTpl">
+        <input nz-input [type]="confirmPasswordIsVisible ? 'text' : 'password'" formControlName="confirmPassword"
+               (ngModelChange)="matchPassword()">
+        <ng-template #confirmPasswordErrorTip let-control>
+          <div *ngIf="control.invalid && (control.touched || control.dirty)">
+            <div *ngIf="control.errors?.required">
+              Please input confirm password!
+            </div>
+            <div *ngIf="control.errors?.passwordMismatch">
+              Confirm password is different from new password!
+            </div>
+          </div>
+        </ng-template>
+      </nz-input-group>
+      <ng-template #confirmPwSuffixTpl>
+        <i nz-icon [nzType]="confirmPasswordIsVisible ? 'eye' : 'eye-invisible'"
+           (click)="confirmPasswordIsVisible = !confirmPasswordIsVisible"></i>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control nzSpan="12">
+      <button nz-button nzType="primary"
+              [disabled]="!passwordForm.valid || !passwordForm.touched || !passwordForm.dirty"
+              (click)="updatePassword()">Update Password
+      </button>
+      <br><br>
+      <p nz-typography>Forgot password? <a [routerLink]="['/reset']">Reset here</a>.</p>
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -20,6 +20,7 @@ import {AppService} from "./app.service";
 import {BasicAuthInterceptorService} from "./shared/services/basic-auth-interceptor.service";
 import {AssistanceModule} from "./assistance/assistance.module";
 import {AppointmentModule} from "./appointment/appointment.module";
+import {SettingsModule} from "./settings/settings.module";
 
 registerLocaleData(en);
 
@@ -36,6 +37,7 @@ registerLocaleData(en);
     HttpClientModule,
     BrowserAnimationsModule,
     HomepageModule,
+    SettingsModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
