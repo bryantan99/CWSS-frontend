@@ -1,3 +1,11 @@
+<nz-row *ngIf="isAdmin" class="mb-4">
+  <nz-col nzSpan="24" class="text-end">
+    <nz-space>
+      <button *nzSpaceItem class="me-4" nz-button nzType="primary" (click)="openNewPostModal()">Create Post</button>
+    </nz-space>
+  </nz-col>
+</nz-row>
+
 <nz-spin [nzSpinning]="isLoading">
   <ng-container *ngIf="adminPost.length > 0; else emptyPostTemplate">
     <nz-card class="mb-4" *ngFor="let post of adminPost">
@@ -39,6 +47,7 @@
                width="200px"
                height="200px"
                class="me-2 mb-2"
+               alt="Post image"
                [nzSrc]="getPostImg(img)">
         </nz-image-group>
       </ng-template>

@@ -5,6 +5,7 @@ import {AuthService} from "../../../auth/auth.service";
 import {NewPostModalComponent} from "../new-post-modal/new-post-modal.component";
 import {ImageService} from "../../services/image.service";
 import {HttpStatusConstant} from "../../constants/http-status-constant";
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-post-feed',
@@ -19,10 +20,16 @@ export class PostFeedComponent implements OnInit {
   dummyPhotoUrl: string = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
   isAdminLoggedIn: boolean = false;
   editPostModalIsVisible: boolean = false;
+  user: User;
+  isAdmin: boolean = false;
 
   constructor(private adminPostService: AdminPostService,
               private authService: AuthService,
               private imageService: ImageService) {
+    this.authService.user.subscribe(resp => {
+      this.user = resp;
+      this.isAdmin = this.authService.isAdminLoggedIn();
+    })
   }
 
   ngOnInit(): void {
@@ -74,5 +81,9 @@ export class PostFeedComponent implements OnInit {
 
   getPostImg(img: any) {
     return this.imageService.getPostImg(img.postId, img.mediaDirectory);
+  }
+
+  openNewPostModal() {
+    this.editPostModalIsVisible = true;
   }
 }
