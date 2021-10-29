@@ -94,6 +94,7 @@ export class ProfileComponent implements OnInit {
   private initAdminForm() {
     this.adminForm = this.fb.group({
       username: ['', [Validators.required]],
+      fullName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       contactNo: ['', Validators.required]
     });
@@ -102,29 +103,32 @@ export class ProfileComponent implements OnInit {
   private patchAdminForm() {
     this.adminForm.patchValue({
       username: this.adminProfile.username,
+      fullName: this.adminProfile.fullName,
       email: this.adminProfile.email,
       contactNo: this.adminProfile.contactNo
     });
   }
 
   cancelNzEdit() {
-    this.adminForm.reset();
     this.nzEditAdmin = false;
+    this.adminForm.reset();
   }
 
   validateEmail() {
-    const emailValue = this.adminForm.controls['email'].value;
-    if (emailValue === this.adminProfile.email) {
-      this.adminForm.controls['email'].setErrors(null);
-      return;
-    }
-
-    this.authService.isUniqueEmail(emailValue).subscribe(resp => {
-      if (resp && resp.status === HttpStatusConstant.OK) {
-        const error = resp.data ? null : {emailTaken: true};
-        this.adminForm.controls['email'].setErrors(error);
+    if (this.nzEditAdmin) {
+      const emailValue = this.adminForm.controls['email'].value;
+      if (emailValue === this.adminProfile.email) {
+        this.adminForm.controls['email'].setErrors(null);
+        return;
       }
-    })
+
+      this.authService.isUniqueEmail(emailValue).subscribe(resp => {
+        if (resp && resp.status === HttpStatusConstant.OK) {
+          const error = resp.data ? null : {emailTaken: true};
+          this.adminForm.controls['email'].setErrors(error);
+        }
+      })
+    }
   }
 
   submitAdminForm() {
