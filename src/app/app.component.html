@@ -54,7 +54,7 @@
         <a nz-button nzType="link">About Us</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter routerLink="/settings" (click)="minimizeSidebar()">
+      <li nz-menu-item nzMatchRouter *ngIf="user" routerLink="/settings" (click)="minimizeSidebar()">
         <i nz-icon nzType="setting"></i>
         <a nz-button nzType="link">Settings</a>
       </li>
