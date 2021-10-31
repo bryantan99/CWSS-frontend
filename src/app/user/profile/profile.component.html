@@ -5,10 +5,11 @@
   <nz-row nzJustify="start">
     <nz-col [nzXs]="24" [nzMd]="10" [nzLg]="7" [nzXl]="5" [nzXXl]="3">
       <img
+        style="object-fit: cover"
         nz-image
         width="250px"
         height="250px"
-        nzSrc="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+        [nzSrc]="getProfilePicture(adminProfile.username, adminProfile.profilePicDirectory)"
         alt="Profile picture"
       />
     </nz-col>
@@ -52,6 +53,24 @@
           <nz-form-label nzSpan="24" class="fw-bold">Contact No</nz-form-label>
           <nz-form-control nzSpan="12" [nzErrorTip]="contactNoErrorTpl">
             <input nz-input type="text" formControlName="contactNo">
+            <ng-template #contactNoErrorTpl let-control>
+              <div *ngIf="control.invalid && (control.touched || control.dirty)">
+                <div *ngIf="control.errors?.required">
+                  Please input contact number!
+                </div>
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzSpan="24" class="fw-bold">Profile Picture</nz-form-label>
+          <nz-form-control nzSpan="12" [nzErrorTip]="contactNoErrorTpl">
+            <nz-upload [nzLimit]="1" nzListType="picture" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzRemove]="removeFile" [nzAccept]="ACCEPTABLE_FILE_FORMAT">
+              <button nz-button [disabled]="fileList.length >= 1">
+                <i nz-icon nzType="upload"></i>Select {{ fileList?.length || 0 }} / 1 Image
+              </button>
+            </nz-upload>
             <ng-template #contactNoErrorTpl let-control>
               <div *ngIf="control.invalid && (control.touched || control.dirty)">
                 <div *ngIf="control.errors?.required">

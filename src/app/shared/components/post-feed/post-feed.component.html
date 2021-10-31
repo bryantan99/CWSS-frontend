@@ -13,7 +13,7 @@
                     [nzDescription]="descriptionTemplate"></nz-card-meta>
 
       <ng-template #avatarTemplate>
-        <nz-avatar [nzSrc]="dummyPhotoUrl"></nz-avatar>
+        <nz-avatar [nzSrc]="getProfilePicture(post.adminBean)"></nz-avatar>
       </ng-template>
 
       <ng-template #titleTemplate>

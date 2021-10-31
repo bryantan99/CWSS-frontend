@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {ResponseModel} from "../models/response-model";
 import {environment} from "../../../environments/environment";
+import {NzUploadFile} from "ng-zorro-antd/upload";
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +29,15 @@ export class AdminUserService {
     return this.http.delete<ResponseModel<any>>(url);
   }
 
-  addNewStaff(form: any): Observable<ResponseModel<any>> {
-    return this.http.post<ResponseModel<any>>(this.ADD_STAFF, form);
+  addNewStaff(form: any, fileList: NzUploadFile[]): Observable<ResponseModel<any>> {
+    const formData = new FormData();
+    if (fileList) {
+      fileList.forEach((file: any) => {
+        formData.append('files', file);
+      });
+    }
+    formData.append('form', JSON.stringify(form));
+    return this.http.post<ResponseModel<any>>(this.ADD_STAFF, formData);
   }
 
   getProfile(username: string) {
@@ -37,7 +45,14 @@ export class AdminUserService {
     return this.http.get<ResponseModel<any>>(this.GET_ADMIN_PROFILE, {params: params});
   }
 
-  updateAdmin(form: any): Observable<ResponseModel<any>> {
-    return this.http.post<ResponseModel<any>>(this.UPDATE_ADMIN_PROFILE, form);
+  updateAdmin(form: any, fileList: NzUploadFile[]): Observable<ResponseModel<any>> {
+    const formData = new FormData();
+    if (fileList) {
+      fileList.forEach((file: any) => {
+        formData.append('files', file);
+      });
+    }
+    formData.append('form', JSON.stringify(form));
+    return this.http.post<ResponseModel<any>>(this.UPDATE_ADMIN_PROFILE, formData);
   }
 }

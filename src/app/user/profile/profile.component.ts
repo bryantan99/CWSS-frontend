@@ -9,6 +9,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {finalize} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GeneralConstant} from "../../shared/constants/general-constant";
+import {ImageService} from "../../shared/services/image.service";
+import {NzUploadFile} from "ng-zorro-antd/upload";
 
 @Component({
   selector: 'app-profile',
@@ -29,6 +31,24 @@ export class ProfileComponent implements OnInit {
   healthTablePageIndex: number = 1;
   healthTablePageSize = 10;
   DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
+  readonly PROFILE_PIC_PLACEHOLDER = '/assets/placeholder/profile_pic_placeholder.jpg';
+  readonly ACCEPTABLE_FILE_FORMAT = ['image/jpeg', 'image/png'];
+  fileList: NzUploadFile[] = [];
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    if (!this.fileList.some(e => e.name === file.name) && this.fileList.length < 1 && this.ACCEPTABLE_FILE_FORMAT.includes(file.type)) {
+      this.fileList = this.fileList.concat(file);
+    }
+    return false;
+  };
+
+  removeFile = (file: NzUploadFile): boolean => {
+    const index = this.fileList.indexOf(file);
+    if (index > -1) {
+      this.fileList.splice(index, 1);
+    }
+    return false;
+  }
 
   constructor(private authService: AuthService,
               private adminService: AdminUserService,
@@ -36,7 +56,8 @@ export class ProfileComponent implements OnInit {
               private notificationService: NotificationService,
               private fb: FormBuilder,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private imageService: ImageService) {
     this.route.queryParams.subscribe(params => {
       this.queryParamUsername = params['username'];
       this.queryParamAdminUsername = params['adminUsername'];
@@ -107,6 +128,19 @@ export class ProfileComponent implements OnInit {
       email: this.adminProfile.email,
       contactNo: this.adminProfile.contactNo
     });
+
+    if (this.adminProfile.profilePicDirectory) {
+      const list = [];
+      const obj: NzUploadFile = {
+        uid: this.adminProfile.username,
+        name: this.adminProfile.profilePicDirectory,
+        status: 'done',
+        url: this.imageService.getProfilePicture(this.adminProfile.username, this.adminProfile.profilePicDirectory),
+        thumbUrl: this.imageService.getProfilePicture(this.adminProfile.username, this.adminProfile.profilePicDirectory)
+      }
+      list.push(obj);
+      this.fileList = [...list];
+    }
   }
 
   cancelNzEdit() {
@@ -134,7 +168,7 @@ export class ProfileComponent implements OnInit {
   submitAdminForm() {
     if (this.adminForm.valid) {
       this.isSubmitting = true;
-      this.adminService.updateAdmin(this.adminForm.value)
+      this.adminService.updateAdmin(this.adminForm.value, this.fileList)
         .pipe(finalize(() => {
           this.isSubmitting = false;
         }))
@@ -165,7 +199,10 @@ export class ProfileComponent implements OnInit {
       })
   }
 
-  rejectAccount(username: string) {
+  rejectAccount(username
+                  :
+                  string
+  ) {
     this.communityUserService.rejectAccount(username)
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
@@ -176,5 +213,14 @@ export class ProfileComponent implements OnInit {
         this.notificationService.createErrorNotification("There\'s an error when rejecting user account.");
         console.log(error);
       })
+  }
+
+  getProfilePicture(username
+                      :
+                      string, imageName
+                      :
+                      string
+  ) {
+    return imageName ? this.imageService.getProfilePicture(username, imageName) : this.PROFILE_PIC_PLACEHOLDER;
   }
 }

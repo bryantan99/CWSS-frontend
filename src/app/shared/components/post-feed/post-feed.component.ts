@@ -86,4 +86,8 @@ export class PostFeedComponent implements OnInit {
   openNewPostModal() {
     this.editPostModalIsVisible = true;
   }
+
+  getProfilePicture(adminBean: any) {
+    return this.imageService.getProfilePicture(adminBean.username, adminBean.profilePicDirectory);
+  }
 }

@@ -8,6 +8,7 @@ import {NotificationService} from "../../../shared/services/notification.service
 import {AdminUserService} from "../../../shared/services/admin-user.service";
 import {finalize} from "rxjs/operators";
 import {HttpStatusConstant} from "../../../shared/constants/http-status-constant";
+import {NzUploadFile} from "ng-zorro-antd/upload";
 
 @Component({
   selector: 'app-admin-detail',
@@ -20,6 +21,8 @@ export class AdminDetailComponent implements OnInit {
   adminForm: FormGroup;
   isSubmitting: boolean = false;
   readonly roleChoices: { text: string, value: string }[] = DropdownConstant.ACCOUNT_ROLE_DROPDOWN;
+  fileList: NzUploadFile[] = [];
+  readonly ACCEPTABLE_FILE_FORMAT = ['image/jpeg', 'image/png'];
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -47,7 +50,7 @@ export class AdminDetailComponent implements OnInit {
   handleOk() {
     if (this.adminForm.valid) {
       this.isSubmitting = true;
-      this.adminService.addNewStaff(this.adminForm.value).pipe(
+      this.adminService.addNewStaff(this.adminForm.value, this.fileList).pipe(
         finalize(() => {
           this.isSubmitting = false;
         })
@@ -76,5 +79,20 @@ export class AdminDetailComponent implements OnInit {
         this.adminForm.controls[key].updateValueAndValidity();
       }
     }
+  }
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    if (!this.fileList.some(e => e.name === file.name) && this.fileList.length < 1 && this.ACCEPTABLE_FILE_FORMAT.includes(file.type)) {
+      this.fileList = this.fileList.concat(file);
+    }
+    return false;
+  };
+
+  removeFile = (file: NzUploadFile): boolean => {
+    const index = this.fileList.indexOf(file);
+    if (index > -1) {
+      this.fileList.splice(index, 1);
+    }
+    return false;
   }
 }
