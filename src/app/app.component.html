@@ -32,7 +32,7 @@
         <a nz-button nzType="link">Admin</a>
       </li>
 
-      <li nz-menu-item nzMatchRouter *ngIf="user" [routerLink]="'/profile'"
+      <li nz-menu-item nzMatchRouter *ngIf="user" [routerLink]="'/profile'" [queryParams]="isAdmin ? {adminUsername: user.username} : {username: user.username}"
           (click)="minimizeSidebar()">
         <i nz-icon nzType="profile"></i>
         <a nz-button nzType="link">Profile</a>

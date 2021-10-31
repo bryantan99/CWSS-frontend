@@ -43,7 +43,7 @@ const routes: Routes = [
     path: 'admin-user',
     component: AdminManagementComponent,
     canActivate: [AuthGuardService],
-    data: {roles: [RoleConstant.ROLE_SUPER_ADMIN]}
+    data: {roles: [RoleConstant.ROLE_SUPER_ADMIN, RoleConstant.ROLE_ADMIN]}
   },
   {
     path: 'assistance',

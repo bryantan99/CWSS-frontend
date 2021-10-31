@@ -11,6 +11,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {GeneralConstant} from "../../shared/constants/general-constant";
 import {ImageService} from "../../shared/services/image.service";
 import {NzUploadFile} from "ng-zorro-antd/upload";
+import {RoleConstant} from "../../shared/constants/role-constant";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-profile',
@@ -49,6 +51,8 @@ export class ProfileComponent implements OnInit {
     }
     return false;
   }
+  isSuperAdmin: boolean = false;
+  isOwner: boolean = false;
 
   constructor(private authService: AuthService,
               private adminService: AdminUserService,
@@ -57,19 +61,23 @@ export class ProfileComponent implements OnInit {
               private fb: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private imageService: ImageService) {
+              private imageService: ImageService,
+              private location: Location) {
     this.route.queryParams.subscribe(params => {
+      if (!params['username'] && !params['adminUsername']) {
+        this.location.back();
+      }
       this.queryParamUsername = params['username'];
       this.queryParamAdminUsername = params['adminUsername'];
     });
     this.authService.user.subscribe(resp => {
       this.currentLoggedInUser = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
+      this.isSuperAdmin = this.authService.hasRole(RoleConstant.ROLE_SUPER_ADMIN);
     });
   }
 
   ngOnInit(): void {
-    this.initAdminForm();
     this.getProfile();
   }
 
@@ -78,8 +86,6 @@ export class ProfileComponent implements OnInit {
       this.getCommunityUserProfile(this.queryParamUsername);
     } else if (this.queryParamAdminUsername) {
       this.getAdminProfile(this.queryParamAdminUsername)
-    } else {
-      this.isAdmin ? this.getAdminProfile(this.currentLoggedInUser.username) : this.getCommunityUserProfile(this.currentLoggedInUser.username);
     }
   }
 
@@ -88,6 +94,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.adminProfile = resp.data;
+          this.isOwner = this.adminProfile.username === this.currentLoggedInUser.username;
         }
       }, error => {
         this.notificationService.createErrorNotification("There\'s an error when retrieving profile.");
@@ -100,6 +107,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.userProfile = resp.data;
+          this.isOwner = this.userProfile.username === this.currentLoggedInUser.username;
         }
       }, error => {
         this.notificationService.createErrorNotification("There\'s an error when retrieving profile.");
@@ -108,6 +116,7 @@ export class ProfileComponent implements OnInit {
   }
 
   enterEditAdminMode() {
+    this.initAdminForm();
     this.patchAdminForm();
     this.nzEditAdmin = true;
   }

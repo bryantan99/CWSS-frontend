@@ -117,7 +117,7 @@
           </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item>
+        <nz-form-item *ngIf="isSuperAdmin || isOwner">
           <nz-form-control nzSpan="24">
             <nz-space>
               <button *nzSpaceItem nz-button nzType="primary" (click)="enterEditAdminMode()">Edit Profile</button>

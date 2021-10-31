@@ -1,11 +1,7 @@
-<nz-page-header>
-  <nz-page-header-title>
-    Admin
-  </nz-page-header-title>
-  <nz-page-header-extra>
-    <button nz-button (click)="openAddAdminModal()">Add New Staff</button>
-  </nz-page-header-extra>
-</nz-page-header>
+<h4>Admin</h4>
+<nz-divider></nz-divider>
+
+<button nz-button nzType="primary" *ngIf="isSuperAdmin" class="mb-4" (click)="openAddAdminModal()">Add New Staff</button>
 
 <nz-table #fixedTable
           [nzLoading]="isLoading"
@@ -21,7 +17,8 @@
         [nzSortFn]="fullNameColumnItem.sortFn"
         nzCustomFilter>
       Full Name
-      <nz-filter-trigger [(nzVisible)]="fullNameFilterIsVisible" [nzActive]="fullNameSearchValue.length > 0" [nzDropdownMenu]="fullNameFilterMenu">
+      <nz-filter-trigger [(nzVisible)]="fullNameFilterIsVisible" [nzActive]="fullNameSearchValue.length > 0"
+                         [nzDropdownMenu]="fullNameFilterMenu">
         <i nz-icon nzType="search"></i>
       </nz-filter-trigger>
     </th>
@@ -37,16 +34,19 @@
     <td>{{ data?.email || '-' }}</td>
     <td>{{ data?.contactNo }}</td>
     <td class="text-center">
-      <button nz-button nzSize="small" nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1" *ngIf="data?.deletable; else noActionTpl">
-        <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
+      <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
+        Actions
+        <i nz-icon nzType="down"></i>
       </button>
       <nz-dropdown-menu #menu1="nzDropdownMenu">
         <ul nz-menu>
           <li nz-menu-item (click)="viewProfile(data?.username)">View Profile</li>
           <li nz-menu-item
               nz-popconfirm
+              *ngIf="data?.deletable"
               [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'"
-              (nzOnConfirm)="deleteUser(data.username)">Delete Staff</li>
+              (nzOnConfirm)="deleteUser(data.username)">Delete Staff
+          </li>
         </ul>
       </nz-dropdown-menu>
     </td>

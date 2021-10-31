@@ -6,6 +6,9 @@ import {finalize} from "rxjs/operators";
 import {AdminUserService} from "../../../shared/services/admin-user.service";
 import {HttpStatusConstant} from "../../../shared/constants/http-status-constant";
 import {Router} from "@angular/router";
+import {AuthService} from "../../../auth/auth.service";
+import {User} from "../../../shared/models/user";
+import {RoleConstant} from "../../../shared/constants/role-constant";
 
 @Component({
   selector: 'app-admin-user',
@@ -36,10 +39,17 @@ export class AdminManagementComponent implements OnInit {
   fullNameFilterIsVisible: boolean = false;
   fullNameSearchValue = '';
   adminDetailModalIsVisible: boolean = false;
+  isSuperAdmin: boolean = false;
+  user: User;
 
   constructor(private adminUserService: AdminUserService,
               private notificationService: NotificationService,
-              private router: Router) {
+              private router: Router,
+              private authService: AuthService) {
+    this.authService.user.subscribe(resp => {
+      this.user = resp;
+      this.isSuperAdmin = this.authService.hasRole(RoleConstant.ROLE_SUPER_ADMIN);
+    });
   }
 
   ngOnInit(): void {
