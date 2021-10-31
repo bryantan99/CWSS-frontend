@@ -66,9 +66,11 @@ export class ProfileComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (!params['username'] && !params['adminUsername']) {
         this.location.back();
+      } else {
+        this.queryParamUsername = params['username'];
+        this.queryParamAdminUsername = params['adminUsername'];
+        this.getProfile();
       }
-      this.queryParamUsername = params['username'];
-      this.queryParamAdminUsername = params['adminUsername'];
     });
     this.authService.user.subscribe(resp => {
       this.currentLoggedInUser = resp;
@@ -78,10 +80,11 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getProfile();
   }
 
   private getProfile() {
+    this.adminProfile = null;
+    this.userProfile = null;
     if (this.queryParamUsername) {
       this.getCommunityUserProfile(this.queryParamUsername);
     } else if (this.queryParamAdminUsername) {
