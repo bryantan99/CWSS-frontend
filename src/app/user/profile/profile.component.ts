@@ -13,6 +13,7 @@ import {ImageService} from "../../shared/services/image.service";
 import {NzUploadFile} from "ng-zorro-antd/upload";
 import {RoleConstant} from "../../shared/constants/role-constant";
 import {Location} from "@angular/common";
+import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 
 @Component({
   selector: 'app-profile',
@@ -53,6 +54,7 @@ export class ProfileComponent implements OnInit {
   }
   isSuperAdmin: boolean = false;
   isOwner: boolean = false;
+  readonly roleChoices: { text: string, value: string }[] = DropdownConstant.ACCOUNT_ROLE_DROPDOWN;
 
   constructor(private authService: AuthService,
               private adminService: AdminUserService,
@@ -129,16 +131,20 @@ export class ProfileComponent implements OnInit {
       username: ['', [Validators.required]],
       fullName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      contactNo: ['', Validators.required]
+      contactNo: ['', Validators.required],
+      roleList: [[], Validators.required]
     });
   }
 
   private patchAdminForm() {
+    const roleIds = this.adminProfile.roleList ? this.adminProfile.roleList.map(r => r.roleId) : [];
+
     this.adminForm.patchValue({
       username: this.adminProfile.username,
       fullName: this.adminProfile.fullName,
       email: this.adminProfile.email,
-      contactNo: this.adminProfile.contactNo
+      contactNo: this.adminProfile.contactNo,
+      roleList: roleIds
     });
 
     if (this.adminProfile.profilePicDirectory) {
@@ -211,10 +217,7 @@ export class ProfileComponent implements OnInit {
       })
   }
 
-  rejectAccount(username
-                  :
-                  string
-  ) {
+  rejectAccount(username: string) {
     this.communityUserService.rejectAccount(username)
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
@@ -227,12 +230,7 @@ export class ProfileComponent implements OnInit {
       })
   }
 
-  getProfilePicture(username
-                      :
-                      string, imageName
-                      :
-                      string
-  ) {
+  getProfilePicture(username: string, imageName: string) {
     return imageName ? this.imageService.getProfilePicture(username, imageName) : this.PROFILE_PIC_PLACEHOLDER;
   }
 }

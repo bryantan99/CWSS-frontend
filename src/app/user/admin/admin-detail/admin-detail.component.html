@@ -62,7 +62,7 @@
 
       <nz-form-item>
         <nz-form-label [nzSpan]="7" class="fw-bold">Profile Picture</nz-form-label>
-        <nz-form-control [nzSpan]="17" nzErrorTip="Please select role(s) for the staff!">
+        <nz-form-control [nzSpan]="17">
           <nz-upload [nzLimit]="1" nzListType="picture" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzRemove]="removeFile" [nzAccept]="['image/png', 'image/jpeg']">
             <button nz-button [disabled]="fileList.length >= 1">
               <i nz-icon nzType="upload"></i>Select {{ fileList?.length || 0 }} / 1 Image
