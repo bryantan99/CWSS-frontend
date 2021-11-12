@@ -40,6 +40,7 @@
     <th [nzFilters]="appointmentStatusColumnItem.listOfFilter" [nzFilterFn]="appointmentStatusColumnItem.filterFn">
       Appointment Status
     </th>
+    <th>User</th>
     <th>Action</th>
   </tr>
   </thead>
@@ -55,6 +56,10 @@
       <nz-tag *ngIf="data?.appointmentStatus === 'completed'" nzColor="green">Completed</nz-tag>
       <nz-tag *ngIf="data?.appointmentStatus === 'cancelled'" nzColor="magenta">Cancelled</nz-tag>
       <span *ngIf="!data?.appointmentStatus">-</span>
+    </td>
+    <td>
+      <a *ngIf="data?.communityUserBean" [routerLink]="'/profile'" [queryParams]="{username: data?.communityUserBean?.username}">{{data?.communityUserBean?.fullName}}</a>
+      <span *ngIf="!data?.communityUserBean">-</span>
     </td>
     <td>
       <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu"
