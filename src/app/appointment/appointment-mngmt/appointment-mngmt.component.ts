@@ -9,6 +9,9 @@ import {finalize} from "rxjs/operators";
 import {TableColumnItemModel} from "../../shared/models/table-column-item-model";
 import {AppointmentFormComponent} from "../appointment-form/appointment-form.component";
 import {GeneralConstant} from "../../shared/constants/general-constant";
+import {differenceInCalendarDays, isWeekend} from "date-fns";
+import {HolidayService} from "../../shared/services/holiday.service";
+import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 
 @Component({
   selector: 'app-appointment-mngmt',
@@ -47,14 +50,21 @@ export class AppointmentMngmtComponent implements OnInit {
   readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
   filterForm: FormGroup;
 
+  disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) <= 0 || isWeekend(current) || this.isPublicHoliday(current);
+  PUBLIC_HOLIDAY_DATE: Date[] = [];
+  private timeslotList: any;
+
   constructor(private appointmentService: AppointmentService,
               private authService: AuthService,
               private notificationService: NotificationService,
+              private holidayService: HolidayService,
+              private dropdownChoiceService: DropdownChoiceService,
               private fb: FormBuilder) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
     });
+    this.getPublicHolidays();
   }
 
   ngOnInit(): void {
@@ -245,5 +255,37 @@ export class AppointmentMngmtComponent implements OnInit {
     } else {
       this.displayData = [...this.dataSet];
     }
+  }
+
+  private isPublicHoliday(current: Date) {
+    return this.PUBLIC_HOLIDAY_DATE.find(item => {return item.getTime() == current.getTime()}) != null;
+  }
+
+  private getPublicHolidays() {
+    this.PUBLIC_HOLIDAY_DATE = [];
+    this.holidayService.getHoliday().subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        const temp = resp.data ? resp.data : [];
+        temp.forEach(date => {
+          this.PUBLIC_HOLIDAY_DATE.push(new Date(date));
+        })
+      }
+    })
+  }
+
+  initTimeSlotDropdownChoice() {
+    this.changeAppointmentDatetimeForm.patchValue({
+      time: null
+    }, {emitEvent: false, onlySelf: true});
+
+    const date = new Date(this.changeAppointmentDatetimeForm.controls['date'].value);
+    const adminUsername = this.isAdmin ? this.user.username : null;
+    this.dropdownChoiceService.getAppointmentTimeslotChoices(date, adminUsername).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.timeslotList = resp.data ? resp.data : [];
+      }
+    }, error => {
+      this.notificationService.createErrorNotification("There\'s an error when retrieving available timeslot.");
+    })
   }
 }
