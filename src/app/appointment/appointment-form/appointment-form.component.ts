@@ -5,9 +5,10 @@ import {DropdownChoiceService} from "../../shared/services/dropdown-choice.servi
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {NotificationService} from "../../shared/services/notification.service";
-import {differenceInCalendarDays} from 'date-fns';
+import {differenceInCalendarDays, isWeekend} from 'date-fns';
 import {finalize} from "rxjs/operators";
 import {User} from "../../shared/models/user";
+import {HolidayService} from "../../shared/services/holiday.service";
 
 @Component({
   selector: 'app-appointment-form',
@@ -23,22 +24,28 @@ export class AppointmentFormComponent implements OnInit {
   form: FormGroup;
   userChoice: DropdownChoiceModel[] = [];
   adminChoice: DropdownChoiceModel[] = [];
-  today = new Date();
-  disabledDate = (current: Date): boolean => differenceInCalendarDays(current, this.today) <= 0;
+  disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) <= 0 || isWeekend(current) || this.isPublicHoliday(current);
+
+  private isPublicHoliday(current: Date) {
+    return this.PUBLIC_HOLIDAY_DATE.find(item => {return item.getTime() == current.getTime()}) != null;
+  }
+
   isSubmitting: boolean = false;
   timeslotList: DropdownChoiceModel[] = [];
+  PUBLIC_HOLIDAY_DATE: Date[] = [];
 
   constructor(private fb: FormBuilder,
               private appointmentService: AppointmentService,
               private dropdownChoiceService: DropdownChoiceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private holidayService: HolidayService) {
+    this.getPublicHolidays();
   }
 
   ngOnInit(): void {
     this.initDropdownChoice();
     this.initForm();
     this.form.statusChanges.subscribe((status: string) => {
-      console.log(this.form);
       this.formValidityEventEmitter.emit(status === "VALID");
     });
   }
@@ -141,7 +148,7 @@ export class AppointmentFormComponent implements OnInit {
 
   initTimeSlotDropdownChoice() {
     this.form.patchValue({
-      time : null
+      time: null
     }, {emitEvent: false, onlySelf: true});
 
     const date = new Date(this.form.controls['date'].value);
@@ -152,6 +159,18 @@ export class AppointmentFormComponent implements OnInit {
       }
     }, error => {
       this.notificationService.createErrorNotification("There\'s an error when retrieving available timeslot.");
+    })
+  }
+
+  private getPublicHolidays() {
+    this.PUBLIC_HOLIDAY_DATE = [];
+    this.holidayService.getHoliday().subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        const temp = resp.data ? resp.data : [];
+        temp.forEach(date => {
+          this.PUBLIC_HOLIDAY_DATE.push(new Date(date));
+        })
+      }
     })
   }
 }
