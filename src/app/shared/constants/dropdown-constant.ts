@@ -40,4 +40,11 @@ export class DropdownConstant {
     {text: "Super Admin", value: "ROLE_SUPER_ADMIN"}
   ]
 
+  public static APPOINTMENT_STATUS_DROPDOWN =  [
+    {text: 'Pending User', value: 'pending_user'},
+    {text: 'Pending Admin', value: 'pending_admin'},
+    {text: 'Confirmed', value: 'confirmed'},
+    {text: 'Completed', value: 'completed'},
+    {text: 'Cancelled', value: 'cancelled'},
+  ]
 }

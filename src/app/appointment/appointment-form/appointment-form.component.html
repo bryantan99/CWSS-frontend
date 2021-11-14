@@ -13,15 +13,6 @@
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item *ngIf="!isAdmin">
-    <nz-form-label [nzSpan]="24" class="fw-bold">Admin</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-select nzAllowClear nzShowSearch nzPlaceHolder="Select admin" formControlName="adminUsername" (ngModelChange)="initTimeSlotDropdownChoice()">
-        <nz-option *ngFor="let choice of adminChoice" [nzLabel]="choice?.text" [nzValue]="choice.value"></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
-
   <nz-form-item>
     <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Time</nz-form-label>
     <nz-form-control [nzSpan]="24" [nzErrorTip]="timeErrorTpl">

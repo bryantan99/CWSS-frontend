@@ -1,0 +1,37 @@
+<nz-space class="text-end">
+  <button nz-button nzType="primary" *nzSpaceItem (click)="openFilterDrawer()">Filter Settings</button>
+</nz-space>
+
+<br><br>
+
+<app-appointment-table [nzData]="appointmentList"
+                       [isLoading]="isLoading"
+                       [showConfirmAppointmentButton]="true"
+                       (refreshListEventEmitter)="refreshList($event)">
+</app-appointment-table>
+
+<nz-drawer
+  nzTitle="Filter Data"
+  [nzVisible]="filterDrawerIsVisible"
+  (nzOnClose)="closeFilterDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <form nz-form [formGroup]="filterForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">ID</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="appointmentId">
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control [nzSpan]="24">
+          <nz-space>
+            <button *nzSpaceItem nz-button nzType="primary" (click)="getPendingAppointments()">Search</button>
+            <button *nzSpaceItem nz-button nzType="default" (click)="resetFilterSettings()">Reset</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-drawer>

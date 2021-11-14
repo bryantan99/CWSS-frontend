@@ -64,9 +64,9 @@ export class AppointmentScheduleComponent implements OnInit {
   }
 
   generateString(appointment: any) {
-    const startTime = moment(appointment.appointmentStartTime).format("hh:mm A");
-    const endTime = moment(appointment.appointmentEndTime).format("hh:mm A");
-    const targetName = this.isAdmin ? appointment.communityUserBean.fullName : appointment.adminBean.fullName;
+    const startTime = moment(appointment.startDatetime).format("hh:mm A");
+    const endTime = moment(appointment.endDatetime).format("hh:mm A");
+    const targetName = this.isAdmin ? appointment.userFullName : appointment.adminFullName;
     const msg = " Appointment with " + targetName + " [Appointment ID: " + appointment.appointmentId + "]."
     return "<b>" + startTime + " - " + endTime + "</b> : " + msg;
   }

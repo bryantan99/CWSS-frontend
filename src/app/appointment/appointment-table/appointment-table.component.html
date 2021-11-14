@@ -1,0 +1,89 @@
+<nz-table #appointmentTable
+          [(nzPageIndex)]="pageIndex"
+          [(nzPageSize)]="pageSize"
+          [nzData]="nzData"
+          [nzScroll]="{x: '960px'}"
+          [nzLoading]="isLoading">
+  <thead>
+  <tr>
+    <th nzWidth="80px">ID</th>
+    <th>Purpose</th>
+    <th nzCustomFilter>
+      Datetime
+      <nz-filter-trigger [(nzVisible)]="datetimeFilterIsVisible" [nzActive]="selectedDate !== null"
+                         [nzDropdownMenu]="menu">
+        <i nz-icon nzType="search"></i>
+      </nz-filter-trigger>
+    </th>
+    <th>Status</th>
+    <th>Resident</th>
+    <th>Admin-In-Charge</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of appointmentTable.data; let i = index">
+    <td>{{ data?.appointmentId }}</td>
+    <td>{{ data?.purpose || "-" }}</td>
+    <td>{{(data?.startDatetime | date: 'short')}} -<br>{{(data.endDatetime | date: 'short')}}</td>
+    <td>
+      <nz-tag *ngIf="data?.status === 'pending_user'" nzColor="gold">Pending User</nz-tag>
+      <nz-tag *ngIf="data?.status === 'pending_admin'" nzColor="gold">Pending Admin</nz-tag>
+      <nz-tag *ngIf="data?.status === 'confirmed'" nzColor="green">Confirmed</nz-tag>
+      <nz-tag *ngIf="data?.status === 'completed'" nzColor="green">Completed</nz-tag>
+      <nz-tag *ngIf="data?.status === 'cancelled'" nzColor="magenta">Cancelled</nz-tag>
+      <span *ngIf="!data?.status">-</span>
+    </td>
+    <td>
+      <a *ngIf="data?.username; else dashTpl"
+         [routerLink]="'/profile'"
+         [queryParams]="{username: data?.username}">
+        {{data?.userFullName}}
+      </a>
+    </td>
+    <td>{{ data?.adminFullName || "-" }}</td>
+    <td>
+      <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu"
+              *ngIf="data?.status !== 'cancelled'; else dashTpl">
+        Actions <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #actionMenu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item
+              *ngIf="(data?.status === 'pending_user' && !isAdmin) || (data?.status === 'pending_admin' && isAdmin)">
+            <a (click)="confirmAppointment(data?.appointmentId, data?.lastUpdatedDate)">Confirm Appointment</a>
+          </li>
+          <li nz-menu-item>
+            <a (click)="openDatetimeModal(data?.appointmentId)">{{(data?.status === 'pending_admin') ? 'Confirm & Reschedule Datetime' : 'Reschedule Datetime'}}</a>
+          </li>
+          <li nz-menu-item>
+            <a nz-popconfirm nzPopconfirmTitle="Are you sure you want to cancel this appointment?"
+               (nzOnConfirm)="cancelAppointment(data?.appointmentId)">Cancel Appointment</a>
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown p-2">
+    <div class="search-box">
+      <nz-date-picker [(ngModel)]="selectedDate"></nz-date-picker>
+      <br>
+      <button nz-button nzSize="small" nzType="primary" (click)="filterByAppointmentDate()" class="mt-2 me-2">
+        Search
+      </button>
+      <button nz-button nzSize="small" class="mt-2 me-2" (click)="resetFilterByAppointmentDate()">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
+
+<app-appointment-reschedule *ngIf="rescheduleDatetimeModalIsVisible"
+                            [isVisible]="rescheduleDatetimeModalIsVisible"
+                            [appointment]="selectedAppointment"
+                            (modalVisibilityHasChange)="modalVisibilityHasChange($event)"
+                            (refreshListEventEmitter)="refreshList()"></app-appointment-reschedule>
+
+<ng-template #dashTpl>-</ng-template>

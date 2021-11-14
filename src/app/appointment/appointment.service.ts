@@ -12,7 +12,7 @@ export class AppointmentService {
 
   private readonly APP_URL = environment.apiUrl;
   private readonly GET_APPOINTMENT = this.APP_URL + "/appointment/appointmentId";
-  private readonly GET_ALL_APPOINTMENTS = this.APP_URL + "/appointment"
+  private readonly GET_PENDING_APPOINTMENTS = this.APP_URL + "/appointment/pending"
   private readonly GET_USER_APPOINTMENTS = this.APP_URL + "/appointment/user"
   private readonly CANCEL_APPOINTMENT = this.APP_URL + "/appointment/appointmentId"
   private readonly UPDATE_APPOINTMENT_DATETIME = this.APP_URL + "/appointment/update-datetime";
@@ -28,12 +28,25 @@ export class AppointmentService {
     return this.http.get<ResponseModel<any>>(url);
   }
 
-  getAppointments(): Observable<ResponseModel<any>> {
-    return this.http.get<ResponseModel<any>>(this.GET_ALL_APPOINTMENTS);
+  getPendingAppointments(appointmentId?: number): Observable<ResponseModel<any>> {
+    let params = new HttpParams();
+    if (appointmentId) {
+      params = params.set("appointmentId", appointmentId.toString(10));
+    }
+    return this.http.get<ResponseModel<any>>(this.GET_PENDING_APPOINTMENTS, {params: params});
   }
 
-  getUserAppointment(username: string): Observable<ResponseModel<any>> {
-    const params = new HttpParams().set("username", username);
+  getLoggedInUserAppointment(appointmentId?: number, status?: string): Observable<ResponseModel<any>> {
+    let params = new HttpParams();
+
+    if (appointmentId) {
+      params = params.set("appointmentId", appointmentId.toString(10));
+    }
+
+    if (status && status !== 'A') {
+      params = params.set("status", status);
+    }
+
     return this.http.get<ResponseModel<any>>(this.GET_USER_APPOINTMENTS, {params: params});
   }
 
