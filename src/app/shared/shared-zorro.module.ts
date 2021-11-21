@@ -40,6 +40,7 @@ import {NzImageModule} from "ng-zorro-antd/image";
 import {NzPageHeaderModule} from "ng-zorro-antd/page-header";
 import {NzCommentModule} from "ng-zorro-antd/comment";
 import {NzSpaceModule} from "ng-zorro-antd/space";
+import {NzStatisticModule} from "ng-zorro-antd/statistic";
 
 export const SHARED_ZORRO_MODULES = [
   NzButtonModule,
@@ -83,5 +84,6 @@ export const SHARED_ZORRO_MODULES = [
   NzImageModule,
   NzPageHeaderModule,
   NzCommentModule,
-  NzSpaceModule
+  NzSpaceModule,
+  NzStatisticModule
 ];

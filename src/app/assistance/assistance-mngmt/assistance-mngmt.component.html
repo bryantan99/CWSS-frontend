@@ -1,126 +1,19 @@
-<ng-template #tableHeaderTpl>
-  <nz-row>
-    <nz-col [nzSm]="24" [nzMd]="8">
-      <h4>Assistance Record</h4>
-    </nz-col>
-    <nz-col [nzSm]="24" [nzMd]="16" class="text-end">
-      <button *ngIf="user && !isAdmin"  nz-button (click)="openAddAssistanceModal()">Request Assistance</button>
-    </nz-col>
-  </nz-row>
-</ng-template>
+<h4>Assistance</h4>
+<nz-divider></nz-divider>
 
-<nz-table #assistanceRecordTable
-          [(nzPageIndex)]="pageIndex"
-          [(nzPageSize)]="pageSize"
-          [nzData]="listOfAssistanceRecord"
-          [nzLoading]="isLoading"
-          [nzScroll]="{x: '960px'}"
-          [nzTitle]="tableHeaderTpl"
-          *ngIf="user && !isAdmin">
-  <thead>
-  <tr>
-    <th nzWidth="80px">No.</th>
-    <th>Issue Title</th>
-    <th>Status</th>
-    <th>Admin In-Charge</th>
-    <th>Created Date</th>
-    <th>Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let data of assistanceRecordTable.data;
-      let i = index">
-    <td>{{ (pageIndex - 1) * pageSize + 1 + i}}</td>
-    <td>{{ data?.assistanceTitle || "-" }}</td>
-    <td>
-      <ng-container *ngIf="data?.status; else noStatusTpl">
-        <nz-tag *ngIf="data.status === 'pending'" nzColor="gold">Pending</nz-tag>
-        <nz-tag *ngIf="data.status === 'processing'" nzColor="blue">Processing</nz-tag>
-        <nz-tag *ngIf="data.status === 'completed'" nzColor="green">Completed</nz-tag>
-        <nz-tag *ngIf="data.status === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
-      </ng-container>
-      <ng-template #noStatusTpl>-</ng-template>
-    </td>
-    <td>{{ data?.adminFullName || "-" }}</td>
-    <td>{{ (data?.createdDate | date: DATE_FORMAT) || "-" }}</td>
-    <td>
-      <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
-        Actions<i nz-icon nzType="down"></i>
-      </button>
-      <nz-dropdown-menu #menu1="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item (click)="viewRec(data?.assistanceId)">View Request</li>
-          <li nz-menu-item nz-popconfirm
-              nzPopconfirmTitle="Are you sure you want to delete this request?"
-              (nzOnConfirm)="deleteRec(data?.assistanceId)" *ngIf="data?.status === 'pending'">Delete
-            Request
-          </li>
-        </ul>
-      </nz-dropdown-menu>
-    </td>
-  </tr>
-  </tbody>
-</nz-table>
-
-<nz-table #basicTable
-          [nzLoading]="isLoading"
-          [nzPageIndex]="pageIndex"
-          [nzPageSize]="pageSize"
-          [nzData]="listOfAssistanceRecord"
-          [nzScroll]="{x: '960px'}"
-          [nzTitle]="tableHeaderTpl"
-          *ngIf="user && isAdmin">
-  <thead>
-  <tr>
-    <th nzWidth="80px">No.</th>
-    <th nzWidth="120px">Assistance ID</th>
-    <th>Issue Title</th>
-    <th>Help-seeker</th>
-    <th>Admin In-Charge</th>
-    <th>Status</th>
-    <th>Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let record of basicTable.data; let i = index">
-    <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-    <td>{{ record?.assistanceId || "-" }}</td>
-    <td>{{ record?.assistanceTitle || "-" }}</td>
-    <td>{{ record?.userFullName || "-" }}</td>
-    <td>{{ record?.adminFullName || "-" }}</td>
-    <td>
-      <nz-tag *ngIf="record?.status === 'pending'" nzColor="gold">Pending</nz-tag>
-      <nz-tag *ngIf="record?.status === 'processing'" nzColor="blue">Processing</nz-tag>
-      <nz-tag *ngIf="record?.status === 'completed'" nzColor="green">Completed</nz-tag>
-      <nz-tag *ngIf="record?.status === 'cancelled'" nzColor="magenta">Cancel</nz-tag>
-      <span *ngIf="!record?.status">-</span>
-    </td>
-    <td>
-      <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="adminActionMenu">
-        Actions<i nz-icon nzType="down"></i>
-      </button>
-      <nz-dropdown-menu #adminActionMenu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item [routerLink]="['/assistance/detail']" [queryParams]="{assistanceId: record?.assistanceId}">
-            View Request
-          </li>
-        </ul>
-      </nz-dropdown-menu>
-    </td>
-  </tr>
-  </tbody>
-</nz-table>
-
-<nz-modal [(nzVisible)]="assistanceDetailIsVisible"
-          [nzTitle]="nzTitle"
-          (nzOnCancel)="cancelNewAssistance()">
-  <div *nzModalContent>
-    <app-assistance-form [isEdit]="isEdit"
-                         (modalIsVisibleEventEmitter)="modalVisibleHasChange($event)"
-                         (refreshListEventEmitter)="listHasChange($event)"></app-assistance-form>
-  </div>
-  <div *nzModalFooter>
-    <button nz-button nzType="default" (click)="cancelNewAssistance()">Cancel</button>
-    <button nz-button nzType="primary" (click)="submitNewAssistance()">Submit</button>
-  </div>
-</nz-modal>
+<nz-tabset nzType="card" [(nzSelectedIndex)]="tabIndex">
+  <nz-tab *ngIf="isAdmin" nzTitle="Pending Assistance">
+    <app-pending-assistance *ngIf="tabIndex === 0"></app-pending-assistance>
+  </nz-tab>
+  <nz-tab nzTitle="My Assistance">
+    <div *ngIf="isAdmin && tabIndex === 1 || !isAdmin && tabIndex === 0">
+      <app-my-assistance></app-my-assistance>
+    </div>
+  </nz-tab>
+  <nz-tab *ngIf="isAdmin" nzTitle="All Assistance">
+      <app-all-assistance *ngIf="tabIndex === 2"></app-all-assistance>
+  </nz-tab>
+  <nz-tab *ngIf="isAdmin" nzTitle="Assistance Category">
+    <app-assistance-category-mngmt *ngIf="tabIndex === 3"></app-assistance-category-mngmt>
+  </nz-tab>
+</nz-tabset>

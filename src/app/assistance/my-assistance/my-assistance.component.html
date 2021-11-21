@@ -1,0 +1,78 @@
+<nz-space>
+  <button nz-button *nzSpaceItem nzType="primary" (click)="openFilterDrawer()">Filter Settings</button>
+  <button nz-button nzType="default" *nzSpaceItem
+          (click)="openAddAssistanceModal()">{{ isAdmin ? 'Add Assistance' : 'Request Assistance'}}
+  </button>
+</nz-space>
+
+<br><br>
+
+<nz-drawer
+  nzTitle="Filter Data"
+  [nzVisible]="filterDrawerIsVisible"
+  (nzOnClose)="closeFilterDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <form [formGroup]="filterForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Assistance ID</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="assistanceId">
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Title</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="title">
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Status</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="status">
+            <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
+            <nz-option *ngFor="let choice of STATUS_DROPDOWN_LIST" [nzLabel]="choice.text"
+                       [nzValue]="choice.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="isAdmin">
+        <nz-form-label [nzSpan]="24" class="fw-bold">Community User Name</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="username">
+            <nz-option *ngFor="let choice of USERNAME_DROPDOWN_LIST" [nzLabel]="choice.text"
+                       [nzValue]="choice.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-space>
+            <button nz-button nzType="primary" *nzSpaceItem (click)="searchByFilter()">Search</button>
+            <button nz-button nzType="default" *nzSpaceItem (click)="resetFilterSettings()">Reset</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-drawer>
+
+<app-assistance-table [nzData]="assistanceRecords" [adminInChargeColumnIsVisible]="true" [isLoading]="isLoading"
+                      (refreshTableEventEmitter)="refreshTable($event)"></app-assistance-table>
+
+<nz-modal [(nzVisible)]="assistanceFormIsVisible"
+          [nzTitle]="'Request New Assistance'"
+          (nzOnCancel)="cancelNewAssistance()">
+  <div *nzModalContent>
+    <app-assistance-form (modalIsVisibleEventEmitter)="modalVisibleHasChange($event)" [addToRequestPool]="false"
+                         (refreshListEventEmitter)="listHasChange($event)"></app-assistance-form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelNewAssistance()">Cancel</button>
+    <button nz-button nzType="primary" (click)="submitNewAssistance()">Submit</button>
+  </div>
+</nz-modal>

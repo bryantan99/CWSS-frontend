@@ -1,19 +1,19 @@
 <form nz-form [formGroup]="form">
-  <nz-form-item>
-    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Category</nz-form-label>
-    <nz-form-control [nzSpan]="12" [nzErrorTip]="categoryTplError">
-      <nz-select formControlName="categoryId">
-        <nz-option [nzLabel]="'Category 1'" [nzValue]="1"></nz-option>
+  <nz-form-item *ngIf="isAdmin">
+    <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Category ID</nz-form-label>
+    <nz-form-control [nzSpan]="24" [nzErrorTip]="categoryErrorTpl">
+      <nz-select nzShowSearch formControlName="categoryId">
+        <nz-option *ngFor="let choice of CATEGORY_DROPDOWN" [nzValue]="choice?.value" [nzLabel]="choice?.text"></nz-option>
       </nz-select>
-      <ng-template #categoryTplError let-control>
-        <ng-container *ngIf="control.hasError('required')">Please select a category!</ng-container>
-      </ng-template>
     </nz-form-control>
+    <ng-template #categoryErrorTpl let-control>
+      <ng-container *ngIf="control.hasError('required')">Please select a category!</ng-container>
+    </ng-template>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Title</nz-form-label>
-    <nz-form-control [nzSpan]="12" [nzErrorTip]="titleErrorTpl">
+    <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Title</nz-form-label>
+    <nz-form-control [nzSpan]="24" [nzErrorTip]="titleErrorTpl">
       <textarea rows="2" nz-input [maxlength]="200" formControlName="assistanceTitle"></textarea>
     </nz-form-control>
     <ng-template #titleErrorTpl let-control>
@@ -22,12 +22,24 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSpan]="7" class="fw-bold" nzRequired>Description</nz-form-label>
-    <nz-form-control [nzSpan]="12" [nzErrorTip]="descriptionErrorTpl">
+    <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Description</nz-form-label>
+    <nz-form-control [nzSpan]="24" [nzErrorTip]="descriptionErrorTpl">
       <textarea rows="8" nz-input formControlName="assistanceDescription"></textarea>
     </nz-form-control>
     <ng-template #descriptionErrorTpl let-control>
       <ng-container *ngIf="control.hasError('required')">Please enter description!</ng-container>
+    </ng-template>
+  </nz-form-item>
+
+  <nz-form-item *ngIf="isAdmin">
+    <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Target Community User</nz-form-label>
+    <nz-form-control [nzSpan]="24" [nzErrorTip]="descriptionErrorTpl">
+      <nz-select nzShowSearch formControlName="username">
+        <nz-option *ngFor="let choice of COMMUNITY_USER_DROPDOWN" [nzLabel]="choice?.text" [nzValue]="choice?.value"></nz-option>
+      </nz-select>
+    </nz-form-control>
+    <ng-template #descriptionErrorTpl let-control>
+      <ng-container *ngIf="control.hasError('required')">Please select a user!</ng-container>
     </ng-template>
   </nz-form-item>
 </form>

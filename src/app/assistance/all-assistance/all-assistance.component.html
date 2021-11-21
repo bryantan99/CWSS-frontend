@@ -1,0 +1,103 @@
+<nz-form-item>
+  <nz-form-label [nzSpan]="24" class="fw-bold">Chart</nz-form-label>
+  <nz-form-control [nzSpan]="24">
+    <nz-select [(ngModel)]="chartType" (ngModelChange)="initChart()">
+      <nz-option [nzLabel]="'Status'" [nzValue]="'status'"></nz-option>
+      <nz-option [nzLabel]="'Category'" [nzValue]="'category'"></nz-option>
+    </nz-select>
+  </nz-form-control>
+</nz-form-item>
+
+<highcharts-chart
+  [Highcharts]="Highcharts"
+  [options]="statusPieChartOption"
+  *ngIf="chartType == 'status'"
+  style="width: 100%; height: 300px; display: block;"
+></highcharts-chart>
+
+<highcharts-chart
+  [Highcharts]="Highcharts"
+  [options]="categoryColumnChartOption"
+  *ngIf="chartType == 'category'"
+  style="width: 100%; height: 300px; display: block;"
+></highcharts-chart>
+
+<nz-drawer
+  nzTitle="Filter Data"
+  [nzVisible]="filterDrawerIsVisible"
+  (nzOnClose)="closeFilterDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <form [formGroup]="filterForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Assistance ID</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="assistanceId">
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Category</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="categoryId">
+            <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
+            <nz-option [nzLabel]="'Undefined'" [nzValue]="'-1'"></nz-option>
+            <nz-option *ngFor="let choice of CATEGORY_DROPDOWN" [nzLabel]="choice?.text" [nzValue]="choice?.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Title</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="title">
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Status</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="status">
+            <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
+            <nz-option *ngFor="let choice of STATUS_DROPDOWN_LIST" [nzLabel]="choice.text"
+                       [nzValue]="choice.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Help-seeker NRIC</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input nz-input formControlName="nric">
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Admin-In-Charge</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select formControlName="adminUsername">
+            <nz-option *ngFor="let choice of ADMIN_DROPDOWN_LIST" [nzLabel]="choice.text"
+                       [nzValue]="choice.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-space>
+            <button nz-button nzType="primary" *nzSpaceItem (click)="searchByFilter()">Search</button>
+            <button nz-button nzType="default" *nzSpaceItem (click)="resetFilterSettings()">Reset</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-drawer>
+
+<nz-space>
+  <button nz-button nzType="primary" *nzSpaceItem (click)="openFilterDrawer()">Filter Settings</button>
+</nz-space>
+
+<br><br>
+
+<app-assistance-table [nzData]="assistanceRecords" [adminInChargeColumnIsVisible]="true" [isLoading]="isLoading"></app-assistance-table>

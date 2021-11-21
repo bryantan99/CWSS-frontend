@@ -1,0 +1,52 @@
+<nz-table #assistanceRecordTable
+          [(nzPageIndex)]="pageIndex"
+          [(nzPageSize)]="pageSize"
+          [nzData]="nzData"
+          [nzLoading]="isLoading"
+          [nzScroll]="{x: '960px'}">
+  <thead>
+  <tr>
+    <th nzWidth="80px">ID</th>
+    <th nzWidth="150px">Category</th>
+    <th nzWidth="300px">Title</th>
+    <th nzWidth="300px">Description</th>
+    <th nzWidth="120px">Status</th>
+    <th nzWidth="120px">Help-seeker</th>
+    <th nzWidth="120px" *ngIf="adminInChargeColumnIsVisible">Admin In-Charge</th>
+    <th nzWidth="120px">Created Date</th>
+    <th nzWidth="120px">Last Updated Date</th>
+    <th nzWidth="120px">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of assistanceRecordTable.data;
+      let i = index">
+    <td>{{ data?.assistanceId }}</td>
+    <td>{{ data?.categoryName || "-" }}</td>
+    <td>{{ data?.title || "-" }}</td>
+    <td>{{ data?.description || "-" }}</td>
+    <td>
+      <ng-container [ngSwitch]="data?.status">
+        <nz-tag *ngSwitchCase="'pending'" nzColor="gold">Pending</nz-tag>
+        <nz-tag *ngSwitchCase="'processing'" nzColor="blue">Processing</nz-tag>
+        <nz-tag *ngSwitchCase="'completed'" nzColor="green">Completed</nz-tag>
+        <nz-tag *ngSwitchCase="'cancelled'" nzColor="magenta">Cancelled</nz-tag>
+        <nz-tag *ngSwitchCase="'rejected'" nzColor="magenta">Rejected</nz-tag>
+        <span *ngSwitchDefault>-</span>
+      </ng-container>
+    </td>
+    <td>
+      <a *ngIf="data?.username && data?.userFullName; else dashTpl" [routerLink]="'/profile'"
+         [queryParams]="{username: data?.username}">{{ data?.userFullName }}</a>
+    </td>
+    <td *ngIf="adminInChargeColumnIsVisible">{{ data?.adminFullName || "-" }}</td>
+    <td>{{ (data?.createdDate | date: DATE_FORMAT) || "-" }}</td>
+    <td>{{ (data?.lastUpdatedDate | date: DATE_FORMAT) || "-" }}</td>
+    <td>
+      <button nz-button nzType="default" (click)="viewRec(data?.assistanceId)">View</button>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #dashTpl>-</ng-template>

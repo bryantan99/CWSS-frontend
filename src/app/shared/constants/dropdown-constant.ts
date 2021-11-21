@@ -47,4 +47,11 @@ export class DropdownConstant {
     {text: 'Completed', value: 'completed'},
     {text: 'Cancelled', value: 'cancelled'},
   ]
+    static ASSISTANCE_STATUS_DROPDOWN = [
+      {text: 'Pending', value: 'pending'},
+      {text: 'Processing', value: 'processing'},
+      {text: 'Completed', value: 'completed'},
+      {text: 'Cancelled', value: 'cancelled'},
+      {text: 'Rejected', value: 'rejected'},
+    ];
 }

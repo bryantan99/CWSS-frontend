@@ -16,6 +16,7 @@ export class DropdownChoiceService {
   private readonly GET_COMMUNITY_USER_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/community-user";
   private readonly GET_APPOINTMENT_AVAILABLE_TIMESLOT = this.API_SERVER_URL + "/dropdown/appointment/timeslot";
   private readonly GET_ZONE_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/zoneId";
+  private readonly GET_ASSISTANCE_CATEGORY_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/assistance-category";
 
   constructor(private http: HttpClient) { }
 
@@ -27,8 +28,9 @@ export class DropdownChoiceService {
     return this.http.get<ResponseModel<any>>(this.GET_ADMIN_DROPDOWN_CHOICE);
   }
 
-  getCommunityUserDropdownChoices() {
-    return this.http.get<ResponseModel<any>>(this.GET_COMMUNITY_USER_DROPDOWN_CHOICE);
+  getCommunityUserDropdownChoices(hasNric?: boolean) {
+    let params = new HttpParams().set("hasNric", hasNric ? "Y" : "N");
+    return this.http.get<ResponseModel<any>>(this.GET_COMMUNITY_USER_DROPDOWN_CHOICE, {params: params});
   }
 
   getAppointmentTimeslotChoices(date: Date, adminUsername?: any) {
@@ -42,4 +44,8 @@ export class DropdownChoiceService {
     getZoneDropdownChoiceList(): Observable<ResponseModel<any>> {
       return this.http.get<ResponseModel<any>>(this.GET_ZONE_DROPDOWN_CHOICE);
     }
+
+  getAssistanceCategoryDropdown(): Observable<ResponseModel<any>> {
+    return this.http.get<ResponseModel<any>>(this.GET_ASSISTANCE_CATEGORY_DROPDOWN_CHOICE);
+  }
 }
