@@ -1,5 +1,5 @@
 <nz-space class="text-end">
-  <button nz-button nzType="primary" *nzSpaceItem (click)="openFilterDrawer()">Filter Settings</button>
+  <button nz-button nzType="primary" *nzSpaceItem (click)="openFilterDrawer()">Filter</button>
 </nz-space>
 
 <br><br>
@@ -11,7 +11,7 @@
 </app-appointment-table>
 
 <nz-drawer
-  nzTitle="Filter Data"
+  nzTitle="Filter Settings"
   [nzVisible]="filterDrawerIsVisible"
   (nzOnClose)="closeFilterDrawer()"
 >

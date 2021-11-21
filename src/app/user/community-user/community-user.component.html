@@ -28,7 +28,7 @@
 <!--</google-map>-->
 
 <nz-drawer
-  nzTitle="Filter Data"
+  nzTitle="Filter Settings"
   [nzVisible]="queryDrawerIsVisible"
   (nzOnClose)="closeQueryDrawer()"
 >
@@ -108,7 +108,7 @@
 <ng-template #titleTpl>
   <nz-row>
     <nz-col [nzSpan]="24" class="text-end">
-      <button nz-button nzType="primary" class="me-4" (click)="openQueryDrawer()">Filter Settings</button>
+      <button nz-button nzType="primary" class="me-4" (click)="openQueryDrawer()">Filter</button>
     </nz-col>
   </nz-row>
 </ng-template>

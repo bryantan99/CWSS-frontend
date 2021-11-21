@@ -127,7 +127,7 @@ export class MyAssistanceComponent implements OnInit {
   }
 
   private initDropdown() {
-    this.dropdownChoiceService.getCommunityUserDropdownChoices().subscribe(resp => {
+    this.dropdownChoiceService.getCommunityUserDropdownChoices(true).subscribe(resp => {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.USERNAME_DROPDOWN_LIST = resp.data;
       }

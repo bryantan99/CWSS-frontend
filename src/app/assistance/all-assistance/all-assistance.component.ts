@@ -42,7 +42,6 @@ export class AllAssistanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFilterForm();
-    this.initDropdownChoices();
     this.getAllAssistanceRecords();
   }
 
@@ -125,6 +124,7 @@ export class AllAssistanceComponent implements OnInit {
   }
 
   openFilterDrawer() {
+    this.initDropdownChoices();
     this.filterDrawerIsVisible = true;
   }
 

@@ -20,14 +20,14 @@
 </div>
 
 <nz-space>
-  <button nz-button *nzSpaceItem nzType="primary" (click)="openFilterDrawer()">Filter Settings</button>
+  <button nz-button *nzSpaceItem nzType="primary" (click)="openFilterDrawer()">Filter</button>
   <button nz-button nzType="default" *nzSpaceItem (click)="openAddAssistanceModal()">Add assistance</button>
 </nz-space>
 
 <br><br>
 
 <nz-drawer
-  nzTitle="Filter Data"
+  nzTitle="Filter Settings"
   [nzVisible]="filterDrawerIsVisible"
   (nzOnClose)="closeFilterDrawer()"
 >

@@ -23,7 +23,7 @@
 ></highcharts-chart>
 
 <nz-drawer
-  nzTitle="Filter Data"
+  nzTitle="Filter Settings"
   [nzVisible]="filterDrawerIsVisible"
   (nzOnClose)="closeFilterDrawer()"
 >
@@ -39,10 +39,12 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="24" class="fw-bold">Category</nz-form-label>
         <nz-form-control [nzSpan]="24">
-          <nz-select formControlName="categoryId">
+          <nz-select nzAllowClear nzShowSearch formControlName="categoryId">
             <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
             <nz-option [nzLabel]="'Undefined'" [nzValue]="'-1'"></nz-option>
-            <nz-option *ngFor="let choice of CATEGORY_DROPDOWN" [nzLabel]="choice?.text" [nzValue]="choice?.value"></nz-option>
+            <nz-option *ngFor="let choice of CATEGORY_DROPDOWN" [nzLabel]="choice?.text" [nzValue]="choice?.value" [nzCustomContent]="true">
+              <span class="full-nz-option-label">{{choice?.text}}</span>
+            </nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
@@ -75,7 +77,7 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="24" class="fw-bold">Admin-In-Charge</nz-form-label>
         <nz-form-control [nzSpan]="24">
-          <nz-select formControlName="adminUsername">
+          <nz-select nzAllowClear nzShowSearch formControlName="adminUsername">
             <nz-option *ngFor="let choice of ADMIN_DROPDOWN_LIST" [nzLabel]="choice.text"
                        [nzValue]="choice.value"></nz-option>
           </nz-select>
@@ -95,7 +97,7 @@
 </nz-drawer>
 
 <nz-space>
-  <button nz-button nzType="primary" *nzSpaceItem (click)="openFilterDrawer()">Filter Settings</button>
+  <button nz-button nzType="primary" *nzSpaceItem (click)="openFilterDrawer()">Filter</button>
 </nz-space>
 
 <br><br>
