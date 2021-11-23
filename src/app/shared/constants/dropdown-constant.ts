@@ -2,6 +2,11 @@ import {StateConstant} from "./state-constant";
 
 export class DropdownConstant {
 
+  public static GENDER_DROPDOWN = [
+    {text: 'Male', value: 'M'},
+    {text: 'Female', value: 'F'},
+  ]
+
   public static EMPLOYMENT_TYPE_DROPDOWN = [
     {text: 'Unemployed', value: "-"},
     {text: 'Self Employed', value: "S/E"},

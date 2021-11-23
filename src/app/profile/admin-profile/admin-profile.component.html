@@ -1,0 +1,144 @@
+<h4>Profile</h4>
+<nz-divider></nz-divider>
+
+<nz-row nzJustify="start">
+  <nz-col [nzXs]="24" [nzMd]="10" [nzLg]="7" [nzXl]="5">
+    <img
+      style="object-fit: cover"
+      nz-image
+      width="250px"
+      height="250px"
+      [nzSrc]="getProfilePicture(adminProfile.username, adminProfile.profilePicDirectory)"
+      alt="Profile picture"
+    />
+  </nz-col>
+  <nz-col [nzXs]="24" [nzMd]="14" [nzLg]="17" [nzXl]="19">
+    <form nz-form [formGroup]="adminForm" *ngIf="nzEditAdmin; else displayAdminProfileTpl">
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">Name</nz-form-label>
+        <nz-form-control nzSpan="12" [nzErrorTip]="fullNameErrorTpl">
+          <input nz-input formControlName="fullName">
+        </nz-form-control>
+        <ng-template #fullNameErrorTpl let-control>
+          <div *ngIf="control.invalid && (control.touched || control.dirty)">
+            <div *ngIf="control.errors?.required">
+              Please input your full name.
+            </div>
+          </div>
+        </ng-template>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">E-mail</nz-form-label>
+        <nz-form-control nzSpan="12" [nzErrorTip]="emailErrorTpl">
+          <input nz-input type="email" formControlName="email" (ngModelChange)="validateEmail()">
+        </nz-form-control>
+        <ng-template #emailErrorTpl let-control>
+          <div *ngIf="control.invalid && (control.touched || control.dirty)">
+            <div *ngIf="control.errors?.required">
+              Please input email!
+            </div>
+            <div *ngIf="control.errors?.email">
+              Please input valid email!
+            </div>
+            <div *ngIf="control.errors?.emailTaken">
+              This email has already been taken!
+            </div>
+          </div>
+        </ng-template>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">Contact No</nz-form-label>
+        <nz-form-control nzSpan="12" [nzErrorTip]="contactNoErrorTpl">
+          <input nz-input type="text" formControlName="contactNo">
+          <ng-template #contactNoErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.touched || control.dirty)">
+              <div *ngIf="control.errors?.required">
+                Please input contact number!
+              </div>
+            </div>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">Profile Picture</nz-form-label>
+        <nz-form-control nzSpan="12" [nzErrorTip]="contactNoErrorTpl">
+          <nz-upload [nzLimit]="1" nzListType="picture" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzRemove]="removeFile" [nzAccept]="ACCEPTABLE_FILE_FORMAT">
+            <button nz-button [disabled]="fileList.length >= 1">
+              <i nz-icon nzType="upload"></i>Select {{ fileList?.length || 0 }} / 1 Image
+            </button>
+          </nz-upload>
+          <ng-template #contactNoErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.touched || control.dirty)">
+              <div *ngIf="control.errors?.required">
+                Please input contact number!
+              </div>
+            </div>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="isSuperAdmin">
+        <nz-form-label nzSpan="24" class="fw-bold">Account Role(s)</nz-form-label>
+        <nz-form-control nzSpan="12" [nzErrorTip]="roleErrorTpl">
+          <nz-select nzMode="multiple" nzPlaceHolder="Select account role" formControlName="roleList">
+            <nz-option *ngFor="let role of ROLE_CHOICE" [nzLabel]="role.text" [nzValue]="role.value"></nz-option>
+          </nz-select>
+          <ng-template #roleErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.touched || control.dirty)">
+              <div *ngIf="control.errors?.required">
+                Please select at least 1 role.
+              </div>
+            </div>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control [nzSm]="24" [nzMd]="17">
+          <nz-space>
+            <button *nzSpaceItem nz-button nzType="primary"
+                    [disabled]="!adminForm.valid || (!adminForm.touched && !adminForm.dirty)"
+                    (click)="submitAdminForm()"
+                    [nzLoading]="isSubmitting">Update
+            </button>
+            <button *nzSpaceItem nz-button nzType="default" (click)="cancelNzEdit()">Cancel</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+
+    <ng-template #displayAdminProfileTpl>
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">Name</nz-form-label>
+        <nz-form-control nzSpan="24">
+          <span style="white-space: normal; word-break: break-word">{{adminProfile?.fullName || "-"}}</span>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">E-mail</nz-form-label>
+        <nz-form-control nzSpan="24">
+          <span style="white-space: normal; word-break: break-word">{{adminProfile?.email || "-"}}</span>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">Contact No</nz-form-label>
+        <nz-form-control nzSpan="24">
+          {{adminProfile?.contactNo || "-"}}
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="isSuperAdmin || isOwnerOfProfile">
+        <nz-form-control nzSpan="24">
+          <nz-space>
+            <button *nzSpaceItem nz-button nzType="primary" (click)="enterEditAdminMode()">Edit Profile</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
+    </ng-template>
+  </nz-col>
+</nz-row>

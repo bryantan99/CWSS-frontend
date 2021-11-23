@@ -12,7 +12,7 @@ import {AssistanceDetailComponent} from "./assistance/assistance-detail/assistan
 import {AuthGuardService} from "./shared/services/auth-guard.service";
 import {AppointmentMngmtComponent} from "./appointment/appointment-mngmt/appointment-mngmt.component";
 import {RoleConstant} from "./shared/constants/role-constant";
-import {ProfileComponent} from "./user/profile/profile.component";
+import {ProfileComponent} from "./profile/profile/profile.component";
 import {PostFeedComponent} from "./shared/components/post-feed/post-feed.component";
 import {SettingsComponent} from "./settings/settings.component";
 

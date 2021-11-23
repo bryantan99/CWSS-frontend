@@ -1,0 +1,10 @@
+<div *ngIf="adminProfile">
+  <app-admin-profile [adminProfile]="adminProfile" [isLoading]="isLoading" [isSuperAdmin]="isSuperAdmin"
+                     [isOwnerOfProfile]="isOwnerOfProfile"
+                     (refreshEventEmitter)="refreshProfile($event)"></app-admin-profile>
+</div>
+
+<div *ngIf="userProfile">
+  <app-user-profile [userProfile]="userProfile" [isLoading]="isLoading"
+                    (refreshEventEmitter)="refreshProfile($event)"></app-user-profile>
+</div>

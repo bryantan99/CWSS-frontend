@@ -15,7 +15,6 @@ import {UpdateProfileComponent} from './update-profile/update-profile.component'
 import {AdminManagementComponent} from "./admin/admin-management/admin-management.component";
 import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component";
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { ProfileComponent } from './profile/profile.component';
 import { CommunityUserGraphComponent } from './community-user-graph/community-user-graph.component';
 
 @NgModule({
@@ -32,7 +31,6 @@ import { CommunityUserGraphComponent } from './community-user-graph/community-us
     AdminManagementComponent,
     AdminDetailComponent,
     ResetPasswordComponent,
-    ProfileComponent,
     CommunityUserGraphComponent
   ],
   imports: [

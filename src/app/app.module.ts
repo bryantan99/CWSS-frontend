@@ -21,6 +21,7 @@ import {BasicAuthInterceptorService} from "./shared/services/basic-auth-intercep
 import {AssistanceModule} from "./assistance/assistance.module";
 import {AppointmentModule} from "./appointment/appointment.module";
 import {SettingsModule} from "./settings/settings.module";
+import {ProfileModule} from "./profile/profile.module";
 
 registerLocaleData(en);
 
@@ -42,6 +43,7 @@ registerLocaleData(en);
     FormsModule,
     ReactiveFormsModule,
     UserModule,
+    ProfileModule,
     AssistanceModule,
     AppointmentModule
   ],
