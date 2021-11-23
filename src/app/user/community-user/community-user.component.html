@@ -139,7 +139,7 @@
   <tbody>
   <tr *ngFor="let data of userTable.data; let i = index">
     <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-    <td>{{data?.fullName || "-"}}</td>
+    <td>{{(data?.fullName | titlecase) || "-"}}</td>
     <td>{{data?.nric || "-"}}</td>
     <td>{{data?.gender || "-"}}</td>
     <td>{{(data?.ethnic | ethnic) || "-"}}</td>
