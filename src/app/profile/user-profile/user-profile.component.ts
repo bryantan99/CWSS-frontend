@@ -10,6 +10,8 @@ import {Location} from "@angular/common";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 import {phoneNumberValidator, postCodeValidator} from "../../shared/validators/custom-validators";
+import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
+import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -32,9 +34,12 @@ export class UserProfileComponent implements OnInit {
   readonly GENDER_DROPDOWN = DropdownConstant.GENDER_DROPDOWN;
   readonly ETHNIC_DROPDOWN = DropdownConstant.ETHNIC_DROPDOWN;
   readonly STATE_DROPDOWN = DropdownConstant.STATE_AND_FEDERAL_TERRITORY_DROPDOWN;
+  diseaseDropdownList: DropdownChoiceModel[] = [];
+  readonly NZ_DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
 
   constructor(private authService: AuthService,
               private communityUserService: CommunityUserService,
+              private dropdownChoiceService: DropdownChoiceService,
               private notificationService: NotificationService,
               private router: Router,
               private location: Location,
@@ -43,6 +48,10 @@ export class UserProfileComponent implements OnInit {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
     })
+  }
+
+  get diseaseList(): FormArray {
+    return this.userProfileForm.controls['health'].get('diseaseList') as FormArray;
   }
 
   ngOnInit(): void {
@@ -86,6 +95,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   enterEditMode() {
+    this.initDropdownChoice();
     this.patchForm();
     this.updateFormValidity(this.userProfileForm);
     this.userProfileForm.markAllAsTouched();
@@ -114,6 +124,9 @@ export class UserProfileComponent implements OnInit {
         postcode: ['', [Validators.required, postCodeValidator()]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
+      }),
+      health: this.fb.group({
+        diseaseList: this.fb.array([])
       })
     })
   }
@@ -144,6 +157,36 @@ export class UserProfileComponent implements OnInit {
         }
       });
     }
+
+    if (this.userProfile.healthModelList) {
+      let mappedHealthIssues: any[] = this.userProfile.healthModelList.map(healthIssue => {
+        return {
+          healthIssueId: healthIssue.issueId ? healthIssue.issueId : null,
+          diseaseId: healthIssue.diseaseId.toString(),
+          description: healthIssue.diseaseDescription,
+          isApproved: healthIssue.approvedBy != null && healthIssue.approvedDate != null
+        }
+      });
+      for (let i = 0; i < this.userProfile.healthModelList.length; i++) {
+        this.addDiseaseFormGroup();
+      }
+      this.diseaseList.patchValue(mappedHealthIssues);
+    }
+  }
+
+  addDiseaseFormGroup() {
+    this.diseaseList.push(this.initDiseaseForm());
+    this.updateFormValidity(this.diseaseList);
+    this.diseaseList.markAllAsTouched();
+  }
+
+  private initDiseaseForm() {
+    return this.fb.group({
+      healthIssueId: [null],
+      diseaseId: ['', Validators.required],
+      description: [''],
+      isApproved: ['']
+    });
   }
 
   private updateFormValidity(group: FormGroup | FormArray) {
@@ -161,5 +204,20 @@ export class UserProfileComponent implements OnInit {
         this.emitRefreshProfile(this.userProfile.username);
       }
     })
+  }
+
+  private initDropdownChoice() {
+    this.dropdownChoiceService.getDiseaseDropdownChoices().subscribe(resp => {
+      if (resp && resp.status == HttpStatusConstant.OK) {
+        this.diseaseDropdownList = resp.data ? resp.data : [];
+      }
+    }, error => {
+      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving disease dropdown list.";
+      this.notificationService.createErrorNotification(msg);
+    })
+  }
+
+  deleteDiseaseFormGroup(index: number) {
+    this.diseaseList.removeAt(index);
   }
 }
