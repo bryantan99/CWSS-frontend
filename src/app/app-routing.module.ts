@@ -5,7 +5,6 @@ import {SignupComponent} from "./user/signup/signup.component";
 import {AboutComponent} from "./homepage/about/about.component";
 import {CommunityUserComponent} from "./user/community-user/community-user.component";
 import {AssistanceMngmtComponent} from "./assistance/assistance-mngmt/assistance-mngmt.component";
-import {UpdateProfileComponent} from "./user/update-profile/update-profile.component";
 import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
 import {ResetPasswordComponent} from "./user/reset-password/reset-password.component";
 import {AssistanceDetailComponent} from "./assistance/assistance-detail/assistance-detail.component";
@@ -53,11 +52,6 @@ const routes: Routes = [
   {
     path: 'assistance/detail',
     component: AssistanceDetailComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: 'community-user/profile/update',
-    component: UpdateProfileComponent,
     canActivate: [AuthGuardService]
   },
   {

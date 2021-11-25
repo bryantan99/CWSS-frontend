@@ -11,7 +11,6 @@ import {SignupOccupationFormComponent} from './signup-occupation-form/signup-occ
 import {SignupHealthFormComponent} from './signup-health-form/signup-health-form.component';
 import {CommunityUserComponent} from './community-user/community-user.component';
 import {SignupInfoComponent} from './signup-info/signup-info.component';
-import {UpdateProfileComponent} from './update-profile/update-profile.component';
 import {AdminManagementComponent} from "./admin/admin-management/admin-management.component";
 import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component";
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -27,7 +26,6 @@ import { CommunityUserGraphComponent } from './community-user-graph/community-us
     SignupHealthFormComponent,
     CommunityUserComponent,
     SignupInfoComponent,
-    UpdateProfileComponent,
     AdminManagementComponent,
     AdminDetailComponent,
     ResetPasswordComponent,
