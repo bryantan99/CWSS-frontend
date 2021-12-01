@@ -73,9 +73,9 @@ export class CommunityUserService {
     return this.http.get<ResponseModel<any>>(this.APPROVE_USER_ACCOUNT, {params: params});
   }
 
-  deleteCommunityUser(username: string) {
+  deleteCommunityUser(username: string): Observable<ResponseModel<any>> {
     const url = this.DELETE_COMMUNITY_USER + "/" + username;
-    return this.http.delete(url);
+    return this.http.delete<ResponseModel<any>>(url);
   }
 
   updateProfile(form: any):Observable<any> {

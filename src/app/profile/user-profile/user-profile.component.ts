@@ -90,6 +90,19 @@ export class UserProfileComponent implements OnInit {
       })
   }
 
+  deleteAccount(username: string) {
+    this.communityUserService.deleteCommunityUser(username)
+      .subscribe(resp => {
+        if (resp && resp.status === HttpStatusConstant.OK) {
+          this.notificationService.createSuccessNotification("User account has been deleted.");
+          this.emitRefreshProfile(username);
+        }
+      }, error => {
+        this.notificationService.createErrorNotification("There\'s an error when deleting user account.");
+        console.log(error);
+      })
+  }
+
   private emitRefreshProfile(username: string) {
     this.refreshEventEmitter.emit({username: username});
   }
