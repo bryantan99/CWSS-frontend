@@ -25,8 +25,8 @@ export class ResetPasswordComponent implements OnInit {
               private router: Router) {
   }
 
-  get emailFormControl() {
-    return this.resetForm.get('email') as FormControl;
+  get usernameFormControl() {
+    return this.resetForm.get('username') as FormControl;
   }
 
   get otpFormControl() {
@@ -45,7 +45,7 @@ export class ResetPasswordComponent implements OnInit {
     this.currentStep = 0;
 
     this.resetForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       otp: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
@@ -55,7 +55,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   requestPasswordReset() {
-    this.passwordResetService.requestPasswordReset(this.emailFormControl.value).subscribe(resp => {
+    this.passwordResetService.requestPasswordReset(this.usernameFormControl.value).subscribe(resp => {
       if (resp) {
         if (resp.status === HttpStatusConstant.OK) {
           this.currentStep = this.currentStep + 1;
@@ -71,7 +71,7 @@ export class ResetPasswordComponent implements OnInit {
   validateOtp() {
     //  Send request to backend
     const obj = {
-      email: this.emailFormControl.value,
+      username: this.usernameFormControl.value,
       otp: this.otpFormControl.value
     }
 

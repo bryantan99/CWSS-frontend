@@ -18,14 +18,14 @@ export class PasswordResetService {
   constructor(private http: HttpClient) {
   }
 
-  requestPasswordReset(email: string): Observable<ResponseModel<any>> {
+  requestPasswordReset(username: string): Observable<ResponseModel<any>> {
     const param = {
-      email: email
+      username: username
     }
     return this.http.post<ResponseModel<any>>(this.REQUEST_RESET_PASSWORD, param);
   }
 
-  validateOtp(form: { otp: string; email: string }): Observable<ResponseModel<any>> {
+  validateOtp(form: { otp: string; username: string }): Observable<ResponseModel<any>> {
     return this.http.post<ResponseModel<any>>(this.VALIDATE_OTP, form);
   }
 
