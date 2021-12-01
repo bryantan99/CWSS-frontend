@@ -1,12 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {SignupService} from "../signup.service";
-import {SignupHealthFormComponent} from "../signup-health-form/signup-health-form.component";
-import {NzNotificationService} from "ng-zorro-antd/notification";
 import {SignupPersonalDetailFormComponent} from "../signup-personal-detail-form/signup-personal-detail-form.component";
 import {SignupAddressFormComponent} from "../signup-address-form/signup-address-form.component";
-import {SignupOccupationFormComponent} from "../signup-occupation-form/signup-occupation-form.component";
 import {Router} from "@angular/router";
+import {NotificationService} from "../../shared/services/notification.service";
 
 @Component({
   selector: 'app-signup',
@@ -16,37 +14,25 @@ export class SignupComponent implements OnInit {
 
   @ViewChild(SignupPersonalDetailFormComponent) personalDetailFormComponent: SignupPersonalDetailFormComponent;
   @ViewChild(SignupAddressFormComponent) addressFormComponent: SignupAddressFormComponent;
-  @ViewChild(SignupOccupationFormComponent) occupationFormComponent: SignupOccupationFormComponent;
-  @ViewChild(SignupHealthFormComponent) healthFormComponent: SignupHealthFormComponent;
 
   form: FormGroup;
-  stepIndex: number = 0;
-
-  showInfoPage: boolean = true;
-  showPersonalDetailForm: boolean = false;
-  showAddressForm: boolean = false;
-  showOccupationForm: boolean = false;
-  showHealthForm: boolean = false;
 
   constructor(private fb: FormBuilder,
               private signupService: SignupService,
-              private notificationService: NzNotificationService,
-              private router: Router) { }
+              private notificationService: NotificationService,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       personalDetail: new FormControl(""),
       address: new FormControl(""),
-      occupation: new FormControl(""),
-      health: new FormControl()
     });
   }
 
   submitForm() {
     this.form.controls['personalDetail'].updateValueAndValidity({emitEvent: false});
     this.form.controls['address'].updateValueAndValidity({emitEvent: false});
-    this.form.controls['occupation'].updateValueAndValidity({emitEvent: false});
-    this.form.controls['health'].updateValueAndValidity({emitEvent: false});
 
     if (!this.form.valid) {
       const invalidFormList = this.filterInvalidForm();
@@ -56,11 +42,12 @@ export class SignupComponent implements OnInit {
 
     this.signupService.registerAccount(this.form.value).subscribe(resp => {
       if (resp) {
-        this.displaySignUpSuccessfulNotification();
+        this.notificationService.createSuccessNotification("You've successfully registered an account!");
         this.router.navigate(['login']);
       }
     }, error => {
-      this.notificationService.error("Error", "There's an error when submitting form.");
+      const msg = error && error.error && error.error.message ? error.error.message : "There's an error when submitting form.";
+      this.notificationService.createErrorNotification(msg);
     });
   }
 
@@ -79,54 +66,11 @@ export class SignupComponent implements OnInit {
     return formName;
   }
 
-  movePage(newIndex: number) {
-    this.stepIndex = newIndex;
-    this.displayChildForm(newIndex);
-  }
-
-  addDiseaseFormGroup() {
-    this.healthFormComponent.addDiseaseFormGroup();
-  }
-
   private displayInvalidFormNotification(invalidForms: string[]) {
     let errorMsg = "The following form(s) has invalid input fields. Please double check the form.<br/>";
     invalidForms.forEach(name => {
       errorMsg += "- " + name + "<br/>"
     })
-
-    this.notificationService.create(
-      'error',
-      'Form is invalid',
-      errorMsg
-    )
-  }
-
-  private displayChildForm(newIndex: number) {
-    this.showInfoPage = newIndex === 0;
-    this.showPersonalDetailForm = newIndex === 1;
-    this.showAddressForm = newIndex === 2;
-    this.showOccupationForm = newIndex === 3;
-    this.showHealthForm = newIndex === 4;
-  }
-
-  private displaySignUpSuccessfulNotification() {
-    const title: string = "Form is submitted!";
-    const content: string = "Your submission will be reviewed by the admin. Please schedule an appointment with the admin " +
-      "to review the submission. You should bring along supporting documents to support your details provided in occupation and health section."
-    this.notificationService.success(title, content);
-  }
-
-  formIsValid(): boolean {
-    if (this.stepIndex === 1) {
-      return this.personalDetailFormComponent.getValidity();
-    } else if (this.stepIndex === 2) {
-      return this.addressFormComponent.getValidity();
-    } else if (this.stepIndex === 3) {
-      return this.occupationFormComponent.getValidity();
-    } else if (this.stepIndex === 4) {
-      return this.healthFormComponent.getValidity();
-    } else {
-      return true;
-    }
+    this.notificationService.createErrorNotification(errorMsg)
   }
 }

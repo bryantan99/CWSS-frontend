@@ -10,7 +10,6 @@ import {SignupAddressFormComponent} from './signup-address-form/signup-address-f
 import {SignupOccupationFormComponent} from './signup-occupation-form/signup-occupation-form.component';
 import {SignupHealthFormComponent} from './signup-health-form/signup-health-form.component';
 import {CommunityUserComponent} from './community-user/community-user.component';
-import {SignupInfoComponent} from './signup-info/signup-info.component';
 import {AdminManagementComponent} from "./admin/admin-management/admin-management.component";
 import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component";
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -25,7 +24,6 @@ import { CommunityUserGraphComponent } from './community-user-graph/community-us
     SignupOccupationFormComponent,
     SignupHealthFormComponent,
     CommunityUserComponent,
-    SignupInfoComponent,
     AdminManagementComponent,
     AdminDetailComponent,
     ResetPasswordComponent,

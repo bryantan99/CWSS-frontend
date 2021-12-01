@@ -66,7 +66,7 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    console.log("Address Form validation", c);
+    console.log("Validating address form.", this.addressForm.valid);
     return this.addressForm.valid ? null : {
       invalidForm: {
         valid: false,

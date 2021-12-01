@@ -1,22 +1,16 @@
 <form [formGroup]="form">
-  <app-signup-info [isVisible]="showInfoPage"></app-signup-info>
-  <app-signup-personal-detail-form [isSignUp]="true" [isVisible]="showPersonalDetailForm" formControlName="personalDetail"></app-signup-personal-detail-form>
-  <app-signup-address-form [isVisible]="showAddressForm" formControlName="address"></app-signup-address-form>
-  <app-signup-occupation-form [isVisible]="showOccupationForm" formControlName="occupation"></app-signup-occupation-form>
-  <app-signup-health-form [isSignUp]="true" [isVisible]="showHealthForm" [parentDiseaseListFormValues]="form.get('health').value?.diseaseList"
-                          formControlName="health"></app-signup-health-form>
+  <h4>Personal Detail</h4>
+  <nz-divider></nz-divider>
+  <app-signup-personal-detail-form [isVisible]="true" formControlName="personalDetail"></app-signup-personal-detail-form>
 
-  <nz-row>
-    <nz-col [nzSpan]="8">
-      <button nz-button nzType="primary" class="me-2" *ngIf="stepIndex !== 0" (click)="movePage(this.stepIndex - 1)">Previous</button>
-    </nz-col>
-    <nz-col [nzSpan]="8" class="text-center">
-      <button *ngIf="stepIndex === 4" nz-button nzType="default" (click)="addDiseaseFormGroup()">Add Disease</button>
-    </nz-col>
-    <nz-col [nzSpan]="8">
-      <button nz-button nzType="primary" class="float-end me-2" *ngIf="stepIndex !== 4" [disabled]="!formIsValid()" (click)="movePage(this.stepIndex + 1)">Next</button>
-      <button nz-button nzType="primary" class="float-end" *ngIf="stepIndex === 4" [disabled]="!formIsValid()" (click)="submitForm()">Register</button>
-    </nz-col>
-  </nz-row>
+  <br>
 
+  <h4>Address</h4>
+  <nz-divider></nz-divider>
+  <app-signup-address-form [isVisible]="true" formControlName="address"></app-signup-address-form>
+
+  <nz-space>
+    <button nz-button nzType="primary" *nzSpaceItem (click)="submitForm()">Register
+    </button>
+  </nz-space>
 </form>

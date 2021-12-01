@@ -8,12 +8,14 @@ import {
   Validators
 } from "@angular/forms";
 import {
+  nricValidator,
   passwordValidator,
   phoneNumberValidator
 } from "../../shared/validators/custom-validators";
 import {uniqueEmailValidator, uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
 import {AuthService} from "../../auth/auth.service";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
+import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 
 @Component({
   selector: 'app-signup-personal-detail-form',
@@ -34,21 +36,12 @@ import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAccessor, Validators {
 
   @Input('isVisible') isVisible: boolean;
-  @Input('isSignUp') isSignUp: boolean;
   personalDetailForm: FormGroup;
-
-  ETHNIC_DROPDOWN = DropdownConstant.ETHNIC_DROPDOWN;
+  readonly GENDER_CHOICE: DropdownChoiceModel[] = DropdownConstant.GENDER_DROPDOWN;
+  readonly ETHNIC_DROPDOWN: DropdownChoiceModel[] = DropdownConstant.ETHNIC_DROPDOWN;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService) {
-  }
-
-  get usernameFormControl() {
-    return this.personalDetailForm.get('username') as FormControl;
-  }
-
-  get emailFormControl() {
-    return this.personalDetailForm.get('email') as FormControl;
   }
 
   get passwordFormControl() {
@@ -60,28 +53,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   }
 
   ngOnInit(): void {
-    this.personalDetailForm = this.fb.group({
-      fullName: ['', Validators.required],
-      nric: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      username: [''],
-      password: [''],
-      confirmPassword: [''],
-      gender: ['', Validators.required],
-      contactNo: ['', [Validators.required, phoneNumberValidator()]],
-      ethnic: ['', Validators.required]
-    })
-
-    if (this.isSignUp) {
-      this.usernameFormControl.setValidators([Validators.required]);
-      this.usernameFormControl.setAsyncValidators([uniqueUsernameValidator(this.authService)]);
-      this.emailFormControl.setAsyncValidators([uniqueEmailValidator(this.authService)]);
-      this.passwordFormControl.setValidators([Validators.required, passwordValidator()]);
-      this.confirmPasswordFormControl.setValidators([Validators.required]);
-    } else {
-      this.passwordFormControl.disable();
-      this.confirmPasswordFormControl.disable();
-    }
+    this.initForm();
   }
 
   onChange: any = () => {};
@@ -130,5 +102,19 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
     if (passwordValue !== confirmPasswordValue) {
       this.confirmPasswordFormControl.setErrors({passwordNotMatch: true})
     }
+  }
+
+  private initForm() {
+    this.personalDetailForm = this.fb.group({
+      fullName: ['', Validators.required],
+      nric: ['', [Validators.required, nricValidator()]],
+      username: ['', [Validators.required], [uniqueUsernameValidator(this.authService)]],
+      password: ['', [Validators.required, passwordValidator()]],
+      confirmPassword: ['', [Validators.required]],
+      contactNo: ['', [Validators.required, phoneNumberValidator()]],
+      email: ['', [Validators.email], [uniqueEmailValidator(this.authService)]],
+      gender: [''],
+      ethnic: ['']
+    });
   }
 }

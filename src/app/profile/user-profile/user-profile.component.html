@@ -336,9 +336,9 @@
 <ng-template #accountNotActivatedTemplate>
   <p nz-typography>Account details are provided by the user and has not been verified.<br> Please verify the details
     before approving the account.</p>
-  <button nz-button nzType="primary" class="me-2 mb-2" (click)="approveAccount(userProfile?.personalDetail?.username)">
+  <button nz-button nzType="primary" class="me-2 mb-2" (click)="approveAccount(userProfile?.username)">
     Approve
   </button>
-  <button nz-button nzDanger nzType="primary" (click)="rejectAccount(userProfile?.personalDetail?.username)">Reject
+  <button nz-button nzDanger nzType="primary" (click)="rejectAccount(userProfile?.username)">Reject
   </button>
 </ng-template>

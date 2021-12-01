@@ -1,8 +1,8 @@
 <div *ngIf="isVisible">
   <ng-container [formGroup]="addressForm">
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 1</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="addressLine1ErrorTpl">
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Address Line 1</nz-form-label>
+      <nz-form-control [nzSpan]="24" [nzErrorTip]="addressLine1ErrorTpl">
         <input nz-input type="text" formControlName="addressLine1">
         <ng-template #addressLine1ErrorTpl let-control>
           <p>
@@ -13,8 +13,8 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Address Line 2</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="addressLine2ErrorTpl">
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Address Line 2</nz-form-label>
+      <nz-form-control [nzSpan]="24" [nzErrorTip]="addressLine2ErrorTpl">
         <input nz-input type="text" formControlName="addressLine2">
         <ng-template #addressLine2ErrorTpl let-control>
           <p>
@@ -25,8 +25,8 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">Post Code</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="postCodeErrorTpl">
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Post Code</nz-form-label>
+      <nz-form-control [nzSpan]="24" [nzErrorTip]="postCodeErrorTpl">
         <input nz-input type="text" [minlength]="5" [maxlength]="5" formControlName="postcode">
         <ng-template #postCodeErrorTpl let-control>
           <p>
@@ -38,8 +38,8 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">City</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="cityErrorTpl">
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>City</nz-form-label>
+      <nz-form-control [nzSpan]="24" [nzErrorTip]="cityErrorTpl">
         <input nz-input type="text" formControlName="city">
         <ng-template #cityErrorTpl let-control>
           <p>
@@ -50,8 +50,8 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzXs]="24" [nzMd]="4">State</nz-form-label>
-      <nz-form-control [nzXs]="24" [nzMd]="20" [nzErrorTip]="stateErrorTpl">
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>State</nz-form-label>
+      <nz-form-control [nzSpan]="24" [nzErrorTip]="stateErrorTpl">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a state" formControlName="state">
           <nz-option *ngFor="let state of STATE_FEDERAL_TERRITORY_DROPDOWN" [nzLabel]="state.text" [nzValue]="state.value"></nz-option>
         </nz-select>

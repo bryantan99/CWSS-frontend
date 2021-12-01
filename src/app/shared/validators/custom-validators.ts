@@ -52,3 +52,14 @@ export function postCodeValidator(): ValidatorFn {
   }
 }
 
+export function nricValidator(): ValidatorFn {
+  return (control: FormControl): {[key: string]: boolean} | null => {
+    const digitsOnlyRegex = /^[0-9]*$/;
+    const nric: string = control.value;
+    if (nric && (nric.search(digitsOnlyRegex) == -1 || nric.length !== 12 )) {
+      return {invalidNric: true};
+    }
+    return null;
+  }
+}
+
