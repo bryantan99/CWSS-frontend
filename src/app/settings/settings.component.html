@@ -1,5 +1,5 @@
 <nz-row>
-  <nz-col [nzSm]="24" [nzMd]="4" class="mb-4">
+  <nz-col [nzSm]="24" [nzMd]="4" class="mb-4 pe-4">
     <nz-card>
       <form nz-form [formGroup]="form" class="w-100">
         <nz-form-item>
@@ -13,9 +13,10 @@
       </form>
     </nz-card>
   </nz-col>
-  <nz-col [nzSm]="24" [nzMd]="20" class="ps-4">
+  <nz-col [nzSm]="24" [nzMd]="20">
     <ng-container [ngSwitch]="optionIdFormControl.value">
       <app-account-setting *ngSwitchCase="'account'"></app-account-setting>
+      <app-activity-log *ngSwitchCase="'activity-log'"></app-activity-log>
     </ng-container>
   </nz-col>
 </nz-row>

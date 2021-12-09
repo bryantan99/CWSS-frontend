@@ -6,13 +6,15 @@ import {UserModule} from "../user/user.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AccountSettingComponent } from './account-setting/account-setting.component';
 import {RouterModule} from "@angular/router";
+import { ActivityLogComponent } from './activity-log/activity-log.component';
 
 
 
 @NgModule({
   declarations: [
     SettingsComponent,
-    AccountSettingComponent
+    AccountSettingComponent,
+    ActivityLogComponent
   ],
     imports: [
         CommonModule,
