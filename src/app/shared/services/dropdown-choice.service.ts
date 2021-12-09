@@ -17,6 +17,7 @@ export class DropdownChoiceService {
   private readonly GET_APPOINTMENT_AVAILABLE_TIMESLOT = this.API_SERVER_URL + "/dropdown/appointment/timeslot";
   private readonly GET_ZONE_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/zoneId";
   private readonly GET_ASSISTANCE_CATEGORY_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/assistance-category";
+  private readonly GET_MODULE_DROPDOWN_CHOICE = this.API_SERVER_URL + "/dropdown/module";
 
   constructor(private http: HttpClient) { }
 
@@ -47,5 +48,10 @@ export class DropdownChoiceService {
 
   getAssistanceCategoryDropdown(): Observable<ResponseModel<any>> {
     return this.http.get<ResponseModel<any>>(this.GET_ASSISTANCE_CATEGORY_DROPDOWN_CHOICE);
+  }
+
+  getModuleDropdownChoices(): Observable<ResponseModel<any>> {
+    return this.http.get<ResponseModel<any>>(this.GET_MODULE_DROPDOWN_CHOICE);
+
   }
 }

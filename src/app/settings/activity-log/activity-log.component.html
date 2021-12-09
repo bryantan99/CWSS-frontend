@@ -1,0 +1,65 @@
+<form nz-form [formGroup]="form">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" class="fw-bold">Module</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select formControlName="moduleName" [nzPlaceHolder]="'Select a module'" (ngModelChange)="getLog()">
+        <nz-option *ngFor="let choice of MODULE_LIST" [nzLabel]="choice.text" [nzValue]="choice.value"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<nz-table
+  #categoryTable
+  [nzLoading]="isLoading"
+  [nzData]="logList"
+  [nzScroll]="{x: '500px'}">
+  <thead>
+  <tr>
+    <th nzWidth="80px">Audit ID</th>
+    <th nzWidth="120px">Module</th>
+    <th nzWidth="120px">Action Maker</th>
+    <th nzWidth="120px">Action Date</th>
+    <th nzWidth="300px">Action Name</th>
+    <th nzWidth="120px">Action Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of categoryTable.data">
+    <td>{{ data?.auditId || "-" }}</td>
+    <td>{{ data?.module || "-"}}</td>
+    <td>{{ data?.actionBy || "-" }}</td>
+    <td>{{ (data?.actionDate | date: NZ_DATE_FORMAT) || "-"}}</td>
+    <td>{{ data?.actionName || "-" }}</td>
+    <td>
+      <button *ngIf="data?.actionDescriptions; else dashTpl" nz-button nzType="default" (click)="viewDesc(data?.auditId)">View</button>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal *ngIf="descriptionModelIsVisible && selectedObj"
+          [(nzVisible)]="descriptionModelIsVisible && selectedObj"
+          [nzTitle]="'Action Description'"
+          [nzCancelText]="null"
+          (nzOnOk)="closeModal()"
+          (nzOnCancel)="closeModal()">
+  <ng-container *nzModalContent>
+    <nz-descriptions nzBordered
+                     nzLayout="vertical"
+                     [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }">
+      <nz-descriptions-item nzTitle="Audit ID">{{selectedObj.auditId || "-"}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Module">{{selectedObj.module || "-"}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Action Maker">{{selectedObj.actionBy || "-"}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Action Date">{{(selectedObj.actionDate | date: NZ_DATE_FORMAT) || "-"}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Action Name" nzSpan="2">{{selectedObj.actionName || "-"}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Action Description" nzSpan="2">
+        <ul *ngIf="selectedObj.actionDescriptions; else dashTpl">
+          <li *ngFor="let desc of selectedObj.actionDescriptions" [innerHTML]="desc"></li>
+        </ul>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </ng-container>
+</nz-modal>
+
+<ng-template #dashTpl>-</ng-template>
