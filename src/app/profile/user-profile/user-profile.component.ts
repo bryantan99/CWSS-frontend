@@ -95,7 +95,7 @@ export class UserProfileComponent implements OnInit {
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.notificationService.createSuccessNotification("User account has been deleted.");
-          this.emitRefreshProfile(username);
+          this.router.navigate(['/community-user']);
         }
       }, error => {
         this.notificationService.createErrorNotification("There\'s an error when deleting user account.");
