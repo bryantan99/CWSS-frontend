@@ -4,8 +4,8 @@
   <div *nzModalContent>
     <form nz-form [formGroup]="changeAppointmentDatetimeForm">
       <nz-form-item>
-        <nz-form-label [nzXs]="24" [nzMd]="8" class="fw-bold">Scheduled Datetime</nz-form-label>
-        <nz-form-control [nzXs]="24" [nzMd]="16">
+        <nz-form-label [nzSpan]="24" class="fw-bold">Scheduled Datetime</nz-form-label>
+        <nz-form-control [nzSpan]="24">
           {{ (appointment?.startDatetime | date: 'short') || "-" }}
           - {{ (appointment?.endDatetime | date: 'short') || "-" }}
         </nz-form-control>
