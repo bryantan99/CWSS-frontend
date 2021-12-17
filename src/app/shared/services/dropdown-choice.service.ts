@@ -34,10 +34,12 @@ export class DropdownChoiceService {
     return this.http.get<ResponseModel<any>>(this.GET_COMMUNITY_USER_DROPDOWN_CHOICE, {params: params});
   }
 
-  getAppointmentTimeslotChoices(date: Date, adminUsername?: any) {
+  getAppointmentTimeslotChoices(date: Date, adminUsername?: string, username?: string) {
     let params = new HttpParams().set("date", format(parseISO(date.toISOString()), 'yyyyMMdd'));
     if (adminUsername) {
-     params = params.set("adminUsername", adminUsername);
+      params = params.set("adminUsername", adminUsername);
+    } else {
+      params = params.set("username", username);
     }
     return this.http.get<ResponseModel<any>>(this.GET_APPOINTMENT_AVAILABLE_TIMESLOT, {params: params});
   }

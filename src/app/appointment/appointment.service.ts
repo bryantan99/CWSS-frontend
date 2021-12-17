@@ -4,6 +4,9 @@ import {Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
 import {environment} from "../../environments/environment";
 import {format, parseISO} from "date-fns";
+import {UpdateAppointmentStatusFormModel} from "../shared/models/update-appointment-status-form-model";
+import {ConfirmationFormModel} from "../shared/models/confirmation-form-model";
+import {UpdateDatetimeForm} from "../shared/models/update-datetime-form";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +22,7 @@ export class AppointmentService {
   private readonly CONFIRM_APPOINTMENT = this.APP_URL + "/appointment/confirm";
   private readonly SCHEDULE_APPOINTMENT = this.APP_URL + "/appointment";
   private readonly GET_SCHEDULED_APPOINTMENT = this.APP_URL + "/appointment/upcoming";
+  private readonly UPDATE_APPOINTMENT_STATUS = this.APP_URL + "/appointment/update-status";
 
   constructor(private http: HttpClient) {
   }
@@ -55,11 +59,11 @@ export class AppointmentService {
     return this.http.delete<ResponseModel<any>>(url);
   }
 
-  updateAppointmentDatetime(form: { datetime: Date; appointmentId: any }) {
+  updateAppointmentDatetime(form: UpdateDatetimeForm) {
     return this.http.post<ResponseModel<any>>(this.UPDATE_APPOINTMENT_DATETIME, form);
   }
 
-  confirmAppointment(form: { appointmentId: number }) {
+  confirmAppointment(form: ConfirmationFormModel) {
     return this.http.post<ResponseModel<any>>(this.CONFIRM_APPOINTMENT, form);
   }
 
@@ -73,5 +77,9 @@ export class AppointmentService {
       return this.http.get<ResponseModel<any>>(this.GET_SCHEDULED_APPOINTMENT, {params: params});
     }
     return this.http.get<ResponseModel<any>>(this.GET_SCHEDULED_APPOINTMENT);
+  }
+
+  updateAppointmentStatus(form: UpdateAppointmentStatusFormModel): Observable<ResponseModel<any>> {
+    return this.http.post<ResponseModel<any>>(this.UPDATE_APPOINTMENT_STATUS, form);
   }
 }

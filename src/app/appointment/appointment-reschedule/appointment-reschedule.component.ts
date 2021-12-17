@@ -16,6 +16,7 @@ import {AppointmentService} from "../appointment.service";
 export class AppointmentRescheduleComponent implements OnInit {
 
   @Input() appointment: any;
+  @Input() assistanceId: number = null;
   @Input() isVisible: boolean = false;
   @Output() refreshListEventEmitter: EventEmitter<{refreshList: boolean}> = new EventEmitter<{refreshList: boolean}>();
   @Output() modalVisibilityHasChange: EventEmitter<{modalIsVisible: boolean}> = new EventEmitter<{modalIsVisible: boolean}>();
@@ -62,7 +63,8 @@ export class AppointmentRescheduleComponent implements OnInit {
 
     const date = new Date(this.changeAppointmentDatetimeForm.controls['date'].value);
     const adminUsername = this.isAdmin ? this.user.username : null;
-    this.dropdownChoiceService.getAppointmentTimeslotChoices(date, adminUsername).subscribe(resp => {
+    const username = !this.isAdmin ? this.user.username : null;
+    this.dropdownChoiceService.getAppointmentTimeslotChoices(date, adminUsername, username).subscribe(resp => {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.timeslotList = resp.data ? resp.data : [];
       }
@@ -96,6 +98,7 @@ export class AppointmentRescheduleComponent implements OnInit {
 
     const form = {
       appointmentId: this.appointment.appointmentId,
+      assistanceId: this.assistanceId ? this.assistanceId : null,
       appointmentLastUpdatedDate: this.appointment.lastUpdatedDate,
       datetime: date
     }

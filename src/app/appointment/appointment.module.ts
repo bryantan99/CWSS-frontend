@@ -12,21 +12,24 @@ import { PendingAppointmentComponent } from './pending-appointment/pending-appoi
 import { MyAppointmentComponent } from './my-appointment/my-appointment.component';
 
 @NgModule({
-  declarations: [
-    AppointmentMngmtComponent,
-    AppointmentFormComponent,
-    AppointmentScheduleComponent,
-    AppointmentTableComponent,
-    AppointmentRescheduleComponent,
-    PendingAppointmentComponent,
-    MyAppointmentComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    FormsModule
-  ]
+    declarations: [
+        AppointmentMngmtComponent,
+        AppointmentFormComponent,
+        AppointmentScheduleComponent,
+        AppointmentTableComponent,
+        AppointmentRescheduleComponent,
+        PendingAppointmentComponent,
+        MyAppointmentComponent
+    ],
+    exports: [
+        AppointmentRescheduleComponent
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        FormsModule
+    ]
 })
 export class AppointmentModule { }

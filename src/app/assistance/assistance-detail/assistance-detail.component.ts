@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AssistanceService} from "../assistance.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {NotificationService} from "../../shared/services/notification.service";
@@ -13,6 +13,9 @@ import {GeneralConstant} from "../../shared/constants/general-constant";
 import {User} from "../../shared/models/user";
 import {RoleConstant} from "../../shared/constants/role-constant";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
+import {AppointmentService} from "../../appointment/appointment.service";
+import {ConfirmationFormModel} from "../../shared/models/confirmation-form-model";
+import {AssistanceModel} from "../../shared/models/assistance-model";
 
 @Component({
   selector: 'app-assistance-detail',
@@ -21,7 +24,7 @@ import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 export class AssistanceDetailComponent implements OnInit {
 
   assistanceId: number;
-  assistanceRecord: any;
+  assistanceRecord: AssistanceModel;
   isLoading: boolean = false;
   user: User;
   isAdmin: boolean = false;
@@ -37,13 +40,20 @@ export class AssistanceDetailComponent implements OnInit {
   CATEGORY_DROPDOWN: DropdownChoiceModel[] = [];
   rejectRequestModalIsVisible: boolean = false;
   rejectForm: FormGroup;
+  rescheduleDatetimeModalIsVisible: boolean = false;
+  selectedAppointment: any;
+  appointmentStatusModalIsVisible: boolean = false;
+  requestDecisionForm: FormGroup;
+  updateAppointmentAndAssistanceStatusIsLoading: boolean = false;
 
   constructor(private assistanceService: AssistanceService,
               private notificationService: NotificationService,
               private route: ActivatedRoute,
+              private router: Router,
               private location: Location,
               private authService: AuthService,
               private dropdownChoiceService: DropdownChoiceService,
+              private appointmentService: AppointmentService,
               private fb: FormBuilder) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
@@ -53,6 +63,7 @@ export class AssistanceDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initForm();
     this.route.queryParams.subscribe(params => {
       if (params['assistanceId']) {
         this.assistanceId = params['assistanceId'];
@@ -63,7 +74,7 @@ export class AssistanceDetailComponent implements OnInit {
     });
   }
 
-  private getAssistanceDetail() {
+  getAssistanceDetail() {
     this.isLoading = true;
     this.assistanceService.findAssistanceRecordDetail(this.assistanceId)
       .pipe(finalize(() => {
@@ -76,12 +87,10 @@ export class AssistanceDetailComponent implements OnInit {
       }, error => {
         this.isLoading = false;
         this.notificationService.createErrorNotification("There\'s an error when retrieving assistance record detail.");
-        console.log(error.error);
+        if (error.error && error.error.status === HttpStatusConstant.NOT_FOUND) {
+          this.router.navigate(['/assistance']);
+        }
       });
-  }
-
-  navigateToPreviousPage() {
-    this.location.back();
   }
 
   deleteRec(assistanceId: any) {
@@ -172,21 +181,6 @@ export class AssistanceDetailComponent implements OnInit {
     });
   }
 
-  acceptRequest(assistanceId: number) {
-    const form = {
-      assistanceId: assistanceId
-    };
-    this.assistanceService.acceptAssistanceRequest(form).subscribe(resp => {
-      if (resp && resp.status === HttpStatusConstant.OK) {
-        this.notificationService.createSuccessNotification('Successfully accepted the assistance request [ID: ' + assistanceId + "].");
-        this.getAssistanceDetail();
-      }
-    }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when accepting assistance request.";
-      this.notificationService.createErrorNotification(msg);
-    });
-  }
-
   openRejectAssistanceModal() {
     this.initRejectForm();
     this.rejectRequestModalIsVisible = true;
@@ -241,5 +235,104 @@ export class AssistanceDetailComponent implements OnInit {
       const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving person-in-charge dropdown choices list.";
       this.notificationService.createErrorNotification(msg);
     })
+  }
+
+  cancelReschedule() {
+    this.rescheduleDatetimeModalIsVisible = false;
+  }
+
+  openRescheduleModel() {
+    this.appointmentService.getAppointment(this.assistanceRecord.appointmentModel.appointmentId).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.selectedAppointment = resp.data;
+        this.rescheduleDatetimeModalIsVisible = true;
+      }
+    });
+  }
+
+  acceptAppointment(appointmentId: any) {
+    const form: ConfirmationFormModel = {
+      appointmentId: appointmentId,
+      assistanceId: this.assistanceId,
+      appointmentLastUpdatedDate: this.assistanceRecord.appointmentModel.lastUpdatedDate
+    };
+
+    this.appointmentService.confirmAppointment(form).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.notificationService.createSuccessNotification("Successfully confirmed the appointment.");
+        this.getAssistanceDetail();
+      }
+    }, error => {
+      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when confirming appointment.";
+      this.notificationService.createErrorNotification(msg);
+    })
+  }
+
+  modalVisibilityHasChange(data: { modalIsVisible: boolean }) {
+    this.rescheduleDatetimeModalIsVisible = data.modalIsVisible;
+  }
+
+  openUpdateAppointmentStatusModal() {
+    this.initDecisionRequestForm();
+    this.appointmentStatusModalIsVisible = true;
+  }
+
+  private initDecisionRequestForm() {
+    this.requestDecisionForm = this.fb.group({
+      appointmentId: [this.assistanceRecord.appointmentModel.appointmentId, [Validators.required]],
+      appointmentStatus: ['', [Validators.required]],
+      assistanceId: [this.assistanceId, [Validators.required]],
+      assistanceStatus: [{
+        value: '',
+        disabled: true
+      }, [Validators.required]],
+      reason: [{
+        value: '',
+        disabled: true
+      }, [Validators.required]]
+    });
+  }
+
+  appointmentStatusHasChange() {
+    const value = this.requestDecisionForm.controls['appointmentStatus'].value;
+    if (value === 'completed') {
+      this.requestDecisionForm.patchValue({
+        assistanceStatus: ''
+      });
+      this.requestDecisionForm.controls['assistanceStatus'].enable();
+      this.requestDecisionForm.controls['reason'].enable();
+    } else {
+      this.requestDecisionForm.patchValue({
+        assistanceStatus: 'cancelled',
+        reason: ''
+      });
+      this.requestDecisionForm.controls['assistanceStatus'].disable();
+      this.requestDecisionForm.controls['reason'].disable();
+    }
+  }
+
+  closeRequestDecisionModal() {
+    this.appointmentStatusModalIsVisible = false;
+  }
+
+  updateAppointmentAndAssistanceStatus() {
+    Object.keys(this.requestDecisionForm.controls).forEach(key => {
+      this.requestDecisionForm.controls[key].markAsDirty();
+      this.requestDecisionForm.controls[key].markAsTouched();
+      this.requestDecisionForm.controls[key].updateValueAndValidity();
+    });
+
+    if (this.requestDecisionForm.valid) {
+      this.appointmentService.updateAppointmentStatus(this.requestDecisionForm.value).subscribe(resp => {
+        if (resp && resp.status === HttpStatusConstant.OK) {
+          this.notificationService.createSuccessNotification("Successfully updated appointment status and assistance status.");
+          this.closeRequestDecisionModal();
+          this.getAssistanceDetail();
+        }
+      }, error => {
+        const msg = error && error.error && error.error.message ? error.error.message : 'There\'s an error when updating appointment status and assistance status.';
+        this.notificationService.createErrorNotification(msg);
+      })
+    }
   }
 }

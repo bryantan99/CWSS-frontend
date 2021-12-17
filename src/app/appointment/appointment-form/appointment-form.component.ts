@@ -153,7 +153,8 @@ export class AppointmentFormComponent implements OnInit {
 
     const date = new Date(this.form.controls['date'].value);
     const adminUsername = this.form.controls['adminUsername'].value ? this.form.controls['adminUsername'].value : null;
-    this.dropdownChoiceService.getAppointmentTimeslotChoices(date, adminUsername).subscribe(resp => {
+    const username = !this.isAdmin ? this.user.username : null;
+    this.dropdownChoiceService.getAppointmentTimeslotChoices(date, adminUsername, username).subscribe(resp => {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.timeslotList = resp.data ? resp.data : [];
       }

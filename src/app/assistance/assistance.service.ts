@@ -3,6 +3,8 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
 import {environment} from "../../environments/environment";
+import {AssistanceRequestFormModel} from "../shared/models/assistance-request-form-model";
+import {AssistanceUpdateFormModel} from "../shared/models/assistance-update-form-model";
 
 @Injectable({
   providedIn: 'root'
@@ -52,8 +54,8 @@ export class AssistanceService {
     return this.http.get<ResponseModel<any[]>>(this.FIND_USER_ASSISTANCE_RECORD, {params: param});
   }
 
-  addAssistance(value: any): Observable<ResponseModel<any>> {
-    return this.http.post<ResponseModel<any>>(this.ADD_ASSISTANCE_RECORD, value);
+  addAssistance(form: AssistanceRequestFormModel): Observable<ResponseModel<any>> {
+    return this.http.post<ResponseModel<any>>(this.ADD_ASSISTANCE_RECORD, form);
   }
 
   deleteRec(assistanceId: number): Observable<ResponseModel<any>> {
@@ -119,7 +121,7 @@ export class AssistanceService {
     return this.http.get<ResponseModel<any>>(this.GET_HANDLED_ASSISTANCE_RECORDS, {params: params});
   }
 
-  acceptAssistanceRequest(form: any): Observable<ResponseModel<any>> {
+  acceptAssistanceRequest(form: AssistanceUpdateFormModel): Observable<ResponseModel<any>> {
     return this.http.post<ResponseModel<any>>(this.ACCEPT_ASSISTANCE_REQUEST, form);
   }
 

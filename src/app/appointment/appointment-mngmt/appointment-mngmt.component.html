@@ -2,11 +2,11 @@
 <nz-divider></nz-divider>
 
 <nz-tabset nzType="card" [(nzSelectedIndex)]="tabIndex">
-  <nz-tab *ngIf="isAdmin || isSuperAdmin" [nzTitle]="'Pending Appointment'">
-    <app-pending-appointment *ngIf="tabIndex === 0"></app-pending-appointment>
-  </nz-tab>
+<!--  <nz-tab *ngIf="isAdmin || isSuperAdmin" [nzTitle]="'Pending Appointment'">-->
+<!--    <app-pending-appointment *ngIf="tabIndex === 0"></app-pending-appointment>-->
+<!--  </nz-tab>-->
   <nz-tab [nzTitle]="'My Appointment'">
-    <div *ngIf="((isAdmin || isSuperAdmin) && tabIndex === 1 ) || (!isAdmin && !isSuperAdmin && tabIndex === 0)">
+    <div *ngIf="((isAdmin || isSuperAdmin) && tabIndex === 0 ) || (!isAdmin && !isSuperAdmin && tabIndex === 0)">
       <app-appointment-schedule></app-appointment-schedule>
       <app-my-appointment></app-my-appointment>
     </div>

@@ -1,3 +1,8 @@
+<nz-alert nzShowIcon
+          *ngIf="!isAdmin"
+          nzType="info"
+          nzMessage="Please select a meeting datetime to discuss in detail about the assistance requested with the admin."></nz-alert>
+
 <form nz-form [formGroup]="form">
   <nz-form-item *ngIf="isAdmin">
     <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Category ID</nz-form-label>
@@ -41,5 +46,35 @@
     <ng-template #descriptionErrorTpl let-control>
       <ng-container *ngIf="control.hasError('required')">Please select a user!</ng-container>
     </ng-template>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Meeting Date</nz-form-label>
+    <nz-form-control [nzSpan]="24" [nzErrorTip]="dateErrorTpl">
+      <nz-date-picker formControlName="date" (ngModelChange)="initTimeSlotDropdownChoice()" [nzDisabledDate]="disabledDate"></nz-date-picker>
+      <ng-template #dateErrorTpl let-control>
+        <div *ngIf="control.invalid && (control.touched || control.dirty)">
+          <div *ngIf="control.errors?.required">
+            Please select a date!
+          </div>
+        </div>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Meeting Time</nz-form-label>
+    <nz-form-control [nzSpan]="24" [nzErrorTip]="timeErrorTpl">
+      <nz-select nzAllowClear nzShowSearch formControlName="time" [nzPlaceHolder]="form.controls['date'].value ? 'Please select a timeslot' : 'Please select a date first'">
+        <nz-option *ngFor="let choice of timeslotList" [nzLabel]="choice?.text" [nzValue]="choice?.value" [nzDisabled]="choice?.disabled"></nz-option>
+      </nz-select>
+      <ng-template #timeErrorTpl let-control>
+        <div *ngIf="control.invalid && (control.touched || control.dirty)">
+          <div *ngIf="control.errors?.required">
+            Please select a time!
+          </div>
+        </div>
+      </ng-template>
+    </nz-form-control>
   </nz-form-item>
 </form>

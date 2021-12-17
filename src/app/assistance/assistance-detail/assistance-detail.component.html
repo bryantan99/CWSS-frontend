@@ -8,15 +8,25 @@
   </button>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item *ngIf="assistanceRecord?.status ==='pending' && isAdmin">
-        <a (click)="acceptRequest(assistanceRecord?.assistanceId)">Accept Request</a>
+      <li nz-menu-item *ngIf="assistanceRecord?.appointmentModel?.status === 'pending_admin' && isAdmin || assistanceRecord?.appointmentModel?.status === 'pending_user' && !isAdmin">
+        <a (click)="acceptAppointment(assistanceRecord?.appointmentModel?.appointmentId)">Accept Appointment Datetime</a>
       </li>
-      <li nz-menu-item *ngIf="(isAdmin && assistanceRecord?.status !== 'pending') || (assistanceRecord?.status === 'pending' && !isAdmin)">
+      <li nz-menu-item *ngIf="assistanceRecord?.appointmentModel?.status === 'pending_admin' && isAdmin || assistanceRecord?.appointmentModel?.status === 'pending_user' && !isAdmin">
+        <a (click)="openRescheduleModel()">Reschedule Appointment Datetime</a>
+      </li>
+      <li nz-menu-item *ngIf="assistanceRecord?.status === 'pending' && assistanceRecord?.appointmentModel?.status === 'confirmed' && isAdmin">
+        <a (click)="openUpdateAppointmentStatusModal()">Update Appointment Status</a>
+      </li>
+<!--      <li nz-menu-item *ngIf="assistanceRecord?.appointmentStatus === 'completed' && assistanceRecord?.status ==='pending' && isAdmin">-->
+<!--        <a (click)="acceptRequest(assistanceRecord?.assistanceId)">Accept Request</a>-->
+<!--      </li>-->
+      <li nz-menu-item
+          *ngIf="(isAdmin && (assistanceRecord?.appointmentModel == null) || assistanceRecord.status !== 'pending') || (assistanceRecord?.status === 'pending' && !isAdmin)">
         <a (click)="onEditMode()">Update Request</a>
       </li>
-      <li nz-menu-item *ngIf="assistanceRecord?.status === 'pending' && isAdmin">
-        <a (click)="openRejectAssistanceModal()">Reject Request</a>
-      </li>
+<!--      <li nz-menu-item *ngIf="assistanceRecord?.appointmentStatus === 'completed' && assistanceRecord?.status === 'pending' && isAdmin">-->
+<!--        <a (click)="openRejectAssistanceModal()">Reject Request</a>-->
+<!--      </li>-->
       <li nz-menu-item *ngIf="assistanceRecord?.status === 'pending' && !isAdmin">
         <a nz-popconfirm
            nzPopconfirmTitle="Are you sure you want to cancel this request?"
@@ -42,7 +52,8 @@
         <ng-container *ngIf="nzEditForAdmin; else displayCategoryTpl">
           <nz-form-control [nzSpan]="24">
             <nz-select class="w-100" formControlName="categoryId">
-              <nz-option *ngFor="let choice of CATEGORY_DROPDOWN" [nzLabel]="choice?.text" [nzValue]="choice?.value"></nz-option>
+              <nz-option *ngFor="let choice of CATEGORY_DROPDOWN" [nzLabel]="choice?.text"
+                         [nzValue]="choice?.value"></nz-option>
             </nz-select>
           </nz-form-control>
         </ng-container>
@@ -55,6 +66,22 @@
            [queryParams]="{username: assistanceRecord?.username}"
         >{{ assistanceRecord?.userFullName }}
         </a>
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Admin-In-Charge">
+        <ng-container *ngIf="nzEditForAdmin && isSuperAdmin; else displayPicTpl">
+          <nz-form-control [nzSpan]="24" [nzErrorTip]="picErrorTpl">
+            <nz-select class="w-100" nzShowSearch [nzPlaceHolder]="'Choose an admin'" formControlName="personInCharge">
+              <nz-option *ngFor="let choice of adminChoices" [nzValue]="choice?.value"
+                         [nzLabel]="choice?.text"></nz-option>
+            </nz-select>
+            <ng-template #picErrorTpl let-control>
+              <div *ngIf="control.invalid && (control.dirty || control.touched)">
+                <div *ngIf="control.errors?.required">Please select a person in-charge!</div>
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </ng-container>
       </nz-descriptions-item>
 
       <nz-descriptions-item nzTitle="Title">
@@ -89,27 +116,12 @@
         <ng-container *ngIf="nzEditForAdmin; else displayStatusTpl">
           <nz-form-control [nzSpan]="24" [nzErrorTip]="statusErrorTpl">
             <nz-select class="w-100" formControlName="status">
-              <nz-option *ngFor="let choice of ASSISTANCE_REQUEST_STATUS_DROPDOWN" [nzLabel]="choice.text" [nzValue]="choice.value"></nz-option>
+              <nz-option *ngFor="let choice of ASSISTANCE_REQUEST_STATUS_DROPDOWN" [nzLabel]="choice.text"
+                         [nzValue]="choice.value"></nz-option>
             </nz-select>
             <ng-template #statusErrorTpl let-control>
               <div *ngIf="control.invalid && (control.dirty || control.touched)">
                 <div *ngIf="control.errors?.required">Please select a status!</div>
-              </div>
-            </ng-template>
-          </nz-form-control>
-        </ng-container>
-      </nz-descriptions-item>
-
-      <nz-descriptions-item nzTitle="Admin-In-Charge">
-        <ng-container *ngIf="nzEditForAdmin && isSuperAdmin; else displayPicTpl">
-          <nz-form-control [nzSpan]="24" [nzErrorTip]="picErrorTpl">
-            <nz-select class="w-100" nzShowSearch [nzPlaceHolder]="'Choose an admin'" formControlName="personInCharge">
-              <nz-option *ngFor="let choice of adminChoices" [nzValue]="choice?.value"
-                         [nzLabel]="choice?.text"></nz-option>
-            </nz-select>
-            <ng-template #picErrorTpl let-control>
-              <div *ngIf="control.invalid && (control.dirty || control.touched)">
-                <div *ngIf="control.errors?.required">Please select a person in-charge!</div>
               </div>
             </ng-template>
           </nz-form-control>
@@ -136,6 +148,39 @@
     </nz-form-item>
 
   </form>
+
+  <br>
+  <h4>Appointment Detail</h4>
+  <nz-divider></nz-divider>
+
+  <nz-descriptions nzBordered [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }">
+    <nz-descriptions-item nzTitle="Appointment ID">
+      {{assistanceRecord?.appointmentModel?.appointmentId || "-"}}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Status">
+      <div [ngSwitch]="assistanceRecord?.appointmentModel?.status">
+        <nz-tag *ngSwitchCase="'pending_user'" nzColor="gold">Pending User</nz-tag>
+        <nz-tag *ngSwitchCase="'pending_admin'" nzColor="gold">Pending Admin</nz-tag>
+        <nz-tag *ngSwitchCase="'confirmed'" nzColor="green">Confirmed</nz-tag>
+        <nz-tag *ngSwitchCase="'completed'" nzColor="green">Completed</nz-tag>
+        <nz-tag *ngSwitchCase="'cancelled'" nzColor="magenta">Cancelled</nz-tag>
+        <nz-tag *ngSwitchCase="'rejected'" nzColor="magenta">Rejected</nz-tag>
+        <div *ngSwitchDefault>-</div>
+      </div>
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Date">
+      {{(assistanceRecord?.appointmentModel?.startDatetime | date: 'mediumDate') || "-"}}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Time">
+      <div *ngIf="assistanceRecord?.appointmentModel?.startDatetime && assistanceRecord.appointmentModel?.endDatetime; else dashTpl">
+        {{(assistanceRecord?.appointmentModel?.startDatetime | date: 'shortTime')}}
+        - {{(assistanceRecord.appointmentModel?.endDatetime | date: 'shortTime')}}
+      </div>
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Admin-In-Charge">
+      {{assistanceRecord?.appointmentModel?.adminFullName || "-"}}
+    </nz-descriptions-item>
+  </nz-descriptions>
 </nz-spin>
 
 <nz-drawer *ngIf="commentDrawerIsVisible"
@@ -160,7 +205,7 @@
         <nz-form-control [nzSpan]="24" [nzErrorTip]="reasonErrorTpl">
           <textarea nz-input [rows]="4" formControlName="reason"></textarea>
           <ng-template #reasonErrorTpl let-control>
-            <div *ngIf="control.invalid && (control.dirty || control.touched)">
+            <div *ngIf="control.invalid && (control.fdirty || control.touched)">
               <div *ngIf="control.errors?.required">Please enter a reason!</div>
             </div>
           </ng-template>
@@ -184,6 +229,7 @@
     <nz-tag *ngSwitchCase="'pending'" nzColor="gold">Pending</nz-tag>
     <nz-tag *ngSwitchCase="'processing'" nzColor="blue">Processing</nz-tag>
     <nz-tag *ngSwitchCase="'completed'" nzColor="green">Completed</nz-tag>
+    <nz-tag *ngSwitchCase="'accepted'" nzColor="green">Accepted</nz-tag>
     <nz-tag *ngSwitchCase="'rejected'" nzColor="magenta">Rejected</nz-tag>
     <nz-tag *ngSwitchCase="'cancelled'" nzColor="magenta">Cancelled</nz-tag>
     <span *ngSwitchDefault>-</span>
@@ -199,3 +245,67 @@
 </ng-template>
 
 <ng-template #dashTpl>-</ng-template>
+
+<app-appointment-reschedule *ngIf="rescheduleDatetimeModalIsVisible"
+                            [isVisible]="rescheduleDatetimeModalIsVisible"
+                            [appointment]="selectedAppointment"
+                            [assistanceId]="assistanceId"
+                            (modalVisibilityHasChange)="modalVisibilityHasChange($event)"
+                            (refreshListEventEmitter)="getAssistanceDetail()"></app-appointment-reschedule>
+
+<nz-modal *ngIf="appointmentStatusModalIsVisible"
+          [(nzVisible)]="appointmentStatusModalIsVisible"
+          [nzTitle]="'Update Appointment Status and Assistance Status'"
+          (nzOnCancel)="closeRequestDecisionModal()">
+  <div *nzModalContent>
+    <form [formGroup]="requestDecisionForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Appointment Status</nz-form-label>
+        <nz-form-control [nzSpan]="24" [nzErrorTip]="appointmentStatusErrorTpl">
+          <nz-radio-group formControlName="appointmentStatus" (ngModelChange)="appointmentStatusHasChange()">
+            <label nz-radio nzValue="completed">Completed</label>
+            <label nz-radio nzValue="cancelled">Cancelled</label>
+          </nz-radio-group>
+          <ng-template #appointmentStatusErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.dirty || control.touched)">
+              <div *ngIf="control.errors?.required">Please select a choice.</div>
+            </div>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold" [nzRequired]="!requestDecisionForm.controls['assistanceStatus'].disabled">Accept / Reject Assistance Request</nz-form-label>
+        <nz-form-control [nzSpan]="24" [nzErrorTip]="assistanceStatusErrorTpl">
+          <nz-radio-group formControlName="assistanceStatus">
+            <label nz-radio nzValue="accepted" [nzDisabled]="requestDecisionForm.controls['appointmentStatus'].value !== 'completed'">Accept</label>
+            <label nz-radio nzValue="rejected" [nzDisabled]="requestDecisionForm.controls['appointmentStatus'].value !== 'completed'">Reject</label>
+            <label nz-radio nzValue="cancelled" [nzDisabled]="requestDecisionForm.controls['appointmentStatus'].value === 'completed'">Cancelled</label>
+          </nz-radio-group>
+          <ng-template #assistanceStatusErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.dirty || control.touched)">
+              <div *ngIf="control.errors?.required">Please select a choice.</div>
+            </div>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold" [nzRequired]="!requestDecisionForm.controls['reason'].disabled">Reason</nz-form-label>
+        <nz-form-control [nzSpan]="24" [nzErrorTip]="reasonErrorTpl">
+          <textarea nz-input [rows]="4" formControlName="reason"></textarea>
+          <ng-template #reasonErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.dirty || control.touched)">
+              <div *ngIf="control.errors?.required">Please enter a reason.</div>
+            </div>
+          </ng-template>
+        </nz-form-control>
+        <small class="fst-italic"><span style="color: red">*</span> Will be added as a new comment</small>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="closeRequestDecisionModal()">Cancel</button>
+    <button nz-button nzType="primary" (click)="updateAppointmentAndAssistanceStatus()" [nzLoading]="updateAppointmentAndAssistanceStatusIsLoading">Update</button>
+  </div>
+</nz-modal>

@@ -8,6 +8,9 @@ import {AuthService} from "../../auth/auth.service";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 import {RoleConstant} from "../../shared/constants/role-constant";
 import {User} from "../../shared/models/user";
+import {differenceInCalendarDays, isWeekend} from "date-fns";
+import {HolidayService} from "../../shared/services/holiday.service";
+import {AssistanceRequestFormModel} from "../../shared/models/assistance-request-form-model";
 
 @Component({
   selector: 'app-assistance-form',
@@ -25,17 +28,22 @@ export class AssistanceFormComponent implements OnInit {
   user: User;
   isAdmin: boolean = false;
   isSuperAdmin: boolean = false;
+  timeslotList: DropdownChoiceModel[] = [];
+  disabledDate = (current: Date): boolean => differenceInCalendarDays(current, new Date()) <= 0 || isWeekend(current) || this.isPublicHoliday(current);
+  private PUBLIC_HOLIDAY_DATE: Date[] = [];
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private assistanceService: AssistanceService,
               private dropdownChoiceService: DropdownChoiceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private holidayService: HolidayService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
     })
     this.isAdmin = this.authService.isAdminLoggedIn();
     this.isSuperAdmin = this.authService.hasRole(RoleConstant.ROLE_SUPER_ADMIN);
+    this.getPublicHolidays();
   }
 
   ngOnInit(): void {
@@ -50,8 +58,17 @@ export class AssistanceFormComponent implements OnInit {
       this.form.controls[key].updateValueAndValidity();
     }
 
+    const form: AssistanceRequestFormModel = {
+      assistanceTitle: this.form.controls['assistanceTitle'].value,
+      assistanceDescription: this.form.controls['assistanceDescription'].value,
+      categoryId: this.form.controls['categoryId'].value,
+      username: this.form.controls['username'].value,
+      adminUsername: this.form.controls['adminUsername'].value,
+      appointmentStartDatetime: this.combineDatetime(),
+    }
+
     if (this.form.valid) {
-      this.assistanceService.addAssistance(this.form.value).subscribe(resp => {
+      this.assistanceService.addAssistance(form).subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.CREATED) {
           this.notificationService.createSuccessNotification("Created new assistance request.");
           this.refreshListEventEmitter.emit({refreshList: true});
@@ -99,7 +116,9 @@ export class AssistanceFormComponent implements OnInit {
       assistanceDescription: ['', Validators.required],
       categoryId: [''],
       username: [''],
-      adminUsername: ['']
+      adminUsername: [''],
+      date: [''],
+      time: ['']
     });
 
     if (this.isAdmin) {
@@ -115,5 +134,46 @@ export class AssistanceFormComponent implements OnInit {
         username: this.user.username
       });
     }
+  }
+
+  private isPublicHoliday(current: Date) {
+    return this.PUBLIC_HOLIDAY_DATE.find(item => {return item.getTime() == current.getTime()}) != null;
+  }
+
+  private getPublicHolidays() {
+    this.PUBLIC_HOLIDAY_DATE = [];
+    this.holidayService.getHoliday().subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        const temp = resp.data ? resp.data : [];
+        temp.forEach(date => {
+          this.PUBLIC_HOLIDAY_DATE.push(new Date(date));
+        })
+      }
+    })
+  }
+
+  initTimeSlotDropdownChoice() {
+    this.form.patchValue({
+      time: null
+    }, {emitEvent: false, onlySelf: true});
+
+    const date = new Date(this.form.controls['date'].value);
+    const adminUsername = this.form.controls['adminUsername'].value ? this.form.controls['adminUsername'].value : null;
+    const username = !this.isAdmin ? this.user.username : null;
+    this.dropdownChoiceService.getAppointmentTimeslotChoices(date, adminUsername, username).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.timeslotList = resp.data ? resp.data : [];
+      }
+    }, error => {
+      this.notificationService.createErrorNotification("There\'s an error when retrieving available timeslot.");
+    })
+  }
+
+
+  private combineDatetime(): Date {
+    const date = new Date(this.form.controls['date'].value);
+    const time = new Date(this.form.controls['time'].value);
+    date.setHours(time.getHours(), 30, 0, 0);
+    return date;
   }
 }

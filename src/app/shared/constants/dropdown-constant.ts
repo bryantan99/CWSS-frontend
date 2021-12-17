@@ -58,5 +58,6 @@ export class DropdownConstant {
       {text: 'Completed', value: 'completed'},
       {text: 'Cancelled', value: 'cancelled'},
       {text: 'Rejected', value: 'rejected'},
+      {text: 'Accepted', value: 'accepted'},
     ];
 }
