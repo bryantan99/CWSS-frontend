@@ -2,7 +2,7 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="24" class="fw-bold">Module</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-select formControlName="moduleName" [nzPlaceHolder]="'Select a module'" (ngModelChange)="getLog()">
+      <nz-select formControlName="moduleName" nzAllowClear [nzPlaceHolder]="'Select a module'" (ngModelChange)="getLog()">
         <nz-option *ngFor="let choice of MODULE_LIST" [nzLabel]="choice.text" [nzValue]="choice.value"></nz-option>
       </nz-select>
     </nz-form-control>
