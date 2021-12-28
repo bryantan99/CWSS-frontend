@@ -131,8 +131,13 @@ export class AssistanceDetailComponent implements OnInit {
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
       status: ['', [Validators.required]],
-      personInCharge: ['', [Validators.required]]
+      personInCharge: ['']
     });
+    if (this.isAdmin) {
+      this.form.controls['personInCharge'].setValidators(Validators.required);
+    } else {
+      this.form.controls['personInCharge'].setValidators(null);
+    }
   }
 
   cancelEdit() {
