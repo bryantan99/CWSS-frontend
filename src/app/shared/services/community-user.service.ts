@@ -16,6 +16,9 @@ export class CommunityUserService {
   private readonly REJECT_USER_ACCOUNT = this.API_SERVER_URL + '/community-user/reject-user';
   private readonly DELETE_COMMUNITY_USER = this.API_SERVER_URL + "/community-user/delete-user";
   private readonly UPDATE_COMMUNITY_USER_PROFILE = this.API_SERVER_URL + "/community-user/update-user";
+  private readonly BLOCK_USER = this.API_SERVER_URL + "/community-user/block-user";
+  private readonly UNBLOCK_USER = this.API_SERVER_URL + "/community-user/unblock-user";
+  private readonly VALIDATE_USER_ACCOUNT_ELIGIBLE_REQUESTING_ASSISTANCE = this.API_SERVER_URL + "/community-user/validate-user-eligibility";
 
   constructor(private http: HttpClient) {
   }
@@ -86,5 +89,21 @@ export class CommunityUserService {
     const params = new HttpParams()
       .set("username", username);
     return this.http.get<ResponseModel<any>>(this.REJECT_USER_ACCOUNT, {params: params});
+  }
+
+  blockUser(form: any) {
+    return this.http.post<ResponseModel<any>>(this.BLOCK_USER, form);
+  }
+
+  unblockUser(username: string) {
+    const form = {
+      username: username
+    };
+    return this.http.post<ResponseModel<any>>(this.UNBLOCK_USER, form);
+  }
+
+  validateUserIsBlockedFromRequestingAssistance(username: string) {
+    const param = new HttpParams().set("username", username);
+    return this.http.get<ResponseModel<any>>(this.VALIDATE_USER_ACCOUNT_ELIGIBLE_REQUESTING_ASSISTANCE, {params: param});
   }
 }

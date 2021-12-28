@@ -1,8 +1,18 @@
 <nz-space>
   <button nz-button *nzSpaceItem nzType="primary" (click)="openFilterDrawer()">Filter</button>
-  <button nz-button nzType="default" *nzSpaceItem
-          (click)="openAddAssistanceModal()">{{ isAdmin ? 'Add Assistance' : 'Request Assistance'}}
-  </button>
+  <div *nzSpaceItem>
+    <button nz-button nzType="default" *ngIf="isAdmin" (click)="openAddAssistanceModal()">Add Assistance</button>
+    <div
+      *ngIf="!isAdmin && blockDetail?.isBlocked"
+      nz-tooltip
+      [nzTooltipTitle]="'Your account has been blocked by admin (' + this.blockDetail?.blockedByFullName + '). [Reason : ' + this.blockDetail?.blockedMessage + ']'">
+      <button nz-button nzType="default" [disabled]="blockDetail?.isBlocked" (click)="openAddAssistanceModal()">Request Assistance</button>
+    </div>
+    <div
+      *ngIf="!isAdmin && !blockDetail?.isBlocked">
+      <button nz-button nzType="default" (click)="openAddAssistanceModal()">Request Assistance</button>
+    </div>
+  </div>
 </nz-space>
 
 <br><br>

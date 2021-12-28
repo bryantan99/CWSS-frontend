@@ -10,6 +10,8 @@ import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 import {AssistanceFormComponent} from "../assistance-form/assistance-form.component";
 import {finalize} from "rxjs/operators";
+import {CommunityUserService} from "../../shared/services/community-user.service";
+import {BlockDetailModel} from "../../shared/models/block-detail-model";
 
 @Component({
   selector: 'app-my-assistance',
@@ -28,15 +30,20 @@ export class MyAssistanceComponent implements OnInit {
   USERNAME_DROPDOWN_LIST: DropdownChoiceModel[] = [];
   STATUS_DROPDOWN_LIST: DropdownChoiceModel[] = DropdownConstant.ASSISTANCE_STATUS_DROPDOWN;
   assistanceFormIsVisible: boolean = false;
+  blockDetail: BlockDetailModel;
 
   constructor(private fb: FormBuilder,
               private assistanceService: AssistanceService,
               private authService: AuthService,
+              private communityUserService: CommunityUserService,
               private dropdownChoiceService: DropdownChoiceService,
               private notificationService: NotificationService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
+      if (!this.isAdmin) {
+        this.validateUserAccountIsBlocked();
+      }
     })
   }
 
@@ -157,5 +164,19 @@ export class MyAssistanceComponent implements OnInit {
 
   openAddAssistanceModal() {
     this.assistanceFormIsVisible = true;
+  }
+
+  private validateUserAccountIsBlocked() {
+    this.communityUserService.validateUserIsBlockedFromRequestingAssistance(this.user.username).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.blockDetail = resp.data ? resp.data : null;
+      }
+    }, error => {
+      this.blockDetail = {
+        username: this.user.username,
+        isBlocked: true
+      };
+      this.notificationService.createErrorNotification("There\' an error when checking if the user is blocked from requesting assistance.");
+    })
   }
 }

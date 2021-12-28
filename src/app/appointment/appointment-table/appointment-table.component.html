@@ -44,7 +44,7 @@
     <td>{{ data?.adminFullName || "-" }}</td>
     <td>
       <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu"
-              *ngIf="data?.status !== 'cancelled'; else dashTpl">
+              *ngIf="data?.status !== 'cancelled' && data?.status !== 'completed'; else dashTpl">
         Actions <i nz-icon nzType="down"></i>
       </button>
       <nz-dropdown-menu #actionMenu="nzDropdownMenu">

@@ -6,6 +6,14 @@
           class="mb-4">
 </nz-alert>
 
+<nz-alert *ngIf="userProfile?.blockedBy"
+          nzType="warning"
+          nzMessage="Account is blocked"
+          [nzDescription]="accountIsBlockedTemplate"
+          nzShowIcon
+          class="mb-4">
+</nz-alert>
+
 <h4>{{ (userProfile?.personalDetail?.fullName | titlecase) || "-" }} Profile</h4>
 <nz-divider></nz-divider>
 
@@ -262,7 +270,7 @@
 
               <nz-form-item>
                 <nz-form-control [nzSpan]="24">
-                  <label nz-checkbox formControlName="isApproved">Approve disease {{i+1}}</label>
+                  <label nz-checkbox formControlName="isApproved">Approve disease {{i + 1}}</label>
                 </nz-form-control>
               </nz-form-item>
 
@@ -300,6 +308,18 @@
         nzPopconfirmTitle="Are you sure you want to delete this user's account?"
         (nzOnConfirm)="deleteAccount(userProfile?.username)">
       Delete Account
+    </li>
+    <li nz-menu-item
+        *ngIf="isAdmin && (!userProfile?.blockedBy && !userProfile?.blockedMessage && !userProfile?.blockedDate)"
+        (click)="showBlockModal()">
+      Block User
+    </li>
+    <li nz-menu-item
+        *ngIf="isAdmin && (userProfile?.blockedBy && userProfile?.blockedMessage && userProfile?.blockedDate)"
+        nz-popconfirm
+        nzPopconfirmTitle="Are you sure you want to unblock this user account?"
+        (nzOnConfirm)="unblockUser()">
+      Unblock User
     </li>
   </ul>
 </nz-dropdown-menu>
@@ -342,3 +362,29 @@
   <button nz-button nzDanger nzType="primary" (click)="rejectAccount(userProfile?.username)">Reject
   </button>
 </ng-template>
+
+<ng-template #accountIsBlockedTemplate>
+  <p nz-typography>This account has been blocked by admin ({{userProfile?.blockedByFullName || "-"}}) on {{(userProfile?.blockedDate | date: 'medium') || "-"}}.
+    <br>Reason : {{userProfile?.blockedMessage || "-"}}</p>
+</ng-template>
+
+<nz-modal [nzTitle]="'Block User'"
+          [nzVisible]="blockModalIsVisible"
+          (nzOnOk)="submitBlockForm()"
+          (nzOnCancel)="closeBlockForm()">
+  <div *nzModalContent>
+    <form [formGroup]="blockForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Reason</nz-form-label>
+        <nz-form-control [nzSpan]="24" [nzErrorTip]="reasonErrorTpl">
+          <textarea nz-input [rows]="4" formControlName="reason"></textarea>
+        </nz-form-control>
+        <ng-template #reasonErrorTpl let-control>
+          <div *ngIf="control.invalid && (control.dirty || control.touched)">
+            <div *ngIf="control.errors?.required">Please enter a reason.</div>
+          </div>
+        </ng-template>
+      </nz-form-item>
+    </form>
+  </div>
+</nz-modal>

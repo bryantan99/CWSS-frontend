@@ -36,6 +36,8 @@ export class UserProfileComponent implements OnInit {
   readonly STATE_DROPDOWN = DropdownConstant.STATE_AND_FEDERAL_TERRITORY_DROPDOWN;
   diseaseDropdownList: DropdownChoiceModel[] = [];
   readonly NZ_DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
+  blockModalIsVisible: boolean = false;
+  blockForm: FormGroup;
 
   constructor(private authService: AuthService,
               private communityUserService: CommunityUserService,
@@ -232,5 +234,47 @@ export class UserProfileComponent implements OnInit {
 
   deleteDiseaseFormGroup(index: number) {
     this.diseaseList.removeAt(index);
+  }
+
+  showBlockModal() {
+    this.initBlockForm();
+    this.blockModalIsVisible = true;
+  }
+
+  initBlockForm() {
+    this.blockForm = this.fb.group({
+      username: [this.userProfile.username, Validators.required],
+      reason: ['', Validators.required],
+    });
+  }
+
+  submitBlockForm() {
+    this.communityUserService.blockUser(this.blockForm.value).subscribe(resp => {
+      if (resp && resp.status == HttpStatusConstant.OK) {
+        this.notificationService.createSuccessNotification("Successfully block user.");
+        this.closeBlockForm();
+        this.emitRefreshProfile(this.userProfile.username);
+      }
+    }, error => {
+      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when attempting to block user.";
+      this.notificationService.createErrorNotification(msg);
+    })
+  }
+
+  closeBlockForm() {
+    this.blockForm.reset();
+    this.blockModalIsVisible = false;
+  }
+
+  unblockUser() {
+    this.communityUserService.unblockUser(this.userProfile.username).subscribe(resp => {
+      if (resp && resp.status === HttpStatusConstant.OK) {
+        this.notificationService.createSuccessNotification("Successfully unblock user.");
+        this.emitRefreshProfile(this.userProfile.username);
+      }
+    }, error => {
+      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when attempting to unblock user.";
+      this.notificationService.createErrorNotification(msg);
+    })
   }
 }

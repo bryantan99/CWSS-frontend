@@ -21,7 +21,7 @@
 <!--        <a (click)="acceptRequest(assistanceRecord?.assistanceId)">Accept Request</a>-->
 <!--      </li>-->
       <li nz-menu-item
-          *ngIf="(isAdmin && (assistanceRecord?.appointmentModel == null) || assistanceRecord.status !== 'pending') || (assistanceRecord?.status === 'pending' && !isAdmin)">
+          *ngIf="(isAdmin && ((assistanceRecord?.appointmentModel == null) || assistanceRecord.status !== 'pending')) || (assistanceRecord?.status === 'pending' && !isAdmin)">
         <a (click)="onEditMode()">Update Request</a>
       </li>
 <!--      <li nz-menu-item *ngIf="assistanceRecord?.appointmentStatus === 'completed' && assistanceRecord?.status === 'pending' && isAdmin">-->

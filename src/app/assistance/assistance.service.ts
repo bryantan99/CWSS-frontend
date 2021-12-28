@@ -4,7 +4,6 @@ import {Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
 import {environment} from "../../environments/environment";
 import {AssistanceRequestFormModel} from "../shared/models/assistance-request-form-model";
-import {AssistanceUpdateFormModel} from "../shared/models/assistance-update-form-model";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,6 @@ export class AssistanceService {
   private readonly UPDATE_ASSISTANCE_RECORD = this.APP_URL + "/assistance/update";
   private readonly FIND_PENDING_ASSISTANCE_REQUESTS = this.APP_URL + "/assistance/pending";
   private readonly GET_HANDLED_ASSISTANCE_RECORDS = this.APP_URL + "/assistance/handled";
-  private readonly ACCEPT_ASSISTANCE_REQUEST = this.APP_URL + "/assistance/accept";
   private readonly REJECT_ASSISTANCE_REQUEST = this.APP_URL + "/assistance/reject";
   private readonly DELETE_ASSISTANCE_CATEGORY = this.APP_URL + "/assistance/category";
   private readonly ADD_ASSISTANCE_CATEGORY = this.APP_URL + "/assistance/category";
@@ -119,10 +117,6 @@ export class AssistanceService {
       params = params.set("username", username);
     }
     return this.http.get<ResponseModel<any>>(this.GET_HANDLED_ASSISTANCE_RECORDS, {params: params});
-  }
-
-  acceptAssistanceRequest(form: AssistanceUpdateFormModel): Observable<ResponseModel<any>> {
-    return this.http.post<ResponseModel<any>>(this.ACCEPT_ASSISTANCE_REQUEST, form);
   }
 
   rejectAssistance(form: any): Observable<ResponseModel<any>> {
