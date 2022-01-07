@@ -2,13 +2,13 @@
   "name": "chis-app",
   "version": "0.0.0",
   "scripts": {
+	"heroku-postbuild": "ng build --configuration=production",
     "ng": "ng",
     "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "heroku-postbuild": "ng build -- prod"
+    "e2e": "ng e2e"
   },
   "engines": {
     "node": "12.18.2",
