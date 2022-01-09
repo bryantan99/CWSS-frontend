@@ -8,6 +8,9 @@ import {finalize} from "rxjs/operators";
 import {AuthService} from "../../auth/auth.service";
 import {AdminUserService} from "../../shared/services/admin-user.service";
 import {NotificationService} from "../../shared/services/notification.service";
+import {Subscription} from "rxjs";
+import {phoneNumberValidator} from "../../shared/validators/custom-validators";
+import {uniqueEmailValidator} from "../../shared/validators/custom-async-validator";
 
 @Component({
   selector: 'app-admin-profile',
@@ -24,6 +27,8 @@ export class AdminProfileComponent implements OnInit {
   readonly ACCEPTABLE_FILE_FORMAT = ['image/jpeg', 'image/png'];
   readonly ROLE_CHOICE: { text: string, value: string }[] = DropdownConstant.ACCOUNT_ROLE_DROPDOWN;
   fileList: NzUploadFile[] = [];
+  fileListValueChanges: EventEmitter<any> = new EventEmitter<any>();
+  fileListValueChangesSubscription: Subscription;
   adminForm: FormGroup;
   nzEditAdmin: boolean = false;
   isSubmitting: boolean = false;
@@ -31,6 +36,7 @@ export class AdminProfileComponent implements OnInit {
   beforeUpload = (file: NzUploadFile): boolean => {
     if (!this.fileList.some(e => e.name === file.name) && this.fileList.length < 1 && this.ACCEPTABLE_FILE_FORMAT.includes(file.type)) {
       this.fileList = this.fileList.concat(file);
+      this.fileListValueChanges.emit(this.fileList);
     }
     return false;
   };
@@ -39,6 +45,7 @@ export class AdminProfileComponent implements OnInit {
     const index = this.fileList.indexOf(file);
     if (index > -1) {
       this.fileList.splice(index, 1);
+      this.fileListValueChanges.emit(this.fileList);
     }
     return false;
   }
@@ -55,23 +62,6 @@ export class AdminProfileComponent implements OnInit {
 
   getProfilePicture(username: string, imageName: string) {
     return imageName ? this.imageService.getProfilePicture(username, imageName) : this.PROFILE_PIC_PLACEHOLDER;
-  }
-
-  validateEmail() {
-    if (this.nzEditAdmin) {
-      const emailValue = this.adminForm.controls['email'].value;
-      if (emailValue === this.adminProfile.email) {
-        this.adminForm.controls['email'].setErrors(null);
-        return;
-      }
-
-      this.authService.isUniqueEmail(emailValue).subscribe(resp => {
-        if (resp && resp.status === HttpStatusConstant.OK) {
-          const error = resp.data ? null : {emailTaken: true};
-          this.adminForm.controls['email'].setErrors(error);
-        }
-      })
-    }
   }
 
   submitAdminForm() {
@@ -98,6 +88,7 @@ export class AdminProfileComponent implements OnInit {
   cancelNzEdit() {
     this.nzEditAdmin = false;
     this.adminForm.reset();
+    this.fileListValueChangesSubscription.unsubscribe();
   }
 
   enterEditAdminMode() {
@@ -110,10 +101,18 @@ export class AdminProfileComponent implements OnInit {
     this.adminForm = this.fb.group({
       username: ['', [Validators.required]],
       fullName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      contactNo: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email], [uniqueEmailValidator(this.authService, this.adminProfile.email)]],
+      contactNo: ['', [Validators.required, phoneNumberValidator()]],
       roleList: [[], Validators.required]
     });
+
+    this.fileListValueChangesSubscription = this.fileListValueChanges.subscribe(file => {
+      if (this.nzEditAdmin) {
+        this.adminForm.markAllAsTouched();
+        this.adminForm.markAsDirty();
+        this.adminForm.updateValueAndValidity();
+      }
+    })
   }
 
   private patchAdminForm() {

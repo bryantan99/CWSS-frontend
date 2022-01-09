@@ -14,14 +14,17 @@ export function uniqueUsernameValidator(authService: AuthService): AsyncValidato
   }
 }
 
-export function uniqueEmailValidator(authService: AuthService): AsyncValidatorFn {
-  return (control: AbstractControl) => {
-    return authService.isUniqueEmail(control.value).pipe(
-      map(resp => {
-        if (resp && resp.status === HttpStatusConstant.OK) {
-          return resp.data ? null : {emailTaken: true}
+export function uniqueEmailValidator(authService: AuthService, oriValue?: string): AsyncValidatorFn {
+    return (control: AbstractControl) => {
+        if (oriValue && oriValue == control.value) {
+            return Promise.resolve(null);
         }
-      })
-    )
-  }
+        return authService.isUniqueEmail(control.value).pipe(
+            map(resp => {
+                if (resp && resp.status === HttpStatusConstant.OK) {
+                    return resp.data ? null : {emailTaken: true}
+                }
+            })
+        )
+    }
 }
