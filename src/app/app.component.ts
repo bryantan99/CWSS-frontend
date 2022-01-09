@@ -14,11 +14,12 @@ export class AppComponent {
 
   user: User;
   isCollapsed = true;
-  appName = "HSS";
+  appName = "CWSS";
   sidebarStyle: any = {
     padding: '0px',
     background: '#001529'
   };
+  year: string = new Date().getFullYear().toString();
 
   constructor(private app: AppService,
               private http: HttpClient,
