@@ -28,10 +28,7 @@ export class CommunityUserService {
                     gender?: string,
                     ethnic?: string,
                     diseaseId?: string,
-                    zoneId?: string,
-                    address?: boolean,
-                    occupation?: boolean,
-                    healthIssue?: boolean): Observable<ResponseModel<any>> {
+                    zoneId?: string): Observable<ResponseModel<any>> {
     let params = new HttpParams();
     if (name) {
       params = params.set("name", name);
@@ -50,15 +47,6 @@ export class CommunityUserService {
     }
     if (zoneId && zoneId != 'A') {
       params = params.set("zoneId", zoneId);
-    }
-    if (address) {
-      params = params.set("address", "Y");
-    }
-    if (occupation) {
-      params = params.set("occupation", "Y");
-    }
-    if (healthIssue) {
-      params = params.set("healthIssue", "Y");
     }
     return this.http.get<ResponseModel<any>>(this.GET_COMMUNITY_USERS, {params: params});
   }

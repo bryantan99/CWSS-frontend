@@ -116,10 +116,7 @@ export class CommunityUserComponent implements OnInit {
       this.queryForm.controls['gender'].value,
       this.queryForm.controls['ethnic'].value,
       this.queryForm.controls['disease'].value,
-      this.queryForm.controls['zoneId'].value,
-      true,
-      false,
-      true)
+      this.queryForm.controls['zoneId'].value)
       .pipe(finalize(() => {
         this.isLoading = false;
       }))
