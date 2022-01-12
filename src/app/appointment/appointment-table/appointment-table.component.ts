@@ -4,6 +4,7 @@ import {AppointmentService} from "../appointment.service";
 import {NotificationService} from "../../shared/services/notification.service";
 import {AuthService} from "../../auth/auth.service";
 import {User} from "../../shared/models/user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-appointment-table',
@@ -27,7 +28,8 @@ export class AppointmentTableComponent implements OnInit {
 
   constructor(private appointmentService: AppointmentService,
               private notificationService: NotificationService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private router: Router) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -101,5 +103,9 @@ export class AppointmentTableComponent implements OnInit {
 
   modalVisibilityHasChange(data: {modalIsVisible: boolean}) {
     this.rescheduleDatetimeModalIsVisible = data.modalIsVisible;
+  }
+
+  navigateToAssistanceDetailPage(assistanceId: number) {
+    this.router.navigate(['/assistance/detail'], {queryParams: {assistanceId: assistanceId}});
   }
 }

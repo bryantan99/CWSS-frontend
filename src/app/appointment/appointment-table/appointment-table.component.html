@@ -43,25 +43,7 @@
     </td>
     <td>{{ data?.adminFullName || "-" }}</td>
     <td>
-      <button nz-button nz-dropdown [nzDropdownMenu]="actionMenu"
-              *ngIf="data?.status !== 'cancelled' && data?.status !== 'completed'; else dashTpl">
-        Actions <i nz-icon nzType="down"></i>
-      </button>
-      <nz-dropdown-menu #actionMenu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item
-              *ngIf="(data?.status === 'pending_user' && !isAdmin) || (data?.status === 'pending_admin' && isAdmin)">
-            <a (click)="confirmAppointment(data?.appointmentId, data?.lastUpdatedDate)">Confirm Appointment</a>
-          </li>
-          <li nz-menu-item>
-            <a (click)="openDatetimeModal(data?.appointmentId)">{{(data?.status === 'pending_admin') ? 'Confirm & Reschedule Datetime' : 'Reschedule Datetime'}}</a>
-          </li>
-          <li nz-menu-item>
-            <a nz-popconfirm nzPopconfirmTitle="Are you sure you want to cancel this appointment?"
-               (nzOnConfirm)="cancelAppointment(data?.appointmentId)">Cancel Appointment</a>
-          </li>
-        </ul>
-      </nz-dropdown-menu>
+      <button nz-button nzType="default" (click)="navigateToAssistanceDetailPage(data?.assistanceId)">View</button>
     </td>
   </tr>
   </tbody>
