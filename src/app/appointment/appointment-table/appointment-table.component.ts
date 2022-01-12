@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {AppointmentService} from "../appointment.service";
 import {NotificationService} from "../../shared/services/notification.service";
 import {AuthService} from "../../auth/auth.service";
@@ -20,7 +19,6 @@ export class AppointmentTableComponent implements OnInit {
   pageSize = 10;
   datetimeFilterIsVisible: boolean = false;
   selectedDate: Date = null;
-  rescheduleDatetimeModalIsVisible: boolean = false;
   isAdmin: boolean = false;
   user: User;
   selectedAppointmentId: number | null = null;
@@ -65,44 +63,8 @@ export class AppointmentTableComponent implements OnInit {
     });
   }
 
-  openDatetimeModal(appointmentId: number) {
-    this.selectedAppointment = this.nzData.find(o => o.appointmentId === appointmentId);
-    this.rescheduleDatetimeModalIsVisible = true;
-  }
-
-  cancelAppointment(appointmentId: any) {
-    this.appointmentService.cancelAppointment(appointmentId)
-      .subscribe(resp => {
-        if (resp && resp.status === HttpStatusConstant.OK) {
-          this.notificationService.createSuccessNotification("Successfully cancelled appointment.");
-          this.refreshList();
-        }
-      })
-  }
-
-  confirmAppointment(appointmentId: number, appointmentLastUpdatedDate: Date) {
-    const form = {
-      appointmentId: appointmentId,
-      appointmentLastUpdatedDate: appointmentLastUpdatedDate
-    };
-
-    this.appointmentService.confirmAppointment(form).subscribe(resp => {
-      if (resp && resp.status === HttpStatusConstant.OK) {
-        this.notificationService.createSuccessNotification("Successfully confirmed appointment.")
-        this.refreshList();
-      }
-    }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when confirming appointment's datetime.";
-      this.notificationService.createErrorNotification(msg);
-    })
-  }
-
   refreshList() {
     this.refreshListEventEmitter.emit(true);
-  }
-
-  modalVisibilityHasChange(data: {modalIsVisible: boolean}) {
-    this.rescheduleDatetimeModalIsVisible = data.modalIsVisible;
   }
 
   navigateToAssistanceDetailPage(assistanceId: number) {
