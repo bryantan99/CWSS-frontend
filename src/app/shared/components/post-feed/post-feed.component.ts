@@ -22,6 +22,7 @@ export class PostFeedComponent implements OnInit {
   editPostModalIsVisible: boolean = false;
   user: User;
   isAdmin: boolean = false;
+  nzEdit: boolean = false;
 
   constructor(private adminPostService: AdminPostService,
               private authService: AuthService,
@@ -66,6 +67,7 @@ export class PostFeedComponent implements OnInit {
   }
 
   editPost(postId: number) {
+    this.nzEdit = true;
     this.newPostModalComponent.editPost(postId);
   }
 
@@ -84,6 +86,7 @@ export class PostFeedComponent implements OnInit {
   }
 
   openNewPostModal() {
+    this.nzEdit = false;
     this.editPostModalIsVisible = true;
   }
 

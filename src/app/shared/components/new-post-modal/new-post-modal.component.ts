@@ -16,8 +16,7 @@ export class NewPostModalComponent implements OnInit {
   @Input() postId: number | null;
   @Output() modalIsVisibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() addNewPostEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  nzEdit: boolean = false;
+  @Input() nzEdit: boolean = false;
   nzTitle: string;
   postForm: FormGroup;
   fileList: NzUploadFile[] = [];
@@ -44,7 +43,6 @@ export class NewPostModalComponent implements OnInit {
       return;
     }
 
-    this.nzEdit = true;
     this.nzTitle = "Edit Post";
     this.isVisible = true;
     this.getPost(postId);

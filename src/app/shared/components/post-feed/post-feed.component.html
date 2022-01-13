@@ -60,6 +60,7 @@
   </ng-template>
 </nz-spin>
 
-<app-new-post-modal [isVisible]="editPostModalIsVisible"
+<app-new-post-modal [nzEdit]="nzEdit"
+                    [isVisible]="editPostModalIsVisible"
                     (modalIsVisibleEmitter)="modalVisibleHasChange($event)"
                     (addNewPostEmitter)="postListHasChanges($event)"></app-new-post-modal>
