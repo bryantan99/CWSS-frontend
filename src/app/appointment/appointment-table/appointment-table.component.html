@@ -62,10 +62,4 @@
   </div>
 </nz-dropdown-menu>
 
-<app-appointment-reschedule *ngIf="rescheduleDatetimeModalIsVisible"
-                            [isVisible]="rescheduleDatetimeModalIsVisible"
-                            [appointment]="selectedAppointment"
-                            (modalVisibilityHasChange)="modalVisibilityHasChange($event)"
-                            (refreshListEventEmitter)="refreshList()"></app-appointment-reschedule>
-
 <ng-template #dashTpl>-</ng-template>

@@ -302,14 +302,15 @@ export class AssistanceDetailComponent implements OnInit {
     const value = this.requestDecisionForm.controls['appointmentStatus'].value;
     if (value === 'completed') {
       this.requestDecisionForm.patchValue({
-        assistanceStatus: ''
+        assistanceStatus: '',
+        reason: ''
       });
       this.requestDecisionForm.controls['assistanceStatus'].enable();
       this.requestDecisionForm.controls['reason'].enable();
     } else {
       this.requestDecisionForm.patchValue({
         assistanceStatus: 'cancelled',
-        reason: ''
+        reason: 'Appointment has been cancelled.'
       });
       this.requestDecisionForm.controls['assistanceStatus'].disable();
       this.requestDecisionForm.controls['reason'].disable();
@@ -328,7 +329,7 @@ export class AssistanceDetailComponent implements OnInit {
     });
 
     if (this.requestDecisionForm.valid) {
-      this.appointmentService.updateAppointmentStatus(this.requestDecisionForm.value).subscribe(resp => {
+      this.appointmentService.updateAppointmentStatus(this.requestDecisionForm.getRawValue()).subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.notificationService.createSuccessNotification("Successfully updated appointment status and assistance status.");
           this.closeRequestDecisionModal();

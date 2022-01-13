@@ -17,7 +17,6 @@ export class AppointmentService {
   private readonly GET_APPOINTMENT = this.APP_URL + "/appointment/appointmentId";
   private readonly GET_PENDING_APPOINTMENTS = this.APP_URL + "/appointment/pending"
   private readonly GET_USER_APPOINTMENTS = this.APP_URL + "/appointment/user"
-  private readonly CANCEL_APPOINTMENT = this.APP_URL + "/appointment/appointmentId"
   private readonly UPDATE_APPOINTMENT_DATETIME = this.APP_URL + "/appointment/update-datetime";
   private readonly CONFIRM_APPOINTMENT = this.APP_URL + "/appointment/confirm";
   private readonly SCHEDULE_APPOINTMENT = this.APP_URL + "/appointment";
@@ -52,11 +51,6 @@ export class AppointmentService {
     }
 
     return this.http.get<ResponseModel<any>>(this.GET_USER_APPOINTMENTS, {params: params});
-  }
-
-  cancelAppointment(appointmentId: any): Observable<ResponseModel<any>> {
-    const url = this.CANCEL_APPOINTMENT.replace("appointmentId", appointmentId);
-    return this.http.delete<ResponseModel<any>>(url);
   }
 
   updateAppointmentDatetime(form: UpdateDatetimeForm) {
