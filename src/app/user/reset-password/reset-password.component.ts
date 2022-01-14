@@ -5,6 +5,7 @@ import {PasswordResetService} from "../../shared/services/password-reset.service
 import {finalize} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
+import {passwordValidator} from "../../shared/validators/custom-validators";
 
 @Component({
   selector: 'app-reset-password',
@@ -47,7 +48,7 @@ export class ResetPasswordComponent implements OnInit {
     this.resetForm = this.fb.group({
       username: ['', [Validators.required]],
       otp: ['', Validators.required],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, passwordValidator()]],
       confirmPassword: ['', Validators.required]
     });
 
@@ -86,7 +87,7 @@ export class ResetPasswordComponent implements OnInit {
           this.otpFormControl.setErrors({mismatch: true});
         }
       }
-    }, error => {
+    }, () => {
       this.notificationService.createErrorNotification("There\'s an error when requesting for password reset.");
     })
   }
