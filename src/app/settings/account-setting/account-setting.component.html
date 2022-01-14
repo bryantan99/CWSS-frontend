@@ -11,7 +11,7 @@
             <div *ngIf="control.errors?.required">
               Please input old password!
             </div>
-            <div *ngIf="control.errors?.mismatch">
+            <div *ngIf="control.hasError('mismatch')">
               Incorrect old password!
             </div>
           </div>
@@ -35,7 +35,7 @@
             <div *ngIf="control.errors?.required">
               Please input new password!
             </div>
-            <div *ngIf="control.errors?.invalidPassword">
+            <div *ngIf="control.hasError('invalidPassword')">
               New password should contain at least a digit, a lowercase letter, an uppercase letter and minimum length
               is 8 characters.
             </div>
@@ -60,7 +60,7 @@
             <div *ngIf="control.errors?.required">
               Please input confirm password!
             </div>
-            <div *ngIf="control.errors?.passwordMismatch">
+            <div *ngIf="control.hasError('passwordMismatch')">
               Confirm password is different from new password!
             </div>
           </div>
@@ -79,8 +79,6 @@
               [disabled]="!passwordForm.valid || !passwordForm.touched || !passwordForm.dirty"
               (click)="updatePassword()">Update Password
       </button>
-<!--      <br><br>-->
-<!--      <p nz-typography>Forgot password? <a [routerLink]="['/reset']">Reset here</a>.</p>-->
     </nz-form-control>
   </nz-form-item>
 </form>
