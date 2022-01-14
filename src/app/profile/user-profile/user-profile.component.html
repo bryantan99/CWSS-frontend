@@ -236,6 +236,27 @@
           {{ (userProfile?.address?.state |state | titlecase) || "-" }}
         </ng-template>
       </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Zone">
+        <ng-container *ngIf="isEdit; else displayZoneTpl">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="zoneErrorTpl">
+              <nz-select class="w-100" formControlName="zoneId">
+                <nz-option *ngFor="let choice of ZONE_DROPDOWN" [nzLabel]="choice.text"
+                           [nzValue]="choice.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <ng-template #zoneErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.touched || control.dirty)">
+              <div *ngIf="control.errors?.required">Please select a zone.</div>
+            </div>
+          </ng-template>
+        </ng-container>
+        <ng-template #displayZoneTpl>
+          {{ (userProfile?.address?.zoneName | titlecase) || "-" }}
+        </ng-template>
+      </nz-descriptions-item>
     </nz-descriptions>
 
     <br>
@@ -268,7 +289,7 @@
                 </nz-form-control>
               </nz-form-item>
 
-              <nz-form-item>
+              <nz-form-item *ngIf="isAdmin">
                 <nz-form-control [nzSpan]="24">
                   <label nz-checkbox formControlName="isApproved">Approve disease {{i + 1}}</label>
                 </nz-form-control>

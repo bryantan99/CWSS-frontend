@@ -34,6 +34,7 @@ export class UserProfileComponent implements OnInit {
   readonly GENDER_DROPDOWN = DropdownConstant.GENDER_DROPDOWN;
   readonly ETHNIC_DROPDOWN = DropdownConstant.ETHNIC_DROPDOWN;
   readonly STATE_DROPDOWN = DropdownConstant.STATE_AND_FEDERAL_TERRITORY_DROPDOWN;
+  ZONE_DROPDOWN: DropdownChoiceModel[] = [];
   diseaseDropdownList: DropdownChoiceModel[] = [];
   readonly NZ_DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
   blockModalIsVisible: boolean = false;
@@ -139,6 +140,7 @@ export class UserProfileComponent implements OnInit {
         postcode: ['', [Validators.required, postCodeValidator()]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
+        zoneId: ['']
       }),
       health: this.fb.group({
         diseaseList: this.fb.array([])
@@ -168,7 +170,8 @@ export class UserProfileComponent implements OnInit {
           addressLine2: this.userProfile.address.line2,
           state: this.userProfile.address.state,
           postcode: this.userProfile.address.postcode,
-          city: this.userProfile.address.city
+          city: this.userProfile.address.city,
+          zoneId: this.userProfile.address.zoneId ? this.userProfile.address.zoneId.toString() : ''
         }
       });
     }
@@ -222,14 +225,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   private initDropdownChoice() {
-    this.dropdownChoiceService.getDiseaseDropdownChoices().subscribe(resp => {
-      if (resp && resp.status == HttpStatusConstant.OK) {
-        this.diseaseDropdownList = resp.data ? resp.data : [];
-      }
-    }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving disease dropdown list.";
-      this.notificationService.createErrorNotification(msg);
-    })
+    this.initDiseaseDropdownChoice();
+    this.initZoneDropdownChoice();
   }
 
   deleteDiseaseFormGroup(index: number) {
@@ -274,6 +271,28 @@ export class UserProfileComponent implements OnInit {
       }
     }, error => {
       const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when attempting to unblock user.";
+      this.notificationService.createErrorNotification(msg);
+    })
+  }
+
+  private initDiseaseDropdownChoice() {
+    this.dropdownChoiceService.getDiseaseDropdownChoices().subscribe(resp => {
+      if (resp && resp.status == HttpStatusConstant.OK) {
+        this.diseaseDropdownList = resp.data ? resp.data : [];
+      }
+    }, error => {
+      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving disease dropdown list.";
+      this.notificationService.createErrorNotification(msg);
+    })
+  }
+
+  private initZoneDropdownChoice() {
+    this.dropdownChoiceService.getZoneDropdownChoiceList().subscribe(resp => {
+      if (resp && resp.status == HttpStatusConstant.OK) {
+        this.ZONE_DROPDOWN = resp.data ? resp.data : [];
+      }
+    }, error => {
+      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving zone dropdown list.";
       this.notificationService.createErrorNotification(msg);
     })
   }

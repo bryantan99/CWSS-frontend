@@ -62,6 +62,20 @@
         </ng-template>
       </nz-form-control>
     </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Zone</nz-form-label>
+      <nz-form-control [nzSpan]="24" [nzErrorTip]="zoneErrorTpl">
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a zone" formControlName="zoneId">
+          <nz-option *ngFor="let zone of ZONE_DROPDOWN" [nzLabel]="zone.text" [nzValue]="zone.value"></nz-option>
+        </nz-select>
+        <ng-template #zoneErrorTpl let-control>
+          <p>
+            <span *ngIf="control.hasError('required')">Please select a zone</span>
+          </p>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
   </ng-container>
 
 </div>
