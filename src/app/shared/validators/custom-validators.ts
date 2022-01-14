@@ -14,10 +14,11 @@ export function confirmPasswordMatchValidator(passwordFormControl: AbstractContr
 }
 
 //  Checks if the password meets the minimum requirements
-//  Min reqs: Contains at least a digit, a lowercase letter, an uppercase letter and minimum length is 8 characters
+//  Reqs: Contains at least a digit, a lowercase letter, an uppercase letter and minimum length is 8 characters
+//  Allowed characters: @$!%*?&.
 export function passwordValidator(): ValidatorFn {
   return (control: FormControl): { [key: string]: boolean } | null => {
-    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@$!%*?&.]{8,}$/;
     const password: string = control.value;
 
     if (password && password.search(regex) == -1) {
@@ -63,3 +64,22 @@ export function nricValidator(): ValidatorFn {
   }
 }
 
+/*
+  Username requirements:
+  - 5-20 characters long
+  - no _ or . at the beginning
+  - no __ or _. or ._ or .. inside
+  - allowed characters (a-zA-Z0-9._)
+  - no _ or . at the end
+  https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
+ */
+export function usernameValidator(): ValidatorFn {
+  return (control: FormControl): { [key: string]: boolean } | null => {
+    const usernameRegex = /^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
+    const username: string = control.value;
+    if (username && (username.search(usernameRegex) == -1)) {
+      return {invalidUsername: true};
+    }
+    return null;
+  }
+}

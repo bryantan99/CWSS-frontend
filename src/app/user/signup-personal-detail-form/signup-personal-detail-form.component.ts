@@ -10,7 +10,7 @@ import {
 import {
   nricValidator,
   passwordValidator,
-  phoneNumberValidator
+  phoneNumberValidator, usernameValidator
 } from "../../shared/validators/custom-validators";
 import {uniqueEmailValidator, uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
 import {AuthService} from "../../auth/auth.service";
@@ -108,7 +108,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
     this.personalDetailForm = this.fb.group({
       fullName: ['', Validators.required],
       nric: ['', [Validators.required, nricValidator()]],
-      username: ['', [Validators.required], [uniqueUsernameValidator(this.authService)]],
+      username: ['', [Validators.required, usernameValidator()], [uniqueUsernameValidator(this.authService)]],
       password: ['', [Validators.required, passwordValidator()]],
       confirmPassword: ['', [Validators.required]],
       contactNo: ['', [Validators.required, phoneNumberValidator()]],

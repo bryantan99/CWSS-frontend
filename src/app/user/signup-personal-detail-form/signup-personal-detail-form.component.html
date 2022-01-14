@@ -30,10 +30,12 @@
       <nz-form-control [nzSpan]="24" [nzErrorTip]="usernameErrorTpl">
         <ng-container>
           <input nz-input type="text" formControlName="username">
+          <nz-alert class="mt-2" nzType="info" [nzMessage]="usernameRequirementsTpl" nzShowIcon></nz-alert>
         </ng-container>
         <ng-template #usernameErrorTpl let-control>
           <p>
-            <span *ngIf="control.hasError('required')">Please input username<br></span>
+            <span *ngIf="control.hasError('required')">Please input username.<br></span>
+            <span *ngIf="control.hasError('invalidUsername')">Please ensure that your username matches the requirements.<br></span>
             <span *ngIf="control.hasError('usernameTaken')">This username has been taken.<br></span>
           </p>
         </ng-template>
@@ -44,6 +46,7 @@
       <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Password</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="passwordErrorTpl">
         <input nz-input type="password" formControlName="password" (ngModelChange)="matchPassword()">
+        <nz-alert class="mt-2" nzType="info" [nzMessage]="passwordRequirementsTpl" nzShowIcon></nz-alert>
         <ng-template #passwordErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input password<br></span>
@@ -124,3 +127,22 @@
     </nz-form-item>
   </ng-container>
 </div>
+
+<ng-template #usernameRequirementsTpl>
+  <p nz-typography class="mb-0">Username requirements:</p>
+  <ul>
+    <li>At least 5 - 20 characters long</li>
+    <li>Username contains alphabet (a-z), number (0-9) or symbols (._) only</li>
+    <li>Username must not starts and ends with symbol</li>
+    <li>No two consecutive symbols in the username</li>
+    <li>No whitespace in the username</li>
+  </ul>
+</ng-template>
+
+<ng-template #passwordRequirementsTpl>
+  <p nz-typography class="mb-0">Password requirements:</p>
+  <ul>
+    <li>At least 8 characters long</li>
+    <li>Must contain at least a digit (0-9), a lowercase letter (a-z), an uppercase letter (A-Z)</li>
+  </ul>
+</ng-template>
