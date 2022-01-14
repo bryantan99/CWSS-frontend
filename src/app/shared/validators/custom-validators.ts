@@ -28,13 +28,12 @@ export function passwordValidator(): ValidatorFn {
   }
 }
 
-//  Checks if the contact no. is valid
-//  Min reqs: 9 - 11 digits only
+//  Checks if the contact no. is valid by following Malaysia's standard
 export function phoneNumberValidator(): ValidatorFn {
   return (control: FormControl): {[key: string]: boolean} | null => {
-    const digitsOnlyRegex = /^[0-9]*$/;
+    const phoneNumberRegex = /^(\+?6?01)[02-46-9]-*[0-9]{7}$|^(\+?6?01)[1]-*[0-9]{8}$/;
     const phoneNo: string = control.value;
-    if (phoneNo && (phoneNo.search(digitsOnlyRegex) == -1 || phoneNo.length < 9 || phoneNo.length > 11 || !phoneNo.startsWith("0"))) {
+    if (phoneNo && (phoneNo.search(phoneNumberRegex) == -1)) {
       return {invalidContactNo: true};
     }
     return null;
