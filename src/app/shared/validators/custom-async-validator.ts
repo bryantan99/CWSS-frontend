@@ -14,6 +14,18 @@ export function uniqueUsernameValidator(authService: AuthService): AsyncValidato
   }
 }
 
+export function uniqueNricValidator(authService: AuthService): AsyncValidatorFn {
+    return (control: AbstractControl) => {
+        return authService.isUniqueNric(control.value).pipe(
+            map(resp => {
+                if (resp && resp.status === HttpStatusConstant.OK) {
+                    return resp.data ? null : {nricTaken: true}
+                }
+            })
+        )
+    }
+}
+
 export function uniqueEmailValidator(authService: AuthService, oriValue?: string): AsyncValidatorFn {
     return (control: AbstractControl) => {
         if (oriValue && oriValue == control.value) {

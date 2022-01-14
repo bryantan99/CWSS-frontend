@@ -52,9 +52,10 @@ export function postCodeValidator(): ValidatorFn {
   }
 }
 
+// https://stackoverflow.com/questions/53663245/regex-needed-for-ic-number-validation
 export function nricValidator(): ValidatorFn {
   return (control: FormControl): {[key: string]: boolean} | null => {
-    const digitsOnlyRegex = /^[0-9]*$/;
+    const digitsOnlyRegex = /^\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{6}$/;
     const nric: string = control.value;
     if (nric && (nric.search(digitsOnlyRegex) == -1 || nric.length !== 12 )) {
       return {invalidNric: true};

@@ -20,6 +20,7 @@ export class AuthService {
   private readonly LOGIN = this.API_SERVER_URL + "/authenticate";
   private readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/validation/username";
   private readonly IS_UNIQUE_EMAIL = this.API_SERVER_URL + "/account/validation/email";
+  private readonly IS_UNIQUE_NRIC = this.API_SERVER_URL + "/account/validation/nric";
   private readonly CURRENT_LOGGED_IN_USERNAME = this.API_SERVER_URL + "/account/current-username";
 
   constructor(private http: HttpClient,
@@ -100,5 +101,10 @@ export class AuthService {
     jwtToken = jwtToken.replace("Bearer ", "");
     const jwtTokenArr = jwtToken.split(".");
     return JSON.parse(atob(jwtTokenArr[1]));
+  }
+
+  isUniqueNric(nric: string): Observable<ResponseModel<any>> {
+    const params = new HttpParams().set("nric", nric);
+    return this.http.get<ResponseModel<any>>(this.IS_UNIQUE_NRIC, {params: params});
   }
 }

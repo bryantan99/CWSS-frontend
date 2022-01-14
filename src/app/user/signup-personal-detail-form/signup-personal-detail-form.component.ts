@@ -12,7 +12,11 @@ import {
   passwordValidator,
   phoneNumberValidator, usernameValidator
 } from "../../shared/validators/custom-validators";
-import {uniqueEmailValidator, uniqueUsernameValidator} from "../../shared/validators/custom-async-validator";
+import {
+  uniqueEmailValidator,
+  uniqueNricValidator,
+  uniqueUsernameValidator
+} from "../../shared/validators/custom-async-validator";
 import {AuthService} from "../../auth/auth.service";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
@@ -107,7 +111,7 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   private initForm() {
     this.personalDetailForm = this.fb.group({
       fullName: ['', Validators.required],
-      nric: ['', [Validators.required, nricValidator()]],
+      nric: ['', [Validators.required, nricValidator()], [uniqueNricValidator(this.authService)]],
       username: ['', [Validators.required, usernameValidator()], [uniqueUsernameValidator(this.authService)]],
       password: ['', [Validators.required, passwordValidator()]],
       confirmPassword: ['', [Validators.required]],

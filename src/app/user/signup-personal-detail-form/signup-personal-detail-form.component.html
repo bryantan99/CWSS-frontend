@@ -19,7 +19,8 @@
         <ng-template #nricErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input NRIC<br></span>
-            <span *ngIf="control.hasError('invalidNric')">Please ensure it is 12 digits<br></span>
+            <span *ngIf="control.hasError('invalidNric')">Please ensure it is a valid Malaysian identity card number.<br></span>
+            <span *ngIf="control.hasError('nricTaken')">This NRIC has been registered to an account.<br></span>
           </p>
         </ng-template>
       </nz-form-control>
