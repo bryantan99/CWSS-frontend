@@ -17,11 +17,11 @@
 <h4>{{ (userProfile?.personalDetail?.fullName | titlecase) || "-" }} Profile</h4>
 <nz-divider></nz-divider>
 
-<nz-space>
+<nz-space *ngIf="userProfile.accIsActivate === 'Y'">
   <button nz-button *nzSpaceItem nz-dropdown [nzDropdownMenu]="menu">Actions <i nz-icon nzType="down"></i></button>
+  <br><br>
 </nz-space>
 
-<br><br>
 
 <nz-spin [nzSpinning]="isLoading">
   <form [formGroup]="userProfileForm">
