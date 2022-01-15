@@ -5,6 +5,7 @@ import {AuthService} from "../../auth/auth.service";
 import {finalize} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
+import {User} from "../../shared/models/user";
 
 @Component({
   selector: 'app-login',
@@ -17,13 +18,19 @@ export class LoginComponent implements OnInit {
   errorMsg: string;
 
   passwordIsVisible: boolean = false;
+  user: User;
 
   constructor(private fb: FormBuilder,
               private customValidator: CustomValidationService,
               private authService: AuthService,
               private router: Router,
-              private route: ActivatedRoute
-  ) {
+              private route: ActivatedRoute) {
+    this.authService.user.subscribe(resp => {
+      this.user = resp;
+      if (this.user) {
+        this.router.navigate(['/']);
+      }
+    })
   }
 
   ngOnInit(): void {
