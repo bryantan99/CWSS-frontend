@@ -68,7 +68,9 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   }
 
   registerOnChange(fn: any): void {
-    this.personalDetailForm.valueChanges.subscribe(fn);
+    if (this.personalDetailForm) {
+      this.personalDetailForm.valueChanges.subscribe(fn);
+    }
   }
 
   registerOnTouched(fn: any): void {

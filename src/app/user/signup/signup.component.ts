@@ -5,6 +5,8 @@ import {SignupPersonalDetailFormComponent} from "../signup-personal-detail-form/
 import {SignupAddressFormComponent} from "../signup-address-form/signup-address-form.component";
 import {Router} from "@angular/router";
 import {NotificationService} from "../../shared/services/notification.service";
+import {AuthService} from "../../auth/auth.service";
+import {User} from "../../shared/models/user";
 
 @Component({
   selector: 'app-signup',
@@ -16,11 +18,19 @@ export class SignupComponent implements OnInit {
   @ViewChild(SignupAddressFormComponent) addressFormComponent: SignupAddressFormComponent;
 
   form: FormGroup;
+  user: User;
 
   constructor(private fb: FormBuilder,
               private signupService: SignupService,
               private notificationService: NotificationService,
-              private router: Router) {
+              private router: Router,
+              private authService: AuthService) {
+    this.authService.user.subscribe(resp => {
+      this.user = resp;
+      if (this.user) {
+        this.router.navigate(['/']);
+      }
+    })
   }
 
   ngOnInit(): void {

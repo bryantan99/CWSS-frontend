@@ -6,6 +6,8 @@ import {finalize} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {passwordValidator} from "../../shared/validators/custom-validators";
+import {AuthService} from "../../auth/auth.service";
+import {User} from "../../shared/models/user";
 
 @Component({
   selector: 'app-reset-password',
@@ -19,11 +21,19 @@ export class ResetPasswordComponent implements OnInit {
   submitted: boolean = false;
   currentStep: number;
   otpIsValid: boolean = false;
+  user: User;
 
   constructor(private fb: FormBuilder,
               private notificationService: NotificationService,
               private passwordResetService: PasswordResetService,
-              private router: Router) {
+              private router: Router,
+              private authService: AuthService) {
+    this.authService.user.subscribe(resp => {
+      this.user = resp;
+      if (this.user) {
+        this.router.navigate(['/']);
+      }
+    })
   }
 
   get usernameFormControl() {

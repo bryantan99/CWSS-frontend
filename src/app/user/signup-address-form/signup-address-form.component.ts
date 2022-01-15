@@ -61,8 +61,9 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
   }
 
   registerOnChange(fn: any): void {
-    console.log("on change");
-    this.addressForm.valueChanges.subscribe(fn);
+    if (this.addressForm) {
+      this.addressForm.valueChanges.subscribe(fn);
+    }
   }
 
   registerOnTouched(fn: any): void {
