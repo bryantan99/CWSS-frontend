@@ -14,7 +14,7 @@ export class AdminPostService {
 
   private readonly GET_POSTS = this.APP_URL + "/post";
   private readonly GET_POST = this.APP_URL + "/post/postId";
-  private readonly ADD_POST = this.APP_URL + "/post";
+  private readonly ADD_POST = this.APP_URL + "/post/new";
   private readonly DELETE_POST = this.APP_URL + "/post/postId";
   private readonly UPDATE_POST = this.APP_URL + "/post/update";
 
