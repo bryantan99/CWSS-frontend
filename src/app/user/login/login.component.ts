@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CustomValidationService} from "../../shared/services/custom-validation.service";
 import {AuthService} from "../../auth/auth.service";
 import {finalize} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -21,7 +20,6 @@ export class LoginComponent implements OnInit {
   user: User;
 
   constructor(private fb: FormBuilder,
-              private customValidator: CustomValidationService,
               private authService: AuthService,
               private router: Router,
               private route: ActivatedRoute) {
