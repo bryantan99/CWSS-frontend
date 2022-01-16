@@ -44,9 +44,9 @@ export class DropdownChoiceService {
     return this.http.get<ResponseModel<any>>(this.GET_APPOINTMENT_AVAILABLE_TIMESLOT, {params: params});
   }
 
-    getZoneDropdownChoiceList(): Observable<ResponseModel<any>> {
-      return this.http.get<ResponseModel<any>>(this.GET_ZONE_DROPDOWN_CHOICE);
-    }
+  getZoneDropdownChoiceList(): Observable<ResponseModel<any>> {
+    return this.http.get<ResponseModel<any>>(this.GET_ZONE_DROPDOWN_CHOICE);
+  }
 
   getAssistanceCategoryDropdown(): Observable<ResponseModel<any>> {
     return this.http.get<ResponseModel<any>>(this.GET_ASSISTANCE_CATEGORY_DROPDOWN_CHOICE);
@@ -54,6 +54,5 @@ export class DropdownChoiceService {
 
   getModuleDropdownChoices(): Observable<ResponseModel<any>> {
     return this.http.get<ResponseModel<any>>(this.GET_MODULE_DROPDOWN_CHOICE);
-
   }
 }

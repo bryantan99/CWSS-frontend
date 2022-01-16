@@ -11,6 +11,8 @@ import {NotificationService} from "../../shared/services/notification.service";
 import {Subscription} from "rxjs";
 import {phoneNumberValidator} from "../../shared/validators/custom-validators";
 import {uniqueEmailValidator} from "../../shared/validators/custom-async-validator";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-admin-profile',
@@ -54,7 +56,8 @@ export class AdminProfileComponent implements OnInit {
               private fb: FormBuilder,
               private authService: AuthService,
               private adminService: AdminUserService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
   }
 
   ngOnInit(): void {
@@ -79,7 +82,12 @@ export class AdminProfileComponent implements OnInit {
           }
         }, error => {
           this.isSubmitting = false;
-          this.notificationService.createErrorNotification("There\' an error when updating profile.");
+          if (error.status === HttpStatusConstant.FORBIDDEN) {
+            this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+            this.eventBusService.emit(new EventData('logout', null));
+          } else {
+            this.notificationService.createErrorNotification("There\' an error when updating profile.");
+          }
           console.log(error);
         })
     }
@@ -106,7 +114,7 @@ export class AdminProfileComponent implements OnInit {
       roleList: [[], Validators.required]
     });
 
-    this.fileListValueChangesSubscription = this.fileListValueChanges.subscribe(file => {
+    this.fileListValueChangesSubscription = this.fileListValueChanges.subscribe(() => {
       if (this.nzEditAdmin) {
         this.adminForm.markAllAsTouched();
         this.adminForm.markAsDirty();

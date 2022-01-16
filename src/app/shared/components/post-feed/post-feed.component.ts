@@ -6,6 +6,9 @@ import {NewPostModalComponent} from "../new-post-modal/new-post-modal.component"
 import {ImageService} from "../../services/image.service";
 import {HttpStatusConstant} from "../../constants/http-status-constant";
 import {User} from "../../models/user";
+import {EventData} from "../../models/event-data";
+import {NotificationService} from "../../services/notification.service";
+import {EventBusService} from "../../services/event-bus.service";
 
 @Component({
   selector: 'app-post-feed',
@@ -17,7 +20,6 @@ export class PostFeedComponent implements OnInit {
 
   adminPost: any[] = [];
   isLoading: boolean = false;
-  dummyPhotoUrl: string = "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png";
   isAdminLoggedIn: boolean = false;
   editPostModalIsVisible: boolean = false;
   user: User;
@@ -26,7 +28,9 @@ export class PostFeedComponent implements OnInit {
 
   constructor(private adminPostService: AdminPostService,
               private authService: AuthService,
-              private imageService: ImageService) {
+              private imageService: ImageService,
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -62,7 +66,12 @@ export class PostFeedComponent implements OnInit {
           this.getAdminPosts();
         }
       }, error => {
-        console.log("There's an error when deleting new post.", error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There's an error when deleting new post.");
+        }
       })
   }
 

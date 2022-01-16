@@ -6,6 +6,7 @@ import {ResponseModel} from "../shared/models/response-model";
 import {User} from "../shared/models/user";
 import {Router} from "@angular/router";
 import {environment} from "../../environments/environment";
+import {TokenStorageService} from "../shared/services/token-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +22,11 @@ export class AuthService {
   private readonly IS_UNIQUE_USERNAME = this.API_SERVER_URL + "/account/validation/username";
   private readonly IS_UNIQUE_EMAIL = this.API_SERVER_URL + "/account/validation/email";
   private readonly IS_UNIQUE_NRIC = this.API_SERVER_URL + "/account/validation/nric";
-  private readonly CURRENT_LOGGED_IN_USERNAME = this.API_SERVER_URL + "/account/current-username";
+  private readonly REFRESH_TOKEN = this.API_SERVER_URL + "/refresh-token";
 
   constructor(private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private tokenStorageService: TokenStorageService) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('user')));
     this.user = this.userSubject.asObservable();
   }
@@ -39,10 +41,7 @@ export class AuthService {
       .pipe(
         map(resp => {
           const userData = resp.data;
-          sessionStorage.setItem("user", JSON.stringify(userData));
-          sessionStorage.setItem("username", loginForm.username);
-          let tokenStr = "Bearer " + userData.jwtToken;
-          sessionStorage.setItem("token", tokenStr);
+          this.tokenStorageService.saveLoginSessionData(userData);
           this.userSubject.next(userData);
           return userData;
         })
@@ -61,19 +60,13 @@ export class AuthService {
     return found;
   }
 
-  isUserLoggedIn() {
-    let user = sessionStorage.getItem("username");
-    return !(user === null);
-  }
-
   isAdminLoggedIn() {
     let user = sessionStorage.getItem("username");
     return !(user === null) && (this.hasRole("ROLE_ADMIN") || this.hasRole("ROLE_SUPER_ADMIN"));
   }
 
   logOut() {
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("username");
+    this.tokenStorageService.clear();
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
@@ -86,10 +79,6 @@ export class AuthService {
   isUniqueEmail(email: string): Observable<ResponseModel<any>> {
     const params = new HttpParams().set("email", email);
     return this.http.get<ResponseModel<any>>(this.IS_UNIQUE_EMAIL, {params: params});
-  }
-
-  getCurrentLoggedInUsername(): Observable<ResponseModel<any>> {
-    return this.http.get<ResponseModel<any>>(this.CURRENT_LOGGED_IN_USERNAME);
   }
 
   private static decodeJwtToken() {
@@ -106,5 +95,9 @@ export class AuthService {
   isUniqueNric(nric: string): Observable<ResponseModel<any>> {
     const params = new HttpParams().set("nric", nric);
     return this.http.get<ResponseModel<any>>(this.IS_UNIQUE_NRIC, {params: params});
+  }
+
+  refreshToken(token: string): Observable<ResponseModel<any>> {
+    return this.http.post<ResponseModel<any>>(this.REFRESH_TOKEN, {refreshToken: token});
   }
 }

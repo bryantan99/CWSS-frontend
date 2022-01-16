@@ -10,6 +10,8 @@ import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 import {AuthService} from "../../auth/auth.service";
 import {finalize} from "rxjs/operators";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 HC_stock(Highcharts);
 
@@ -36,7 +38,8 @@ export class AllAssistanceComponent implements OnInit {
               private assistanceService: AssistanceService,
               private authService: AuthService,
               private dropdownChoiceService: DropdownChoiceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
     this.isAdmin = this.authService.isAdminLoggedIn();
   }
 
@@ -58,8 +61,13 @@ export class AllAssistanceComponent implements OnInit {
         }
       }, error => {
         this.isLoading = false;
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving all assistance record.";
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving all assistance record.";
+          this.notificationService.createErrorNotification(msg);
+        }
       })
   }
 
@@ -242,8 +250,13 @@ export class AllAssistanceComponent implements OnInit {
         this.CATEGORY_DROPDOWN = resp.data ? resp.data : [];
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when retrieving assistance category dropdown choice(s).";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when retrieving assistance category dropdown choice(s).";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -253,8 +266,13 @@ export class AllAssistanceComponent implements OnInit {
         this.ADMIN_DROPDOWN_LIST = resp.data ? resp.data : [];
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when retrieving assistance category dropdown choice(s).";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when retrieving assistance category dropdown choice(s).";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 }

@@ -6,6 +6,8 @@ import {finalize} from "rxjs/operators";
 import {NotificationService} from "../../shared/services/notification.service";
 import {AssistanceService} from "../assistance.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-assistance-category-mngmt',
@@ -23,7 +25,8 @@ export class AssistanceCategoryMngmtComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private dropdownChoiceService: DropdownChoiceService,
               private assistanceService: AssistanceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
   }
 
   ngOnInit(): void {
@@ -41,8 +44,13 @@ export class AssistanceCategoryMngmtComponent implements OnInit {
         this.categories = resp.data ? resp.data : [];
       }
     }, error => {
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an issue when retrieving assistance categories.";
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an issue when retrieving assistance categories.";
+          this.notificationService.createErrorNotification(msg);
+        }
       })
   }
 
@@ -53,8 +61,13 @@ export class AssistanceCategoryMngmtComponent implements OnInit {
         this.getAssistanceCategories();
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when deleting category [ID: " + categoryId + "].";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when deleting category [ID: " + categoryId + "].";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -76,8 +89,13 @@ export class AssistanceCategoryMngmtComponent implements OnInit {
           this.closeModal();
         }
       }, error => {
-        const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when creating new category.";
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when creating new category.";
+          this.notificationService.createErrorNotification(msg);
+        }
       })
     }
   }
@@ -91,8 +109,13 @@ export class AssistanceCategoryMngmtComponent implements OnInit {
           this.closeModal();
         }
       }, error => {
-        const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when updating category.";
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\' an error when updating category.";
+          this.notificationService.createErrorNotification(msg);
+        }
       })
     }
   }

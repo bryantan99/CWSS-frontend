@@ -7,6 +7,8 @@ import {GeneralConstant} from "../../shared/constants/general-constant";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {finalize} from "rxjs/operators";
+import {EventData} from "../../shared/models/event-data";
+import {EventBusService} from "../../shared/services/event-bus.service";
 
 @Component({
   selector: 'app-activity-log',
@@ -25,6 +27,7 @@ export class ActivityLogComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private auditService: AuditService,
               private dropdownService: DropdownChoiceService,
+              private eventBusService: EventBusService,
               private notificationService: NotificationService) {
   }
 
@@ -57,8 +60,13 @@ export class ActivityLogComponent implements OnInit {
         }
       }, error => {
         this.isLoading = false;
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving audit logs.";
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving audit logs.";
+          this.notificationService.createErrorNotification(msg);
+        }
       })
   }
 
@@ -84,8 +92,13 @@ export class ActivityLogComponent implements OnInit {
         this.MODULE_LIST = resp.data ? resp.data : [];
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retriving module list.";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving module list.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 }

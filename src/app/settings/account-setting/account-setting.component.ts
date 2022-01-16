@@ -6,6 +6,8 @@ import {AuthService} from "../../auth/auth.service";
 import {PasswordResetService} from "../../shared/services/password-reset.service";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {NotificationService} from "../../shared/services/notification.service";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-account-setting',
@@ -22,7 +24,8 @@ export class AccountSettingComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private passwordResetService: PasswordResetService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
     });
@@ -66,6 +69,10 @@ export class AccountSettingComponent implements OnInit {
           this.notificationService.createErrorNotification("There\'s an error when updating new password.");
           if (error.status === HttpStatusConstant.UNAUTHORIZED) {
             this.oldPasswordFormControl.setErrors({mismatch: true});
+          }
+          if (error.status === HttpStatusConstant.FORBIDDEN) {
+            this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+            this.eventBusService.emit(new EventData('logout', null));
           }
         })
     }

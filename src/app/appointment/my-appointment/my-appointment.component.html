@@ -48,20 +48,20 @@
   </ng-container>
 </nz-drawer>
 
-<nz-modal nzTitle="Schedule New Appointment"
-          (nzOnCancel)="cancelScheduleAppointment()"
-          [nzVisible]="appointmentModalIsVisible">
-  <ng-container *nzModalContent>
-    <app-appointment-form [isAdmin]="isAdmin"
-                          [user]="user"
-                          (formValidityEventEmitter)="formValidityHasChanges($event)"
-                          (isSubmittingEventEmitter)="isSubmittingHasChanges($event)"
-                          (isSubmittedSuccessfullyEventEmitter)="closeModalAndRefreshList($event)"></app-appointment-form>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button nzType="default" (click)="cancelScheduleAppointment()">Cancel</button>
-    <button nz-button nzType="primary" [disabled]="!formIsValid" [nzLoading]="isSubmitting"
-            (click)="scheduleAppointment()">Schedule
-    </button>
-  </div>
-</nz-modal>
+<!--<nz-modal nzTitle="Schedule New Appointment"-->
+<!--          (nzOnCancel)="cancelScheduleAppointment()"-->
+<!--          [nzVisible]="appointmentModalIsVisible">-->
+<!--  <ng-container *nzModalContent>-->
+<!--    <app-appointment-form [isAdmin]="isAdmin"-->
+<!--                          [user]="user"-->
+<!--                          (formValidityEventEmitter)="formValidityHasChanges($event)"-->
+<!--                          (isSubmittingEventEmitter)="isSubmittingHasChanges($event)"-->
+<!--                          (isSubmittedSuccessfullyEventEmitter)="closeModalAndRefreshList($event)"></app-appointment-form>-->
+<!--  </ng-container>-->
+<!--  <div *nzModalFooter>-->
+<!--    <button nz-button nzType="default" (click)="cancelScheduleAppointment()">Cancel</button>-->
+<!--    <button nz-button nzType="primary" [disabled]="!formIsValid" [nzLoading]="isSubmitting"-->
+<!--            (click)="scheduleAppointment()">Schedule-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</nz-modal>-->

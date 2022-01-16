@@ -9,6 +9,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {CommunityUserGraphComponent} from "../community-user-graph/community-user-graph.component";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-community-user',
@@ -54,7 +56,8 @@ export class CommunityUserComponent implements OnInit {
   constructor(private communityUserService: CommunityUserService,
               private notificationService: NotificationService,
               private dropdownChoiceService: DropdownChoiceService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private eventBusService: EventBusService) {
   }
 
   ngOnInit(): void {
@@ -70,7 +73,7 @@ export class CommunityUserComponent implements OnInit {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.diseaseDropdownList = resp.data ? resp.data : [];
       }
-    }, error => {
+    }, () => {
       this.notificationService.createErrorNotification("There's an error when retrieving disease dropdown choice list.");
     })
   }
@@ -128,8 +131,12 @@ export class CommunityUserComponent implements OnInit {
         }
       }, error => {
         this.users = [];
-        this.notificationService.createErrorNotification("There\'s an error when retrieving community users.");
-        console.log(error.error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when retrieving community users.");
+        }
       });
     this.queryDrawerIsVisible = false;
   }
@@ -172,7 +179,7 @@ export class CommunityUserComponent implements OnInit {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.zoneDropdownList = resp.data ? resp.data : [];
       }
-    }, error => {
+    }, () => {
       this.notificationService.createErrorNotification("There's an error when retrieving zone dropdown choice list.");
     })
   }

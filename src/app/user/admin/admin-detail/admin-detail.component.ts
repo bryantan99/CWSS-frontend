@@ -9,6 +9,8 @@ import {AdminUserService} from "../../../shared/services/admin-user.service";
 import {finalize} from "rxjs/operators";
 import {HttpStatusConstant} from "../../../shared/constants/http-status-constant";
 import {NzUploadFile} from "ng-zorro-antd/upload";
+import {EventBusService} from "../../../shared/services/event-bus.service";
+import {EventData} from "../../../shared/models/event-data";
 
 @Component({
   selector: 'app-admin-detail',
@@ -27,7 +29,8 @@ export class AdminDetailComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private notificationService: NotificationService,
-              private adminService: AdminUserService) {
+              private adminService: AdminUserService,
+              private eventBusService: EventBusService) {
   }
 
   ngOnInit(): void {
@@ -61,7 +64,12 @@ export class AdminDetailComponent implements OnInit {
         }
       }, error => {
         this.isSubmitting = false;
-        this.notificationService.createErrorNotification("There\'s an error when adding new staff.");
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when adding new staff.");
+        }
       })
     }
   }

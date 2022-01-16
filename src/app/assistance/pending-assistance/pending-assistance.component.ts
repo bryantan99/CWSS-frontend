@@ -5,6 +5,8 @@ import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {finalize} from "rxjs/operators";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AssistanceFormComponent} from "../assistance-form/assistance-form.component";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-pending-assistance',
@@ -21,7 +23,8 @@ export class PendingAssistanceComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private assistanceService: AssistanceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
   }
 
   ngOnInit(): void {
@@ -37,12 +40,17 @@ export class PendingAssistanceComponent implements OnInit {
       }))
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
-          this.assistanceRequests = resp.data;
+          this.assistanceRequests = resp.data ? resp.data : [];
         }
       }, error => {
         this.isLoading = false;
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving all pending assistance requests(s).";
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving all pending assistance requests(s).";
+          this.notificationService.createErrorNotification(msg);
+        }
       })
   }
 

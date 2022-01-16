@@ -10,6 +10,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ImageService} from "../../shared/services/image.service";
 import {RoleConstant} from "../../shared/constants/role-constant";
 import {Location} from "@angular/common";
+import {EventData} from "../../shared/models/event-data";
+import {EventBusService} from "../../shared/services/event-bus.service";
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +37,8 @@ export class ProfileComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private imageService: ImageService,
-              private location: Location) {
+              private location: Location,
+              private eventBusService: EventBusService) {
     this.route.queryParams.subscribe(params => {
       if (!params['username'] && !params['adminUsername']) {
         this.location.back();
@@ -54,7 +57,6 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.updateIsOwnerOfProfile();
     if (!this.isAdmin && !this.isOwnerOfProfile) {
-      this.notificationService.createErrorNotification("Unauthorized user to view profile.");
       this.location.back();
     }
     this.getProfile();
@@ -78,10 +80,16 @@ export class ProfileComponent implements OnInit {
           this.isOwnerOfProfile = this.adminProfile.username === this.currentLoggedInUser.username;
         }
       }, error => {
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving profile.";
-        this.notificationService.createErrorNotification(msg);
-        if (error && error.status == HttpStatusConstant.NOT_FOUND) {
+        console.log(error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else if (error.status === HttpStatusConstant.NOT_FOUND) {
+          this.notificationService.createErrorNotification("Requested admin profile was not found.");
           this.location.back();
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving profile.";
+          this.notificationService.createErrorNotification(msg);
         }
       });
   }
@@ -94,10 +102,15 @@ export class ProfileComponent implements OnInit {
           this.isOwnerOfProfile = this.userProfile.username === this.currentLoggedInUser.username;
         }
       }, error => {
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving profile.";
-        this.notificationService.createErrorNotification(msg);
-        if (error && error.status == HttpStatusConstant.NOT_FOUND) {
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else if (error.status == HttpStatusConstant.NOT_FOUND) {
+          this.notificationService.createErrorNotification("The requested profile is not found.");
           this.location.back();
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving profile.";
+          this.notificationService.createErrorNotification(msg);
         }
       });
   }

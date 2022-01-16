@@ -16,6 +16,8 @@ import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 import {AppointmentService} from "../../appointment/appointment.service";
 import {ConfirmationFormModel} from "../../shared/models/confirmation-form-model";
 import {AssistanceModel} from "../../shared/models/assistance-model";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-assistance-detail',
@@ -54,7 +56,8 @@ export class AssistanceDetailComponent implements OnInit {
               private authService: AuthService,
               private dropdownChoiceService: DropdownChoiceService,
               private appointmentService: AppointmentService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -86,9 +89,14 @@ export class AssistanceDetailComponent implements OnInit {
         }
       }, error => {
         this.isLoading = false;
-        this.notificationService.createErrorNotification("There\'s an error when retrieving assistance record detail.");
-        if (error.error && error.error.status === HttpStatusConstant.NOT_FOUND) {
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else if (error.status === HttpStatusConstant.NOT_FOUND) {
+          this.notificationService.createErrorNotification("Requested assistance record is not found.");
           this.router.navigate(['/assistance']);
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when retrieving assistance record detail.");
         }
       });
   }
@@ -100,8 +108,13 @@ export class AssistanceDetailComponent implements OnInit {
         this.location.back();
       }
     }, error => {
-      this.notificationService.createErrorNotification("There\'s an error when deleting assistance request.");
-      console.log(error.error);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        console.log(error.error);
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        this.notificationService.createErrorNotification("There\'s an error when deleting assistance request.");
+      }
     })
   }
 
@@ -170,7 +183,12 @@ export class AssistanceDetailComponent implements OnInit {
         }
       }, error => {
         this.isSubmitting = false;
-        this.notificationService.createErrorNotification("There\'s an error when updating record.");
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when updating record.");
+        }
         console.log(error.error);
       });
   }
@@ -210,8 +228,13 @@ export class AssistanceDetailComponent implements OnInit {
         this.getAssistanceDetail();
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when rejecting assistance request.";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when rejecting assistance request.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -226,8 +249,13 @@ export class AssistanceDetailComponent implements OnInit {
         this.adminChoices = resp.data ? resp.data : [];
       }
     }, error => {
-      this.notificationService.createErrorNotification("There\'s an error when retrieving person-in-charge dropdown choices list.");
-      console.log(error.error);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        this.notificationService.createErrorNotification("There\'s an error when retrieving person-in-charge dropdown choices list.");
+        console.log(error.error);
+      }
     })
   }
 
@@ -237,8 +265,13 @@ export class AssistanceDetailComponent implements OnInit {
         this.CATEGORY_DROPDOWN = resp.data ? resp.data : [];
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving person-in-charge dropdown choices list.";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving person-in-charge dropdown choices list.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -251,6 +284,13 @@ export class AssistanceDetailComponent implements OnInit {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.selectedAppointment = resp.data;
         this.rescheduleDatetimeModalIsVisible = true;
+      }
+    }, error => {
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        this.notificationService.createErrorNotification("There\'s an error when retrieving current appointment's datetime.");
       }
     });
   }
@@ -268,8 +308,13 @@ export class AssistanceDetailComponent implements OnInit {
         this.getAssistanceDetail();
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when confirming appointment.";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when confirming appointment.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -336,8 +381,13 @@ export class AssistanceDetailComponent implements OnInit {
           this.getAssistanceDetail();
         }
       }, error => {
-        const msg = error && error.error && error.error.message ? error.error.message : 'There\'s an error when updating appointment status and assistance status.';
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : 'There\'s an error when updating appointment status and assistance status.';
+          this.notificationService.createErrorNotification(msg);
+        }
       })
     }
   }

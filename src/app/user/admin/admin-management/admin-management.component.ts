@@ -9,6 +9,8 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../../auth/auth.service";
 import {User} from "../../../shared/models/user";
 import {RoleConstant} from "../../../shared/constants/role-constant";
+import {EventBusService} from "../../../shared/services/event-bus.service";
+import {EventData} from "../../../shared/models/event-data";
 
 @Component({
   selector: 'app-admin-user',
@@ -45,7 +47,8 @@ export class AdminManagementComponent implements OnInit {
   constructor(private adminUserService: AdminUserService,
               private notificationService: NotificationService,
               private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isSuperAdmin = this.authService.hasRole(RoleConstant.ROLE_SUPER_ADMIN);
@@ -70,9 +73,16 @@ export class AdminManagementComponent implements OnInit {
           this.listOfDisplayData = [...this.listOfData];
         }
       }, error => {
-        console.log("There's an error when retrieving community users.", error);
+        console.log(error);
         this.isLoading = false;
         this.listOfData = []
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There's an error when retrieving admins.");
+        }
+
       });
   }
 
@@ -95,7 +105,12 @@ export class AdminManagementComponent implements OnInit {
         this.getAdminUsers();
       }
     }, error => {
-      this.notificationService.createErrorNotification("There\'s an error when deleting user account.")
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        this.notificationService.createErrorNotification("There\'s an error when deleting user account.")
+      }
     });
   }
 

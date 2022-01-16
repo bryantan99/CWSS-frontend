@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AppointmentService} from "../appointment.service";
 import {finalize} from "rxjs/operators";
@@ -8,7 +8,8 @@ import {User} from "../../shared/models/user";
 import {NotificationService} from "../../shared/services/notification.service";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
-import {AppointmentFormComponent} from "../appointment-form/appointment-form.component";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-my-appointment',
@@ -16,7 +17,6 @@ import {AppointmentFormComponent} from "../appointment-form/appointment-form.com
 })
 export class MyAppointmentComponent implements OnInit {
 
-  @ViewChild(AppointmentFormComponent) appointmentFormComponent: AppointmentFormComponent;
   filterForm: FormGroup;
   appointmentList: any[] = []
   isLoading: boolean = false;
@@ -31,7 +31,8 @@ export class MyAppointmentComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private appointmentService: AppointmentService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -63,11 +64,17 @@ export class MyAppointmentComponent implements OnInit {
       }))
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
-          this.appointmentList = resp.data;
+          this.appointmentList = resp.data ? resp.data : [];
         }
-      }, () => {
+      }, error => {
         this.isLoading = false;
-        this.notificationService.createErrorNotification("There\'s an error when retrieving confirmed appointment(s).");
+        this.appointmentList = [];
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when retrieving confirmed appointment(s).");
+        }
       })
   }
 
@@ -79,31 +86,12 @@ export class MyAppointmentComponent implements OnInit {
     this.filterDrawerIsVisible = false;
   }
 
-  openAppointmentModal() {
-    this.appointmentModalIsVisible = true;
-  }
-
-  cancelScheduleAppointment() {
-    this.appointmentModalIsVisible = false;
-  }
-
-  scheduleAppointment() {
-    this.appointmentFormComponent.submitForm();
-  }
-
   formValidityHasChanges(data: boolean) {
     this.formIsValid = data;
   }
 
   isSubmittingHasChanges(data: boolean) {
     this.isSubmitting = data;
-  }
-
-  closeModalAndRefreshList(data: boolean) {
-    if (data) {
-      this.appointmentModalIsVisible = false;
-      this.getLoggedInUserAppointments();
-    }
   }
 
   refreshList(data: boolean) {

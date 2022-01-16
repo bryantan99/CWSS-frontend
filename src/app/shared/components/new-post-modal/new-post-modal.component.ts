@@ -6,6 +6,8 @@ import {NzUploadFile} from "ng-zorro-antd/upload";
 import {HttpStatusConstant} from "../../constants/http-status-constant";
 import {ImageService} from "../../services/image.service";
 import {NotificationService} from "../../services/notification.service";
+import {EventData} from "../../models/event-data";
+import {EventBusService} from "../../services/event-bus.service";
 
 @Component({
   selector: 'app-new-post-modal',
@@ -30,7 +32,8 @@ export class NewPostModalComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private adminPostService: AdminPostService,
               private imageService: ImageService,
-              private noticationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
   }
 
   ngOnInit(): void {
@@ -67,8 +70,13 @@ export class NewPostModalComponent implements OnInit {
             this.isSubmitted = false;
           }
         }, error => {
-          console.log("There's an error when creating new post.", error);
           this.isSubmitted = false;
+          if (error.status === HttpStatusConstant.FORBIDDEN) {
+            this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+            this.eventBusService.emit(new EventData('logout', null));
+          } else {
+            this.notificationService.createErrorNotification("There's an error when creating new post.");
+          }
         });
     }
   }
@@ -86,8 +94,13 @@ export class NewPostModalComponent implements OnInit {
             this.isSubmitted = false;
           }
         }, error => {
-          console.log("There's an error when updating post.", error);
           this.isSubmitted = false;
+          if (error.status === HttpStatusConstant.FORBIDDEN) {
+            this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+            this.eventBusService.emit(new EventData('logout', null));
+          } else {
+            this.notificationService.createErrorNotification("There's an error when updating post.");
+          }
         });
     }
   }
@@ -137,8 +150,12 @@ export class NewPostModalComponent implements OnInit {
         this.patchForm(resp.data);
       }
     }, error => {
-      this.noticationService.createErrorNotification("There\'s an error when retrieving post ID: " + postId.toString(10));
-      console.log(error.error);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        this.notificationService.createErrorNotification("There\'s an error when retrieving post ID: " + postId.toString(10));
+      }
     })
   }
 

@@ -8,6 +8,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {finalize} from "rxjs/operators";
 import * as moment from "moment";
 import {differenceInCalendarDays} from "date-fns";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-appointment-schedule',
@@ -25,7 +27,8 @@ export class AppointmentScheduleComponent implements OnInit {
   constructor(private authService: AuthService,
               private appointmentService: AppointmentService,
               private notificationService: NotificationService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -52,8 +55,13 @@ export class AppointmentScheduleComponent implements OnInit {
       }, error => {
         this.isLoading = false;
         this.appointmentList = [];
-        this.notificationService.createErrorNotification("There\'s an error when retrieving scheduled appointments on " + date);
         console.log(error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when retrieving scheduled appointments on " + date);
+        }
       })
   }
 

@@ -1,5 +1,8 @@
 export interface User {
   username: string,
   roleList: string[],
-  jwtToken?: string
+  expirationDate?: number,
+  jwtToken?: string,
+  refreshToken?: string,
+  type?: string,
 }

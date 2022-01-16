@@ -12,6 +12,8 @@ import {AssistanceFormComponent} from "../assistance-form/assistance-form.compon
 import {finalize} from "rxjs/operators";
 import {CommunityUserService} from "../../shared/services/community-user.service";
 import {BlockDetailModel} from "../../shared/models/block-detail-model";
+import {EventData} from "../../shared/models/event-data";
+import {EventBusService} from "../../shared/services/event-bus.service";
 
 @Component({
   selector: 'app-my-assistance',
@@ -37,7 +39,8 @@ export class MyAssistanceComponent implements OnInit {
               private authService: AuthService,
               private communityUserService: CommunityUserService,
               private dropdownChoiceService: DropdownChoiceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -79,8 +82,14 @@ export class MyAssistanceComponent implements OnInit {
         }
       }, error => {
         this.isLoading = false;
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving handled assistance record(s).";
-        this.notificationService.createErrorNotification(msg);
+        this.assistanceRecords = [];
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving handled assistance record(s).";
+          this.notificationService.createErrorNotification(msg);
+        }
       });
   }
 
@@ -96,12 +105,19 @@ export class MyAssistanceComponent implements OnInit {
     }))
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
-          this.assistanceRecords = resp.data;
+          this.assistanceRecords = resp.data ? resp.data : [];
         }
       }, error => {
         this.isLoading = false;
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving assistance record(s).";
-        this.notificationService.createErrorNotification(msg);
+        this.assistanceRecords = [];
+        console.log("Error: ", error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving assistance record(s).";
+          this.notificationService.createErrorNotification(msg);
+        }
       });
   }
 
@@ -139,8 +155,13 @@ export class MyAssistanceComponent implements OnInit {
         this.USERNAME_DROPDOWN_LIST = resp.data;
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving community users dropdown list.";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving community users dropdown list.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -176,7 +197,12 @@ export class MyAssistanceComponent implements OnInit {
         username: this.user.username,
         isBlocked: true
       };
-      this.notificationService.createErrorNotification("There\' an error when checking if the user is blocked from requesting assistance.");
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        this.notificationService.createErrorNotification("There\' an error when checking if the user is blocked from requesting assistance.");
+      }
     })
   }
 }

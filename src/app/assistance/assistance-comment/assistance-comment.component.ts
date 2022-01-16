@@ -5,6 +5,8 @@ import {NotificationService} from "../../shared/services/notification.service";
 import {finalize} from "rxjs/operators";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {GeneralConstant} from "../../shared/constants/general-constant";
+import {EventBusService} from "../../shared/services/event-bus.service";
+import {EventData} from "../../shared/models/event-data";
 
 @Component({
   selector: 'app-assistance-comment',
@@ -26,7 +28,8 @@ export class AssistanceCommentComponent implements OnInit {
   readonly DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
 
   constructor(private assistanceService: AssistanceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
   }
 
   ngOnInit(): void {
@@ -50,7 +53,12 @@ export class AssistanceCommentComponent implements OnInit {
         }
       }, error => {
         this.isSubmitting = false;
-        this.notificationService.createErrorNotification("There\'s an error when adding new comment.");
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when adding new comment.");
+        }
         console.log(error.error);
       });
   }
@@ -67,8 +75,14 @@ export class AssistanceCommentComponent implements OnInit {
         }
       }, error => {
         this.isLoading = false;
-        this.notificationService.createErrorNotification("There\'s an error when retrieving comment list.");
+        this.commentList = [];
         console.log(error.error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when retrieving comment list.");
+        }
       })
   }
 

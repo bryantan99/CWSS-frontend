@@ -12,6 +12,8 @@ import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 import {phoneNumberValidator, postCodeValidator} from "../../shared/validators/custom-validators";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
+import {EventData} from "../../shared/models/event-data";
+import {EventBusService} from "../../shared/services/event-bus.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -46,7 +48,8 @@ export class UserProfileComponent implements OnInit {
               private notificationService: NotificationService,
               private router: Router,
               private location: Location,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -69,15 +72,20 @@ export class UserProfileComponent implements OnInit {
 
   rejectAccount(username: string) {
     this.communityUserService.rejectAccount(username)
-      .subscribe(resp => {
-        if (resp && resp.status === HttpStatusConstant.OK) {
-          this.notificationService.createSuccessNotification("User account has been rejected.");
-          this.router.navigate(['/community-user']);
-        }
-      }, error => {
-        this.notificationService.createErrorNotification("There\'s an error when rejecting user account.");
-        console.log(error);
-      })
+        .subscribe(resp => {
+          if (resp && resp.status === HttpStatusConstant.OK) {
+            this.notificationService.createSuccessNotification("User account has been rejected.");
+            this.router.navigate(['/community-user']);
+          }
+        }, error => {
+          console.log(error);
+          if (error.status === HttpStatusConstant.FORBIDDEN) {
+            this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+            this.eventBusService.emit(new EventData('logout', null));
+          } else {
+            this.notificationService.createErrorNotification("There\'s an error when rejecting user account.");
+          }
+        })
   }
 
   approveAccount(username: string) {
@@ -88,8 +96,13 @@ export class UserProfileComponent implements OnInit {
           this.emitRefreshProfile(username);
         }
       }, error => {
-        this.notificationService.createErrorNotification("There\'s an error when approving user account.");
         console.log(error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when approving user account.");
+        }
       })
   }
 
@@ -101,8 +114,13 @@ export class UserProfileComponent implements OnInit {
           this.router.navigate(['/community-user']);
         }
       }, error => {
-        this.notificationService.createErrorNotification("There\'s an error when deleting user account.");
         console.log(error);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There\'s an error when deleting user account.");
+        }
       })
   }
 
@@ -221,6 +239,14 @@ export class UserProfileComponent implements OnInit {
         this.notificationService.createSuccessNotification("Successfully updated user profile.");
         this.emitRefreshProfile(this.userProfile.username);
       }
+    }, error => {
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when updating profile.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -253,8 +279,13 @@ export class UserProfileComponent implements OnInit {
         this.emitRefreshProfile(this.userProfile.username);
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when attempting to block user.";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when attempting to block user.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 
@@ -270,8 +301,13 @@ export class UserProfileComponent implements OnInit {
         this.emitRefreshProfile(this.userProfile.username);
       }
     }, error => {
-      const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when attempting to unblock user.";
-      this.notificationService.createErrorNotification(msg);
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when attempting to unblock user.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 

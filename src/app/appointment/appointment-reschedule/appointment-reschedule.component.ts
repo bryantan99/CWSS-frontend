@@ -8,6 +8,8 @@ import {User} from "../../shared/models/user";
 import {differenceInCalendarDays, isWeekend} from "date-fns";
 import {HolidayService} from "../../shared/services/holiday.service";
 import {AppointmentService} from "../appointment.service";
+import {EventData} from "../../shared/models/event-data";
+import {EventBusService} from "../../shared/services/event-bus.service";
 
 @Component({
   selector: 'app-appointment-reschedule',
@@ -33,7 +35,8 @@ export class AppointmentRescheduleComponent implements OnInit {
               private appointmentService: AppointmentService,
               private holidayService: HolidayService,
               private dropdownChoiceService: DropdownChoiceService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private eventBusService: EventBusService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -68,8 +71,13 @@ export class AppointmentRescheduleComponent implements OnInit {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.timeslotList = resp.data ? resp.data : [];
       }
-    }, () => {
-      this.notificationService.createErrorNotification("There\'s an error when retrieving available timeslot.");
+    }, error => {
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        this.notificationService.createErrorNotification("There\'s an error when retrieving available timeslot.");
+      }
     })
   }
 
@@ -113,8 +121,13 @@ export class AppointmentRescheduleComponent implements OnInit {
           this.refreshAppointmentList();
         }
       }, error => {
-        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when updating appointment's datetime.";
-        this.notificationService.createErrorNotification(msg);
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when updating appointment's datetime.";
+          this.notificationService.createErrorNotification(msg);
+        }
       })
   }
 
