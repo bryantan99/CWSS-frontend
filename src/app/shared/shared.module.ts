@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {NewsfeedComponent} from './components/newsfeed/newsfeed.component';
 import {PostFeedComponent} from "./components/post-feed/post-feed.component";
 import {SHARED_ZORRO_MODULES} from "./shared-zorro.module";
 import { NewPostModalComponent } from './components/new-post-modal/new-post-modal.component';
@@ -15,7 +14,7 @@ import {HighchartsChartModule} from "highcharts-angular";
 
 
 @NgModule({
-  declarations: [NewsfeedComponent, PostFeedComponent, NewPostModalComponent,GenderPipe, StatePipe, EmploymentTypePipe, EthnicPipe],
+  declarations: [PostFeedComponent, NewPostModalComponent,GenderPipe, StatePipe, EmploymentTypePipe, EthnicPipe],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,7 +26,6 @@ import {HighchartsChartModule} from "highcharts-angular";
   ],
   exports: [
     CommonModule,
-    NewsfeedComponent,
     NewPostModalComponent,
     PostFeedComponent,
     GoogleMapsModule,
