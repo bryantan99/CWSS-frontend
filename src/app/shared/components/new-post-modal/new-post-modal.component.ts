@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AdminPostService} from "../../services/admin-post.service";
 import {CkEditorConstants} from "../../constants/ck-editor-constants";
@@ -13,7 +13,7 @@ import {EventBusService} from "../../services/event-bus.service";
   selector: 'app-new-post-modal',
   templateUrl: './new-post-modal.component.html'
 })
-export class NewPostModalComponent implements OnInit {
+export class NewPostModalComponent implements OnInit, OnChanges {
   @Input() isVisible: boolean;
   @Input() postId: number | null;
   @Output() modalIsVisibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -37,8 +37,17 @@ export class NewPostModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initForm();
-    this.nzTitle = this.nzEdit ? "Edit Post" : "Create New Post";
+    if (this.isVisible) {
+      this.initForm();
+      this.nzTitle = this.nzEdit ? "Edit Post" : "Create New Post";
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isVisible) {
+      this.initForm();
+      this.nzTitle = this.nzEdit ? "Edit Post" : "Create New Post";
+    }
   }
 
   editPost(postId: number) {
