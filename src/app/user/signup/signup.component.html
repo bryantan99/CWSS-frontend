@@ -1,16 +1,16 @@
 <form [formGroup]="form">
   <h4>Personal Detail</h4>
   <nz-divider></nz-divider>
-  <app-signup-personal-detail-form [isVisible]="true" formControlName="personalDetail"></app-signup-personal-detail-form>
+  <app-signup-personal-detail-form [isVisible]="true" formControlName="personalDetail" (ngModelChange)="personalDetailFormChanges()"></app-signup-personal-detail-form>
 
   <br>
 
   <h4>Address</h4>
   <nz-divider></nz-divider>
-  <app-signup-address-form [isVisible]="true" formControlName="address"></app-signup-address-form>
+  <app-signup-address-form [isVisible]="true" formControlName="address" (ngModelChange)="addressFormChanges()"></app-signup-address-form>
 
   <nz-space>
-    <button nz-button nzType="primary" *nzSpaceItem (click)="submitForm()">Register
+    <button nz-button nzType="primary" *nzSpaceItem [disabled]="!form.valid" (click)="submitForm()">Register
     </button>
   </nz-space>
 </form>

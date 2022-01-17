@@ -15,7 +15,7 @@
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>NRIC No.</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="nricErrorTpl">
-        <input nz-input type="text" [maxlength]="12" [minlength]="12" formControlName="nric">
+        <input nz-input type="text" [maxlength]="12" [minlength]="12" [placeholder]="'Without hyphens (-)'" formControlName="nric">
         <ng-template #nricErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input NRIC<br></span>
@@ -31,12 +31,14 @@
       <nz-form-control [nzSpan]="24" [nzErrorTip]="usernameErrorTpl">
         <ng-container>
           <input nz-input type="text" formControlName="username">
-          <nz-alert class="mt-2" nzType="info" [nzMessage]="usernameRequirementsTpl" nzShowIcon></nz-alert>
         </ng-container>
         <ng-template #usernameErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input username.<br></span>
-            <span *ngIf="control.hasError('invalidUsername')">Please ensure that your username matches the requirements.<br></span>
+            <span *ngIf="control.hasError('invalidUsername')">
+              Please ensure that your username matches the requirements.<br>
+              <nz-alert class="mt-2" nzType="info" [nzMessage]="usernameRequirementsTpl" nzShowIcon></nz-alert>
+            </span>
             <span *ngIf="control.hasError('usernameTaken')">This username has been taken.<br></span>
           </p>
         </ng-template>
@@ -46,34 +48,39 @@
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Password</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="passwordErrorTpl">
-        <input nz-input type="password" formControlName="password" (ngModelChange)="matchPassword()">
-        <nz-alert class="mt-2" nzType="info" [nzMessage]="passwordRequirementsTpl" nzShowIcon></nz-alert>
-        <ng-template #passwordErrorTpl let-control>
-          <p>
-            <span *ngIf="control.hasError('required')">Please input password<br></span>
-            <span *ngIf="control.hasError('invalidPassword')">Password does not meet minimum requirements<br></span>
-          </p>
-        </ng-template>
+        <nz-input-group [nzSuffix]="passwordSuffixTemplate">
+          <input nz-input [type]="showPassword ? 'text' : 'password'" formControlName="password" (ngModelChange)="matchPassword()">
+          <ng-template #passwordErrorTpl let-control>
+            <p>
+              <span *ngIf="control.hasError('required')">Please input password<br></span>
+              <span *ngIf="control.hasError('invalidPassword')">Password does not meet minimum requirements<br>
+              <nz-alert class="mt-2" nzType="info" [nzMessage]="passwordRequirementsTpl" nzShowIcon></nz-alert>
+            </span>
+            </p>
+          </ng-template>
+        </nz-input-group>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Confirm Password</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="confirmPasswordErrorTpl">
-        <input nz-input type="password" formControlName="confirmPassword" (ngModelChange)="matchPassword()">
-        <ng-template #confirmPasswordErrorTpl let-control>
-          <p>
-            <span *ngIf="control.hasError('required')">Please input confirm password<br></span>
-            <span *ngIf="control.hasError('passwordNotMatch')">Password does not match<br></span>
-          </p>
-        </ng-template>
+        <nz-input-group [nzSuffix]="confirmPasswordSuffixTemplate">
+          <input nz-input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" (ngModelChange)="matchPassword()">
+          <ng-template #confirmPasswordErrorTpl let-control>
+            <p>
+              <span *ngIf="control.hasError('required')">Please input confirm password<br></span>
+              <span *ngIf="control.hasError('passwordNotMatch')">Password does not match<br></span>
+            </p>
+          </ng-template>
+        </nz-input-group>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Contact No</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="contactNoErrorTpl">
-        <input nz-input type="text" [minlength]="9" [maxlength]="11" formControlName="contactNo">
+        <input nz-input type="text" [minlength]="9" [maxlength]="11" placeholder="01xxxxxxxx / 011xxxxxxxx" formControlName="contactNo">
         <ng-template #contactNoErrorTpl let-control>
           <p>
             <span *ngIf="control.hasError('required')">Please input contact no.<br></span>
@@ -98,7 +105,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzSpan]="24">Gender</nz-form-label>
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Gender</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="genderErrorTpl">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose a gender" formControlName="gender">
           <nz-option *ngFor="let choice of GENDER_CHOICE" [nzLabel]="choice?.text"
@@ -113,7 +120,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="fw-bold text-start" [nzSpan]="24">Race</nz-form-label>
+      <nz-form-label class="fw-bold text-start" [nzSpan]="24" nzRequired>Race</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="raceError">
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Choose an ethnic" formControlName="ethnic">
           <nz-option *ngFor="let choice of ETHNIC_DROPDOWN" [nzValue]="choice?.value"
@@ -146,4 +153,12 @@
     <li>At least 8 characters long</li>
     <li>Must contain at least a digit (0-9), a lowercase letter (a-z), an uppercase letter (A-Z)</li>
   </ul>
+</ng-template>
+
+<ng-template #passwordSuffixTemplate>
+  <i nz-icon [nzType]="showPassword ? 'eye' : 'eye-invisible'" (click)="showPassword = !showPassword"></i>
+</ng-template>
+
+<ng-template #confirmPasswordSuffixTemplate>
+  <i nz-icon [nzType]="showConfirmPassword ? 'eye' : 'eye-invisible'" (click)="showConfirmPassword = !showConfirmPassword"></i>
 </ng-template>

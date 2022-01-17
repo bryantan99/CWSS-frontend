@@ -41,9 +41,6 @@ export class SignupComponent implements OnInit {
   }
 
   submitForm() {
-    this.form.controls['personalDetail'].updateValueAndValidity({emitEvent: false});
-    this.form.controls['address'].updateValueAndValidity({emitEvent: false});
-
     if (!this.form.valid) {
       const invalidFormList = this.filterInvalidForm();
       this.displayInvalidFormNotification(invalidFormList);
@@ -82,5 +79,13 @@ export class SignupComponent implements OnInit {
       errorMsg += "- " + name + "<br/>"
     })
     this.notificationService.createErrorNotification(errorMsg)
+  }
+
+  personalDetailFormChanges() {
+    this.form.controls['personalDetail'].updateValueAndValidity({emitEvent: false});
+  }
+
+  addressFormChanges() {
+    this.form.controls['address'].updateValueAndValidity({emitEvent: false});
   }
 }

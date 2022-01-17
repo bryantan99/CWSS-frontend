@@ -43,6 +43,8 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   personalDetailForm: FormGroup;
   readonly GENDER_CHOICE: DropdownChoiceModel[] = DropdownConstant.GENDER_DROPDOWN;
   readonly ETHNIC_DROPDOWN: DropdownChoiceModel[] = DropdownConstant.ETHNIC_DROPDOWN;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService) {
@@ -119,8 +121,8 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
       confirmPassword: ['', [Validators.required]],
       contactNo: ['', [Validators.required, phoneNumberValidator()]],
       email: ['', [Validators.email], [uniqueEmailValidator(this.authService)]],
-      gender: [''],
-      ethnic: ['']
+      gender: ['', [Validators.required]],
+      ethnic: ['', [Validators.required]]
     });
   }
 }
