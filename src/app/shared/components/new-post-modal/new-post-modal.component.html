@@ -24,8 +24,8 @@
     </form>
   </div>
   <div *nzModalFooter>
-    <button *ngIf="!nzEdit" nz-button nzType="primary" [nzLoading]="isSubmitted" (click)="handleOkCreate()">Create</button>
-    <button *ngIf="nzEdit" nz-button nzType="primary" [nzLoading]="isSubmitted" (click)="handleOkUpdate()">Update</button>
+    <button *ngIf="!nzEdit" nz-button nzType="primary" [nzLoading]="isSubmitted" [disabled]="!postForm.valid" (click)="handleOkCreate()">Create</button>
+    <button *ngIf="nzEdit" nz-button nzType="primary" [nzLoading]="isSubmitted" [disabled]="(!postForm.touched && !postForm.dirty) || !postForm.valid" (click)="handleOkUpdate()">Update</button>
     <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
   </div>
 </nz-modal>

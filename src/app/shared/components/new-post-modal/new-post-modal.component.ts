@@ -8,6 +8,7 @@ import {ImageService} from "../../services/image.service";
 import {NotificationService} from "../../services/notification.service";
 import {EventData} from "../../models/event-data";
 import {EventBusService} from "../../services/event-bus.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-new-post-modal',
@@ -22,6 +23,8 @@ export class NewPostModalComponent implements OnInit, OnChanges {
   nzTitle: string;
   postForm: FormGroup;
   fileList: NzUploadFile[] = [];
+  fileListValueChanges: EventEmitter<any> = new EventEmitter<any>();
+  fileListHasChangeSubscription: Subscription
   isSubmitted: boolean = false;
   isUploading: boolean = false;
   EDITOR_CONFIG = CkEditorConstants.DEFAULT_CONFIG;
@@ -118,6 +121,8 @@ export class NewPostModalComponent implements OnInit, OnChanges {
     this.isVisible = false;
     this.resetForm();
     this.emitIsVisible();
+    this.fileListHasChangeSubscription.unsubscribe();
+
   }
 
   emitIsVisible() {
@@ -127,6 +132,7 @@ export class NewPostModalComponent implements OnInit, OnChanges {
   beforeUpload = (file: NzUploadFile): boolean => {
     if (!this.fileList.some(e => e.name === file.name) && this.fileList.length < this.MAX_FILE_LIMIT && this.ACCEPTABLE_FILE_FORMAT.includes(file.type)) {
       this.fileList = this.fileList.concat(file);
+      this.fileListValueChanges.emit(this.fileList);
     }
     return false;
   };
@@ -140,6 +146,7 @@ export class NewPostModalComponent implements OnInit, OnChanges {
         postIdsToBeDeleted: postIdsToBeDeleted
       })
       this.fileList.splice(index, 1);
+      this.fileListValueChanges.emit(this.fileList);
     }
     return false;
   }
@@ -198,5 +205,11 @@ export class NewPostModalComponent implements OnInit, OnChanges {
       postDescription: ['', Validators.required],
       postMediaIdsToBeDeleted: [[]]
     });
+
+    this.fileListHasChangeSubscription = this.fileListValueChanges.subscribe(() => {
+      this.postForm.markAllAsTouched();
+      this.postForm.markAsDirty();
+      this.postForm.updateValueAndValidity();
+    })
   }
 }
