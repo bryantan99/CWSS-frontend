@@ -96,6 +96,14 @@ export class AppointmentRescheduleComponent implements OnInit {
           this.PUBLIC_HOLIDAY_DATE.push(new Date(date));
         })
       }
+    }, error => {
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an issue when retrieving public holidays.";
+        this.notificationService.createErrorNotification(msg);
+      }
     })
   }
 

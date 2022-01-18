@@ -140,6 +140,8 @@ export class AssistanceFormComponent implements OnInit {
     });
 
     if (this.isAdmin) {
+      this.form.controls['date'].setValidators(null);
+      this.form.controls['time'].setValidators(null);
       if (!this.addToRequestPool) {
         this.form.patchValue({
           adminUsername: this.user.username
@@ -148,6 +150,8 @@ export class AssistanceFormComponent implements OnInit {
       this.form.controls['categoryId'].setValidators(Validators.required);
       this.form.controls['username'].setValidators(Validators.required);
     } else {
+      this.form.controls['date'].setValidators(Validators.required);
+      this.form.controls['time'].setValidators(Validators.required);
       this.form.patchValue({
         username: this.user.username
       });
@@ -166,6 +170,14 @@ export class AssistanceFormComponent implements OnInit {
         temp.forEach(date => {
           this.PUBLIC_HOLIDAY_DATE.push(new Date(date));
         })
+      }
+    }, error => {
+      if (error.status === HttpStatusConstant.FORBIDDEN) {
+        this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+        this.eventBusService.emit(new EventData('logout', null));
+      } else {
+        const msg = error && error.error && error.error.message ? error.error.message : "There\'s an issue when retrieving public holidays.";
+        this.notificationService.createErrorNotification(msg);
       }
     })
   }
