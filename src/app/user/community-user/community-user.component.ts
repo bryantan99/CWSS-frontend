@@ -127,7 +127,7 @@ export class CommunityUserComponent implements OnInit {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.users = resp.data ? resp.data : [];
           this.initMarker();
-          this.graphComponent.initCharts();
+          // this.graphComponent.initCharts();
         }
       }, error => {
         this.users = [];

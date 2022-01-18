@@ -35,10 +35,10 @@ export class CommunityUserGraphComponent implements OnInit, OnChanges {
   }
 
   constructor(private fb: FormBuilder) {
+    this.initForm();
   }
 
   ngOnInit(): void {
-    this.initForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
