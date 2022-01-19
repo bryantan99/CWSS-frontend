@@ -66,13 +66,14 @@ export class AccountSettingComponent implements OnInit {
               this.initPasswordForm();
             }
         }, error => {
-          this.notificationService.createErrorNotification("There\'s an error when updating new password.");
-          if (error.status === HttpStatusConstant.UNAUTHORIZED) {
-            this.oldPasswordFormControl.setErrors({mismatch: true});
-          }
           if (error.status === HttpStatusConstant.FORBIDDEN) {
             this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
             this.eventBusService.emit(new EventData('logout', null));
+          } else {
+            this.notificationService.createErrorNotification("There\'s an error when updating new password.");
+            if (error.error && error.error.data && error.error.data.incorrectPassword) {
+              this.oldPasswordFormControl.setErrors({mismatch: true});
+            }
           }
         })
     }

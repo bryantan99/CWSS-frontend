@@ -111,7 +111,8 @@ export class AdminProfileComponent implements OnInit {
       fullName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email], [uniqueEmailValidator(this.authService, this.adminProfile.email)]],
       contactNo: ['', [Validators.required, phoneNumberValidator()]],
-      roleList: [[], Validators.required]
+      roleList: [[], Validators.required],
+      isActive: ['', [Validators.required]],
     });
 
     this.fileListValueChangesSubscription = this.fileListValueChanges.subscribe(() => {
@@ -131,6 +132,7 @@ export class AdminProfileComponent implements OnInit {
       fullName: this.adminProfile.fullName,
       email: this.adminProfile.email,
       contactNo: this.adminProfile.contactNo,
+      isActive: this.adminProfile.isActive,
       roleList: roleIds
     });
 

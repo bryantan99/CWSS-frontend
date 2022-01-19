@@ -24,6 +24,7 @@
     </th>
     <th nzWidth="150px">Email</th>
     <th nzWidth="150px">Contact No.</th>
+    <th nzWidth="150px">Status</th>
     <th nzWidth="120px" class="text-center">Action</th>
   </tr>
   </thead>
@@ -33,6 +34,9 @@
     <td>{{ data?.fullName | uppercase }}</td>
     <td>{{ data?.email || '-' }}</td>
     <td>{{ data?.contactNo }}</td>
+    <td>
+      <nz-tag [nzColor]="data?.isActive == 'Y' ? 'green' : 'magenta'">{{data?.isActive == 'Y' ? 'Active' : 'Resigned'}}</nz-tag>
+    </td>
     <td class="text-center">
       <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
         Actions

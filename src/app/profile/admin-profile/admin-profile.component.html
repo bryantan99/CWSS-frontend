@@ -84,6 +84,21 @@
       </nz-form-item>
 
       <nz-form-item *ngIf="isSuperAdmin">
+        <nz-form-label nzSpan="24" class="fw-bold">Status</nz-form-label>
+        <nz-form-control nzSpan="12" [nzErrorTip]="statusErrorTpl">
+          <nz-radio-group formControlName="isActive">
+            <label nz-radio [nzValue]="'Y'">Active</label>
+            <label nz-radio [nzValue]="'N'">Resigned</label>
+          </nz-radio-group>
+          <ng-template #statusErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.touched || control.dirty)">
+              <div *ngIf="control.errors?.required">Please select at least 1 status.</div>
+            </div>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="isSuperAdmin">
         <nz-form-label nzSpan="24" class="fw-bold">Account Role(s)</nz-form-label>
         <nz-form-control nzSpan="12" [nzErrorTip]="roleErrorTpl">
           <nz-select nzMode="multiple" nzPlaceHolder="Select account role" formControlName="roleList">
@@ -132,6 +147,13 @@
         <nz-form-label nzSpan="24" class="fw-bold">Contact No</nz-form-label>
         <nz-form-control nzSpan="24">
           {{adminProfile?.contactNo || "-"}}
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="24" class="fw-bold">Status</nz-form-label>
+        <nz-form-control nzSpan="24">
+            <nz-tag [nzColor]="adminProfile?.isActive =='Y' ? 'green' : 'magenta'">{{adminProfile?.isActive =='Y' ? 'Active' : 'Resigned'}}</nz-tag>
         </nz-form-control>
       </nz-form-item>
 

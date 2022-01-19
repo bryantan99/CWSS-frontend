@@ -54,10 +54,13 @@ export class LoginComponent implements OnInit {
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
           this.router.navigateByUrl(returnUrl);
         }, error: error => {
-          if (error.status !== HttpStatusConstant.NO_RESPONSE) {
+          this.submitted = false;
+          if (error.status === HttpStatusConstant.NO_RESPONSE) {
+            this.errorMsg = "Internal server error. Please contact the administrator.";
+          } else if (error.status === HttpStatusConstant.UNAUTHORIZED) {
             this.errorMsg = error.error.message;
           } else {
-            this.errorMsg = "Internal server error. Please contact the administrator.";
+            this.errorMsg = "There\'s an error when trying to log in.";
           }
         }
       });
