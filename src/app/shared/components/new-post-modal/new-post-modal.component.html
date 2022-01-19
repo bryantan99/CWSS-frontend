@@ -5,8 +5,10 @@
         <nz-form-label nzRequired [nzSpan]="24" class="fw-bold">Post Description</nz-form-label>
         <nz-form-control [nzSpan]="24" [nzErrorTip]="postDescriptionErrorTpl">
           <ckeditor [editorUrl]="EDITOR_URL" [config]="EDITOR_CONFIG" formControlName="postDescription"></ckeditor>
+          <p class="mb-0 mt-2 text-end">{{postForm.controls['postDescription'].value?.length || 0}} / 2000</p>
           <ng-template #postDescriptionErrorTpl let-ctrl>
             <ng-container *ngIf="ctrl?.hasError('required')">Please enter post description!</ng-container>
+            <ng-container *ngIf="ctrl?.hasError('maxlength')">Please make sure the post description is < 2000 limit.</ng-container>
           </ng-template>
         </nz-form-control>
       </nz-form-item>

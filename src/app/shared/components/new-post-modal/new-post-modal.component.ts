@@ -202,7 +202,7 @@ export class NewPostModalComponent implements OnInit, OnChanges {
   private initForm() {
     this.postForm = this.fb.group({
       postId: [null],
-      postDescription: ['', Validators.required],
+      postDescription: ['', [Validators.required, Validators.maxLength(2000)]],
       postMediaIdsToBeDeleted: [[]]
     });
 
