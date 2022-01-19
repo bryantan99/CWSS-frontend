@@ -35,7 +35,7 @@ export class BasicAuthInterceptorService implements HttpInterceptor {
         }
 
         return next.handle(authReq).pipe(catchError(error => {
-            if (error instanceof HttpErrorResponse && !authReq.url.includes('/login') && error.status === 401) {
+            if (error instanceof HttpErrorResponse && !authReq.url.includes('/authenticate') && error.status === 401) {
                 return this.handle401Error(authReq, next);
             }
 
