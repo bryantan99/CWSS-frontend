@@ -48,7 +48,7 @@
           <li nz-menu-item
               nz-popconfirm
               *ngIf="data?.deletable"
-              [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account?'"
+              [nzPopconfirmTitle]="'Are you sure you want to delete ' + data?.fullName + '\'s account from the database?'"
               (nzOnConfirm)="deleteUser(data.username)">Delete Staff
           </li>
         </ul>
