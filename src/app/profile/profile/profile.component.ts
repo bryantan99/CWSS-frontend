@@ -28,6 +28,7 @@ export class ProfileComponent implements OnInit {
   isLoading: boolean = false;
   isSuperAdmin: boolean = false;
   isOwnerOfProfile: boolean = false;
+  errorPageSubtitle: string = "";
 
   constructor(private authService: AuthService,
               private adminService: AdminUserService,
@@ -39,14 +40,6 @@ export class ProfileComponent implements OnInit {
               private imageService: ImageService,
               private location: Location,
               private eventBusService: EventBusService) {
-    this.route.queryParams.subscribe(params => {
-      if (!params['username'] && !params['adminUsername']) {
-        this.location.back();
-      } else {
-        this.queryParamUsername = params['username'];
-        this.queryParamAdminUsername = params['adminUsername'];
-      }
-    });
     this.authService.user.subscribe(resp => {
       this.currentLoggedInUser = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
@@ -55,11 +48,21 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateIsOwnerOfProfile();
-    if (!this.isAdmin && !this.isOwnerOfProfile) {
-      this.location.back();
-    }
-    this.getProfile();
+    this.route.queryParams.subscribe(params => {
+      if (!params['username'] && !params['adminUsername']) {
+        this.location.back();
+        return;
+      }
+
+      this.queryParamUsername = params['username'];
+      this.queryParamAdminUsername = params['adminUsername'];
+      this.updateIsOwnerOfProfile();
+      if (!this.isAdmin && !this.isOwnerOfProfile) {
+        this.location.back();
+        return;
+      }
+      this.getProfile();
+    });
   }
 
   private getProfile() {
@@ -80,13 +83,12 @@ export class ProfileComponent implements OnInit {
           this.isOwnerOfProfile = this.adminProfile.username === this.currentLoggedInUser.username;
         }
       }, error => {
-        console.log(error);
+        this.adminProfile = null;
         if (error.status === HttpStatusConstant.FORBIDDEN) {
           this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
           this.eventBusService.emit(new EventData('logout', null));
         } else if (error.status === HttpStatusConstant.NOT_FOUND) {
-          this.notificationService.createErrorNotification("Requested admin profile was not found.");
-          this.location.back();
+          this.errorPageSubtitle = "Requested admin profile was not found.";
         } else {
           const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving profile.";
           this.notificationService.createErrorNotification(msg);
@@ -99,6 +101,8 @@ export class ProfileComponent implements OnInit {
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.userProfile = resp.data;
+          console.log(this.userProfile);
+          console.log(this.currentLoggedInUser);
           this.isOwnerOfProfile = this.userProfile.username === this.currentLoggedInUser.username;
         }
       }, error => {
@@ -106,8 +110,7 @@ export class ProfileComponent implements OnInit {
           this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
           this.eventBusService.emit(new EventData('logout', null));
         } else if (error.status == HttpStatusConstant.NOT_FOUND) {
-          this.notificationService.createErrorNotification("The requested profile is not found.");
-          this.location.back();
+          this.errorPageSubtitle = "Requested user profile was not found.";
         } else {
           const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when retrieving profile.";
           this.notificationService.createErrorNotification(msg);
@@ -126,5 +129,9 @@ export class ProfileComponent implements OnInit {
   private updateIsOwnerOfProfile() {
     const currentUsername = this.currentLoggedInUser.username;
     this.isOwnerOfProfile = (this.queryParamUsername && this.queryParamUsername === currentUsername) || (this.queryParamAdminUsername && this.queryParamAdminUsername === currentUsername);
+  }
+
+  goBackPreviousPage() {
+    this.location.back();
   }
 }

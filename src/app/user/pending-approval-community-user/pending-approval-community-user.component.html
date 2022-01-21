@@ -1,0 +1,50 @@
+<form [formGroup]="queryForm">
+    <nz-form-item [nzGutter]="[10, 10]">
+        <nz-form-label [nzXs]="24" [nzMd]="4" [nzLg]="2" class="text-start fw-bold">NRIC number</nz-form-label>
+        <nz-form-control [nzXs]="24" [nzMd]="4" [nzLg]="4">
+            <input nz-input type="text" formControlName="nric">
+        </nz-form-control>
+        <nz-col [nzXs]="24" [nzMd]="4" [nzLg]="4">
+            <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="isLoading" (click)="getPendingApprovalCommunityUsers()">Search</button>
+        </nz-col>
+    </nz-form-item>
+</form>
+
+<nz-table class="mt-4"
+          #userTable
+          [nzLoading]="isLoading"
+          [nzData]="pendingUserList"
+          [(nzPageIndex)]="pageIndex"
+          [(nzPageSize)]="pageSize"
+          [nzScroll]="{x: '1280px'}"
+          [nzShowTotal]="totalTpl"
+          nzShowSizeChanger>
+    <thead>
+    <tr>
+        <th nzWidth="60px">No.</th>
+        <th nzWidth="140px">Name</th>
+        <th nzWidth="140px">NRIC No.</th>
+        <th nzWidth="100px">Gender</th>
+        <th nzWidth="140px">Ethnic</th>
+        <th nzWidth=" 140px">Contact No.</th>
+        <th>Address</th>
+        <th nzWidth="160px">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of userTable.data; let i = index">
+        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+        <td>{{(data?.fullName | titlecase) || "-"}}</td>
+        <td>{{data?.nric || "-"}}</td>
+        <td>{{data?.gender || "-"}}</td>
+        <td>{{(data?.ethnic | ethnic) || "-"}}</td>
+        <td>{{data?.contactNo || "-"}}</td>
+        <td>{{data?.address?.fullAddress || "-"}}</td>
+        <td>
+            <a nz-button nzType="default" [routerLink]="['/profile']" [queryParams]="{username: data?.username}">View Profile</a>
+        </td>
+    </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #totalTpl let-total>Total {{ total }} records</ng-template>

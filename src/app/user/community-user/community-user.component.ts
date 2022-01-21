@@ -120,7 +120,7 @@ export class CommunityUserComponent implements OnInit {
         this.queryForm.controls['ethnic'].value,
         this.queryForm.controls['disease'].value,
         this.queryForm.controls['zoneId'].value,
-        this.queryForm.controls['isActive'].value)
+        this.queryForm.controls['isEligibleForAssistance'].value)
       .pipe(finalize(() => {
         this.isLoading = false;
       }))
@@ -158,7 +158,7 @@ export class CommunityUserComponent implements OnInit {
       ethnic: this.fb.control('A'),
       disease: this.fb.control('A'),
       zoneId: this.fb.control('A'),
-      isActive: this.fb.control('A')
+      isEligibleForAssistance: this.fb.control('A')
     })
   }
 

@@ -3,7 +3,6 @@ import {Routes, RouterModule} from '@angular/router';
 import {LoginComponent} from "./user/login/login.component";
 import {SignupComponent} from "./user/signup/signup.component";
 import {AboutComponent} from "./homepage/about/about.component";
-import {CommunityUserComponent} from "./user/community-user/community-user.component";
 import {AssistanceMngmtComponent} from "./assistance/assistance-mngmt/assistance-mngmt.component";
 import {AdminManagementComponent} from "./user/admin/admin-management/admin-management.component";
 import {ResetPasswordComponent} from "./user/reset-password/reset-password.component";
@@ -14,6 +13,7 @@ import {RoleConstant} from "./shared/constants/role-constant";
 import {ProfileComponent} from "./profile/profile/profile.component";
 import {PostFeedComponent} from "./shared/components/post-feed/post-feed.component";
 import {SettingsComponent} from "./settings/settings.component";
+import {CommunityUserMngmtComponent} from "./user/community-user-mngmt/community-user-mngmt.component";
 
 const routes: Routes = [
   {
@@ -34,7 +34,7 @@ const routes: Routes = [
   },
   {
     path: 'community-user',
-    component: CommunityUserComponent,
+    component: CommunityUserMngmtComponent,
     canActivate: [AuthGuardService],
     data: {roles: [RoleConstant.ROLE_SUPER_ADMIN, RoleConstant.ROLE_ADMIN]}
   },

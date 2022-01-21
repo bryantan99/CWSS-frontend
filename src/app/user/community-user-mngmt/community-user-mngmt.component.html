@@ -1,0 +1,11 @@
+<h4>Community User</h4>
+<nz-divider></nz-divider>
+
+<nz-tabset nzType="card" [(nzSelectedIndex)]="tabIndex">
+    <nz-tab nzTitle="Pending Approval">
+        <app-pending-approval-community-user *ngIf="tabIndex === 0"></app-pending-approval-community-user>
+    </nz-tab>
+    <nz-tab nzTitle="Approved Community User">
+        <app-community-user *ngIf="tabIndex === 1"></app-community-user>
+    </nz-tab>
+</nz-tabset>

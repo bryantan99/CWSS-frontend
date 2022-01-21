@@ -19,8 +19,17 @@ export class CommunityUserService {
   private readonly BLOCK_USER = this.API_SERVER_URL + "/community-user/block-user";
   private readonly UNBLOCK_USER = this.API_SERVER_URL + "/community-user/unblock-user";
   private readonly VALIDATE_USER_ACCOUNT_ELIGIBLE_REQUESTING_ASSISTANCE = this.API_SERVER_URL + "/community-user/validate-user-eligibility";
+  private readonly GET_PENDING_APPROVAL_COMMUNITY_USERS = this.API_SERVER_URL + "/community-user/pending";
 
   constructor(private http: HttpClient) {
+  }
+
+  getPendingApprovalCommunityUsers(nric?: string): Observable<ResponseModel<any>> {
+    let params = new HttpParams();
+    if (nric) {
+      params = params.set("nric", nric);
+    }
+    return this.http.get<ResponseModel<any>>(this.GET_PENDING_APPROVAL_COMMUNITY_USERS, {params: params});
   }
 
   getCommunityUsers(name?: string,
@@ -29,7 +38,7 @@ export class CommunityUserService {
                     ethnic?: string,
                     diseaseId?: string,
                     zoneId?: string,
-                    isActive?: string): Observable<ResponseModel<any>> {
+                    isEligibleForAssistance?: string): Observable<ResponseModel<any>> {
     let params = new HttpParams();
     if (name) {
       params = params.set("name", name);
@@ -49,8 +58,8 @@ export class CommunityUserService {
     if (zoneId && zoneId != 'A') {
       params = params.set("zoneId", zoneId);
     }
-    if (isActive && isActive != 'A') {
-      params = params.set("isActive", isActive);
+    if (isEligibleForAssistance && isEligibleForAssistance != 'A') {
+      params = params.set("isEligibleForAssistance", isEligibleForAssistance);
     }
     return this.http.get<ResponseModel<any>>(this.GET_COMMUNITY_USERS, {params: params});
   }

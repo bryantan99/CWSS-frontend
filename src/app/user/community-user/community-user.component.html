@@ -87,12 +87,12 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSpan]="24" class="fw-bold">Account Status</nz-form-label>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Eligible for Assistance</nz-form-label>
         <nz-form-control [nzSpan]="24">
-          <nz-select formControlName="isActive">
+          <nz-select formControlName="isEligibleForAssistance">
             <nz-option [nzLabel]="'All'" [nzValue]="'A'"></nz-option>
-            <nz-option [nzValue]="'Y'" [nzLabel]="'Activated'"></nz-option>
-            <nz-option [nzValue]="'N'" [nzLabel]="'Unactivated'"></nz-option>
+            <nz-option [nzValue]="'Y'" [nzLabel]="'Yes'"></nz-option>
+            <nz-option [nzValue]="'N'" [nzLabel]="'No'"></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
@@ -117,8 +117,8 @@
 
 <ng-template #titleTpl>
   <nz-row>
-    <nz-col [nzSpan]="24" class="text-end">
-      <button nz-button nzType="primary" class="me-4" (click)="openQueryDrawer()">Filter</button>
+    <nz-col [nzSpan]="24">
+      <button nz-button nzType="primary" (click)="openQueryDrawer()">Filter</button>
     </nz-col>
   </nz-row>
 </ng-template>
@@ -142,7 +142,7 @@
     <th nzWidth="140px">Ethnic</th>
     <th nzWidth=" 140px">Contact No.</th>
     <th>Address</th>
-    <th nzWidth="140px">Account Status</th>
+    <th nzWidth="140px">Eligible for Requesting Assistance</th>
     <th nzWidth="160px">Action</th>
   </tr>
   </thead>
@@ -155,21 +155,9 @@
     <td>{{(data?.ethnic | ethnic) || "-"}}</td>
     <td>{{data?.contactNo || "-"}}</td>
     <td>{{data?.address?.fullAddress || "-"}}</td>
+    <td><nz-tag [nzColor]="data?.accIsBlocked === 'Y' ? 'magenta' : 'blue'">{{data?.accIsBlocked === 'Y' ? 'Not Eligible' : 'Eligible'}}</nz-tag></td>
     <td>
-      <nz-tag [nzColor]="'magenta'" *ngIf="data?.accIsActivate === 'Y' && data?.accIsBlocked === 'Y'">Blocked</nz-tag>
-      <nz-tag [nzColor]="'green'" *ngIf="data?.accIsActivate === 'Y' && data?.accIsBlocked === 'N'">Activated</nz-tag>
-      <nz-tag [nzColor]="'orange'" *ngIf="data?.accIsActivate !== 'Y'">Unactivated</nz-tag>
-    <td>
-      <button nz-button nz-dropdown [nzClickHide]="false" [nzDropdownMenu]="menu1">
-        Actions<i nz-icon nzType="down" nzTheme="outline"></i>
-      </button>
-      <nz-dropdown-menu #menu1="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item [routerLink]="['/profile']" [queryParams]="{username: data?.username}">View
-            Profile
-          </li>
-        </ul>
-      </nz-dropdown-menu>
+      <a nz-button nzType="default" [routerLink]="['/profile']" [queryParams]="{username: data?.username}">View Profile</a>
     </td>
   </tr>
   </tbody>

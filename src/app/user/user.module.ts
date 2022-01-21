@@ -14,6 +14,8 @@ import {AdminManagementComponent} from "./admin/admin-management/admin-managemen
 import {AdminDetailComponent} from "./admin/admin-detail/admin-detail.component";
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CommunityUserGraphComponent } from './community-user-graph/community-user-graph.component';
+import { CommunityUserMngmtComponent } from './community-user-mngmt/community-user-mngmt.component';
+import { PendingApprovalCommunityUserComponent } from './pending-approval-community-user/pending-approval-community-user.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { CommunityUserGraphComponent } from './community-user-graph/community-us
     AdminManagementComponent,
     AdminDetailComponent,
     ResetPasswordComponent,
-    CommunityUserGraphComponent
+    CommunityUserGraphComponent,
+    CommunityUserMngmtComponent,
+    PendingApprovalCommunityUserComponent
   ],
   imports: [
     CommonModule,
