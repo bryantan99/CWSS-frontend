@@ -11,14 +11,14 @@
 <highcharts-chart
   [Highcharts]="Highcharts"
   [options]="statusPieChartOption"
-  *ngIf="chartType == 'status'"
+  *ngIf="chartType == 'status' && statusPieChartOption"
   style="width: 100%; height: 300px; display: block;"
 ></highcharts-chart>
 
 <highcharts-chart
   [Highcharts]="Highcharts"
   [options]="categoryColumnChartOption"
-  *ngIf="chartType == 'category'"
+  *ngIf="chartType == 'category' && categoryColumnChartOption"
   style="width: 100%; height: 300px; display: block;"
 ></highcharts-chart>
 

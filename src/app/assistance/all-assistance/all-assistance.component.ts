@@ -72,6 +72,7 @@ export class AllAssistanceComponent implements OnInit {
   }
 
   private initStatusPieChartOption() {
+    this.statusPieChartOption = null;
     const data = [];
     let map: Map<string, number> = new Map();
     if (this.assistanceRecords) {
@@ -176,6 +177,7 @@ export class AllAssistanceComponent implements OnInit {
   }
 
   private initCategoryColumnChartOption() {
+    this.categoryColumnChartOption = null;
     let map: Map<string, number> = new Map();
     if (this.assistanceRecords) {
       map = this.assistanceRecords.reduce((acc, e) => {
