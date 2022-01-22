@@ -9,7 +9,7 @@
                     (refreshEventEmitter)="refreshProfile($event)"></app-user-profile>
 </div>
 
-<nz-result *ngIf="numOfSearch > 0 && !adminProfile && !userProfile" nzStatus="404" nzTitle="404" [nzSubTitle]="errorPageSubtitle">
+<nz-result *ngIf="showErrorPage" nzStatus="404" nzTitle="404" [nzSubTitle]="errorPageSubtitle">
   <div nz-result-extra>
     <button nz-button nzType="primary" (click)="goBackPreviousPage()">Back</button>
   </div>
