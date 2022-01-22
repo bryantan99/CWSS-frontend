@@ -4,7 +4,7 @@ import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {NotificationService} from "../../shared/services/notification.service";
 import * as Highcharts from 'highcharts';
 import HC_stock from 'highcharts/modules/stock';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
 import {AuthService} from "../../auth/auth.service";
@@ -142,7 +142,7 @@ export class AllAssistanceComponent implements OnInit {
 
   private initFilterForm() {
     this.filterForm = this.fb.group({
-      assistanceId: [''],
+      assistanceId: ['', [Validators.pattern(/^(?:[1-9]\d*|0)$/)]],
       categoryId: ['A'],
       title: [''],
       status: ['A'],

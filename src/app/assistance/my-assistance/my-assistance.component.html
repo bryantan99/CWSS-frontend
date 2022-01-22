@@ -26,8 +26,15 @@
     <form [formGroup]="filterForm">
       <nz-form-item>
         <nz-form-label [nzSpan]="24" class="fw-bold">Assistance ID</nz-form-label>
-        <nz-form-control [nzSpan]="24">
+        <nz-form-control [nzSpan]="24" [nzErrorTip]="assistanceIdErrorTpl">
           <input nz-input formControlName="assistanceId">
+          <ng-template #assistanceIdErrorTpl let-control>
+            <div *ngIf="control.invalid && (control.touched || control.dirty)">
+              <div *ngIf="control.errors?.pattern">
+                Please enter only digits without leading zeros.
+              </div>
+            </div>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
 
@@ -63,7 +70,7 @@
       <nz-form-item>
         <nz-form-control>
           <nz-space>
-            <button nz-button nzType="primary" *nzSpaceItem (click)="searchByFilter()">Search</button>
+            <button nz-button nzType="primary" *nzSpaceItem [disabled]="!filterForm.valid" (click)="searchByFilter()">Search</button>
             <button nz-button nzType="default" *nzSpaceItem (click)="resetFilterSettings()">Reset</button>
           </nz-space>
         </nz-form-control>

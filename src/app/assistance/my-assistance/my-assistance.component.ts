@@ -4,7 +4,7 @@ import {NotificationService} from "../../shared/services/notification.service";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {AuthService} from "../../auth/auth.service";
 import {User} from "../../shared/models/user";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
 import {DropdownConstant} from "../../shared/constants/dropdown-constant";
@@ -142,7 +142,7 @@ export class MyAssistanceComponent implements OnInit {
 
   private initFilterForm() {
     this.filterForm = this.fb.group({
-      assistanceId: [''],
+      assistanceId: ['', [Validators.pattern(/^(?:[1-9]\d*|0)$/)]],
       title: [''],
       status: ['A'],
       username: ['']

@@ -3,7 +3,7 @@ import {AssistanceService} from "../assistance.service";
 import {NotificationService} from "../../shared/services/notification.service";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
 import {finalize} from "rxjs/operators";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AssistanceFormComponent} from "../assistance-form/assistance-form.component";
 import {EventBusService} from "../../shared/services/event-bus.service";
 import {EventData} from "../../shared/models/event-data";
@@ -62,7 +62,7 @@ export class PendingAssistanceComponent implements OnInit {
 
   private initFilterForm() {
     this.filterForm = this.fb.group({
-      assistanceId: ['']
+      assistanceId: ['', [Validators.pattern(/^(?:[1-9]\d*|0)$/)]]
     });
   }
 
