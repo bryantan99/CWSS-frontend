@@ -143,6 +143,7 @@
     <th nzWidth=" 140px">Contact No.</th>
     <th>Address</th>
     <th nzWidth="140px">Eligible for Requesting Assistance</th>
+    <th>Health Issues</th>
     <th nzWidth="160px">Action</th>
   </tr>
   </thead>
@@ -157,6 +158,13 @@
     <td>{{data?.address?.fullAddress || "-"}}</td>
     <td><nz-tag [nzColor]="data?.accIsBlocked === 'Y' ? 'magenta' : 'blue'">{{data?.accIsBlocked === 'Y' ? 'Not Eligible' : 'Eligible'}}</nz-tag></td>
     <td>
+      <div *ngIf="data?.healthIssues && data?.healthIssues.length > 0; else dashTpl">
+        <ng-container *ngFor="let issue of data?.healthIssues">
+          <nz-tag  class="mb-2" [nzColor]="issue?.approvedBy ? 'green' : 'magenta'">{{issue?.diseaseName || "-"}}</nz-tag><br>
+        </ng-container>
+      </div>
+    </td>
+    <td>
       <a nz-button nzType="default" [routerLink]="['/profile']" [queryParams]="{username: data?.username}">View Profile</a>
     </td>
   </tr>
@@ -165,4 +173,8 @@
 
 <ng-template #totalTpl let-total>
   Total {{ total }} records
+</ng-template>
+
+<ng-template #dashTpl>
+  -
 </ng-template>
