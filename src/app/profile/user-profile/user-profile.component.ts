@@ -78,7 +78,6 @@ export class UserProfileComponent implements OnInit {
             this.router.navigate(['/community-user']);
           }
         }, error => {
-          console.log(error);
           if (error.status === HttpStatusConstant.FORBIDDEN) {
             this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
             this.eventBusService.emit(new EventData('logout', null));
@@ -96,7 +95,6 @@ export class UserProfileComponent implements OnInit {
           this.emitRefreshProfile(username);
         }
       }, error => {
-        console.log(error);
         if (error.status === HttpStatusConstant.FORBIDDEN) {
           this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
           this.eventBusService.emit(new EventData('logout', null));
@@ -114,7 +112,6 @@ export class UserProfileComponent implements OnInit {
           this.router.navigate(['/community-user']);
         }
       }, error => {
-        console.log(error);
         if (error.status === HttpStatusConstant.FORBIDDEN) {
           this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
           this.eventBusService.emit(new EventData('logout', null));

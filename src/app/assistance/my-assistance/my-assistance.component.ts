@@ -110,7 +110,6 @@ export class MyAssistanceComponent implements OnInit {
       }, error => {
         this.isLoading = false;
         this.assistanceRecords = [];
-        console.log("Error: ", error);
         if (error.status === HttpStatusConstant.FORBIDDEN) {
           this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
           this.eventBusService.emit(new EventData('logout', null));

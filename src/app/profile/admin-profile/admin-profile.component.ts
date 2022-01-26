@@ -88,7 +88,6 @@ export class AdminProfileComponent implements OnInit {
           } else {
             this.notificationService.createErrorNotification("There\' an error when updating profile.");
           }
-          console.log(error);
         })
     }
   }

@@ -84,7 +84,6 @@ export class SignupPersonalDetailFormComponent implements OnInit, ControlValueAc
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    console.log("Validating personal detail form.", this.personalDetailForm.valid);
     return this.personalDetailForm.valid ? null : {
       invalidForm: {
         valid: false,

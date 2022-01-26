@@ -53,8 +53,8 @@ export class PostFeedComponent implements OnInit {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.adminPost = resp.data ? resp.data : [];
         }
-      }, error => {
-        console.log("There's an error when getting admin posts.", error);
+      }, () => {
+        this.notificationService.createErrorNotification("There\'s an error when getting admin posts.");
         this.isLoading = false;
       })
   }

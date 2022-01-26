@@ -212,7 +212,7 @@ export class CommunityUserGraphComponent implements OnInit, OnChanges {
         if (healthModelList) {
           healthModelList.forEach(o => {
             const diseaseName = o.diseaseName;
-            if (this.filterSetting.disease === 'A' || this.filterSetting.disease == o.diseaseId) {
+            if ((this.filterSetting.disease === 'A' || this.filterSetting.disease == o.diseaseId) && o.approvedByUsername != null) {
               acc.set(diseaseName, (acc.get(diseaseName) || 0) + 1);
             }
           })

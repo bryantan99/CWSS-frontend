@@ -83,7 +83,6 @@ export class AssistanceFormComponent implements OnInit {
           this.eventBusService.emit(new EventData('logout', null));
         } else {
           this.notificationService.createErrorNotification("There\'s an error when adding new assistance request.");
-          console.log(error.error);
         }
       });
     }

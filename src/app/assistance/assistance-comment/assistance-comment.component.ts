@@ -59,7 +59,6 @@ export class AssistanceCommentComponent implements OnInit {
         } else {
           this.notificationService.createErrorNotification("There\'s an error when adding new comment.");
         }
-        console.log(error.error);
       });
   }
 
@@ -76,7 +75,6 @@ export class AssistanceCommentComponent implements OnInit {
       }, error => {
         this.isLoading = false;
         this.commentList = [];
-        console.log(error.error);
         if (error.status === HttpStatusConstant.FORBIDDEN) {
           this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
           this.eventBusService.emit(new EventData('logout', null));

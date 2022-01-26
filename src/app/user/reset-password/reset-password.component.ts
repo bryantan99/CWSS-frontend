@@ -120,10 +120,9 @@ export class ResetPasswordComponent implements OnInit {
             this.notificationService.createSuccessNotification("Your password has been reset and you may login with your new password now.");
             this.router.navigate(['login']);
           }
-        }, error => {
+        }, () => {
           this.submitted = false;
           this.notificationService.createErrorNotification("There\'s an error when resetting password.");
-          console.log(error);
         })
     }
   }

@@ -67,7 +67,6 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
   }
 
   registerOnTouched(fn: any): void {
-    console.log("on blur");
     this.onTouched = fn;
   }
 
@@ -76,7 +75,6 @@ export class SignupAddressFormComponent implements OnInit, ControlValueAccessor 
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    console.log("Validating address form.", this.addressForm.valid);
     return this.addressForm.valid ? null : {
       invalidForm: {
         valid: false,

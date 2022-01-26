@@ -109,7 +109,6 @@ export class AssistanceDetailComponent implements OnInit {
       }
     }, error => {
       if (error.status === HttpStatusConstant.FORBIDDEN) {
-        console.log(error.error);
         this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
         this.eventBusService.emit(new EventData('logout', null));
       } else {
@@ -189,7 +188,6 @@ export class AssistanceDetailComponent implements OnInit {
         } else {
           this.notificationService.createErrorNotification("There\'s an error when updating record.");
         }
-        console.log(error.error);
       });
   }
 
@@ -254,7 +252,6 @@ export class AssistanceDetailComponent implements OnInit {
         this.eventBusService.emit(new EventData('logout', null));
       } else {
         this.notificationService.createErrorNotification("There\'s an error when retrieving person-in-charge dropdown choices list.");
-        console.log(error.error);
       }
     })
   }

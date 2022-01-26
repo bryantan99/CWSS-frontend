@@ -10,8 +10,8 @@ import {
 } from "@angular/forms";
 import {DropdownChoiceService} from "../../shared/services/dropdown-choice.service";
 import {DropdownChoiceModel} from "../../shared/models/dropdown-choice-model";
-import {NzNotificationService} from "ng-zorro-antd/notification";
 import {HttpStatusConstant} from "../../shared/constants/http-status-constant";
+import {NotificationService} from "../../shared/services/notification.service";
 
 @Component({
   selector: 'app-signup-health-form',
@@ -39,7 +39,7 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
 
   constructor(private fb: FormBuilder,
               private dropdownChoiceService: DropdownChoiceService,
-              private notificationService: NzNotificationService) {
+              private notificationService: NotificationService) {
     this.initDiseaseDropdownList();
   }
 
@@ -89,12 +89,10 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   }
 
   registerOnChange(fn: any): void {
-    console.log("on change");
     this.healthForm.valueChanges.subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
-    console.log("on blur");
     this.onTouched = fn;
   }
 
@@ -103,7 +101,6 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    console.log("Health Form validation", c);
     return this.healthForm.valid ? null : {
       invalidForm: {
         valid: false,
@@ -134,8 +131,8 @@ export class SignupHealthFormComponent implements OnInit, ControlValueAccessor {
       if (resp && resp.status === HttpStatusConstant.OK) {
         this.diseaseDropdownList = resp.data ? resp.data : [];
       }
-    }, error => {
-      this.notificationService.error("Error", "There's an error when retrieving disease dropdown choice list.");
+    }, () => {
+      this.notificationService.createErrorNotification("There's an error when retrieving disease dropdown choice list.");
     })
   }
 

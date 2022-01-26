@@ -73,7 +73,6 @@ export class AdminManagementComponent implements OnInit {
           this.listOfDisplayData = [...this.listOfData];
         }
       }, error => {
-        console.log(error);
         this.isLoading = false;
         this.listOfData = []
         if (error.status === HttpStatusConstant.FORBIDDEN) {
