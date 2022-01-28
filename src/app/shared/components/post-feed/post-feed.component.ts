@@ -9,6 +9,7 @@ import {User} from "../../models/user";
 import {EventData} from "../../models/event-data";
 import {NotificationService} from "../../services/notification.service";
 import {EventBusService} from "../../services/event-bus.service";
+import {RoleConstant} from "../../constants/role-constant";
 
 @Component({
   selector: 'app-post-feed',
@@ -20,10 +21,10 @@ export class PostFeedComponent implements OnInit {
 
   adminPost: any[] = [];
   isLoading: boolean = false;
-  isAdminLoggedIn: boolean = false;
   editPostModalIsVisible: boolean = false;
   user: User;
   isAdmin: boolean = false;
+  isSuperAdmin: boolean = false;
   nzEdit: boolean = false;
 
   constructor(private adminPostService: AdminPostService,
@@ -34,12 +35,12 @@ export class PostFeedComponent implements OnInit {
     this.authService.user.subscribe(resp => {
       this.user = resp;
       this.isAdmin = this.authService.isAdminLoggedIn();
+      this.isSuperAdmin = this.authService.hasRole(RoleConstant.ROLE_SUPER_ADMIN);
     })
   }
 
   ngOnInit(): void {
     this.getAdminPosts();
-    this.isAdminLoggedIn = this.authService.isAdminLoggedIn();
   }
 
   getAdminPosts() {

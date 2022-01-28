@@ -23,7 +23,7 @@
             <small>{{post.createdDate | date: 'short'}}</small>
           </nz-col>
 
-          <nz-col [nzSm]="24" [nzMd]="18" *ngIf="isAdminLoggedIn && post.adminBean.username == user.username">
+          <nz-col [nzSm]="24" [nzMd]="18" *ngIf="isSuperAdmin || (isAdmin && post.adminBean.username == user.username)">
             <button class="float-end" nz-button nz-dropdown [nzDropdownMenu]="menu4">Action<i nz-icon nzType="down"></i>
             </button>
             <nz-dropdown-menu #menu4="nzDropdownMenu">
