@@ -9,25 +9,24 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-                <button nz-button nzType="primary" [nzLoading]="isSubmitting" [disabled]="!commentForm.controls['commentDesc']?.value && fileList.length < 1"
-                        (click)="handleSubmit()">
-                    Add Comment
-                </button>
-            </nz-form-item>
-            <nz-form-item>
               <div class="clearfix">
                 <nz-upload class="upload-list-inline" nzListType="picture" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzRemove]="removeFile" [nzAccept]="ACCEPTABLE_FILE_FORMAT">
-                  <button nz-button>
+                  <button nz-button [disabled]="!nzEdit">
                     <span><i nz-icon nzType="upload"></i>Upload</span>
                   </button>
                 </nz-upload>
               </div>
             </nz-form-item>
+            <nz-form-item>
+                <button nz-button nzType="primary" [nzLoading]="isSubmitting" [disabled]="!commentForm.controls['commentDesc']?.value && fileList.length < 1"
+                        (click)="handleSubmit()">
+                    Add Comment
+                </button>
+            </nz-form-item>
         </form>
+        <nz-divider></nz-divider>
     </nz-comment-content>
 </nz-comment>
-
-<nz-divider></nz-divider>
 
 <nz-list *ngIf="commentDisplayList.length"
          [nzDataSource]="commentDisplayList"

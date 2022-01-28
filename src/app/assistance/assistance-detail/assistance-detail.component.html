@@ -189,7 +189,7 @@
            [nzWidth]="320"
            (nzOnClose)="closeCommentDrawer()">
   <ng-container *nzDrawerContent>
-    <app-assistance-comment [assistanceId]="assistanceId"></app-assistance-comment>
+    <app-assistance-comment [nzEdit]="assistanceRecord?.status !== 'completed'" [assistanceId]="assistanceId"></app-assistance-comment>
   </ng-container>
 </nz-drawer>
 

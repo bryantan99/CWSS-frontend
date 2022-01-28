@@ -39,6 +39,7 @@ import {AuthService} from "../../auth/auth.service";
 })
 export class AssistanceCommentComponent implements OnInit {
     @Input() assistanceId: number;
+    @Input() nzEdit: boolean = false;
     commentList: any = [];
     commentDisplayList: any = [];
     isSubmitting: boolean = false;
@@ -141,6 +142,12 @@ export class AssistanceCommentComponent implements OnInit {
             assistanceId: [this.assistanceId, [Validators.required]]
         })
         this.fileList = [];
+
+        if (!this.nzEdit) {
+            this.commentForm.controls['commentDesc'].disable();
+        } else {
+            this.commentForm.controls['commentDesc'].enable();
+        }
     }
 
     getAssistanceCommentMediaImg(commentId: number, imgName: any) {
