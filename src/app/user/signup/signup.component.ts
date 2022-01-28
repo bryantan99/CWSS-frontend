@@ -49,7 +49,7 @@ export class SignupComponent implements OnInit {
 
     this.signupService.registerAccount(this.form.value).subscribe(resp => {
       if (resp) {
-        this.notificationService.createSuccessNotification("You've successfully registered an account!");
+        this.notificationService.createSuccessNotification("You've submitted your account application successfully. Please allow some time for the admin to review your application. An SMS about your application status will be sent to your registered phone number once reviewed.");
         this.router.navigate(['login']);
       }
     }, error => {
