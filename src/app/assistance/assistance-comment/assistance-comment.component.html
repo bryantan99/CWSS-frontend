@@ -1,16 +1,30 @@
 <nz-comment>
-  <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
-  <nz-comment-content>
-    <nz-form-item>
-      <textarea [(ngModel)]="inputValue" [maxlength]="1000" nz-input rows="4"></textarea>
-      <p>{{ inputValue?.length || 0 }} / 1000 characters</p>
-    </nz-form-item>
-    <nz-form-item>
-      <button nz-button nzType="primary" [nzLoading]="isSubmitting" [disabled]="!inputValue" (click)="handleSubmit()">
-        Add Comment
-      </button>
-    </nz-form-item>
-  </nz-comment-content>
+<!--    <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="getProfilePicture()"></nz-avatar>-->
+    <nz-comment-content>
+        <form [formGroup]="commentForm">
+            <nz-form-item>
+              <nz-form-control [nzSpan]="24">
+                <textarea formControlName="commentDesc" [maxlength]="1000" nz-input nzAutosize rows="4"></textarea>
+                <p>{{ commentForm.controls['commentDesc']?.value?.length || 0 }} / 1000 characters</p>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <button nz-button nzType="primary" [nzLoading]="isSubmitting" [disabled]="!commentForm.controls['commentDesc']?.value && fileList.length < 1"
+                        (click)="handleSubmit()">
+                    Add Comment
+                </button>
+            </nz-form-item>
+            <nz-form-item>
+              <div class="clearfix">
+                <nz-upload class="upload-list-inline" nzListType="picture" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzRemove]="removeFile" [nzAccept]="ACCEPTABLE_FILE_FORMAT">
+                  <button nz-button>
+                    <span><i nz-icon nzType="upload"></i>Upload</span>
+                  </button>
+                </nz-upload>
+              </div>
+            </nz-form-item>
+        </form>
+    </nz-comment-content>
 </nz-comment>
 
 <nz-divider></nz-divider>
@@ -19,14 +33,23 @@
          [nzDataSource]="commentDisplayList"
          [nzRenderItem]="item"
          [nzItemLayout]="'horizontal'">
-  <ng-template #item let-item>
-    <nz-comment [nzAuthor]="item?.createdByFullName || '-'" [nzDatetime]="item?.createdDate | date: DATE_FORMAT">
-      <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
-      <nz-comment-content>
-        <p>{{ item?.commentDesc }}</p>
-      </nz-comment-content>
-    </nz-comment>
-  </ng-template>
+    <ng-template #item let-item>
+        <nz-comment [nzAuthor]="item?.createdByFullName || '-'" [nzDatetime]="item?.createdDate | date: DATE_FORMAT">
+<!--            <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>-->
+            <nz-comment-content>
+                <p>{{ item?.commentDesc }}</p>
+                <nz-image-group *ngIf="item?.mediaList">
+                    <img *ngFor="let img of item?.mediaList"
+                         nz-image
+                         width="200px"
+                         height="200px"
+                         class="me-2 mb-2"
+                         alt="Assistance Comment Image"
+                         [nzSrc]="getAssistanceCommentMediaImg(item?.commentId, img?.mediaName)">
+                </nz-image-group>
+            </nz-comment-content>
+        </nz-comment>
+    </ng-template>
 </nz-list>
 
 <nz-pagination *ngIf="commentList?.length"

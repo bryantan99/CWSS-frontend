@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {ResponseModel} from "../shared/models/response-model";
 import {environment} from "../../environments/environment";
 import {AssistanceRequestFormModel} from "../shared/models/assistance-request-form-model";
+import {NzUploadFile} from "ng-zorro-antd/upload";
 
 @Injectable({
   providedIn: 'root'
@@ -89,8 +90,15 @@ export class AssistanceService {
     return this.http.get<ResponseModel<any[]>>(this.FIND_ALL_ASSISTANCE_RECORD, {params: params});
   }
 
-  addComment(form: { commentDesc: string, assistanceId: number }): Observable<ResponseModel<any>> {
-    return this.http.post<ResponseModel<any>>(this.ADD_ASSISTANCE_COMMENT, form);
+  addComment(form: { commentDesc: string, assistanceId: number }, fileList: NzUploadFile[]): Observable<ResponseModel<any>> {
+    const formData = new FormData();
+    if (fileList) {
+      fileList.forEach((file: any) => {
+        formData.append('files', file);
+      });
+    }
+    formData.append('form', JSON.stringify(form));
+    return this.http.post<ResponseModel<any>>(this.ADD_ASSISTANCE_COMMENT, formData);
   }
 
   findComments(assistanceId: number): Observable<ResponseModel<any[]>> {
