@@ -12,7 +12,7 @@
 <nz-table
   #categoryTable
   [nzLoading]="isLoading"
-  [nzData]="logList"
+  [nzData]="displayLogList"
   [nzScroll]="{x: '500px'}">
   <thead>
   <tr>
@@ -20,7 +20,23 @@
     <th nzWidth="120px">Module</th>
     <th nzWidth="120px">Action Maker</th>
     <th nzWidth="120px">Action Date</th>
-    <th nzWidth="300px">Action Name</th>
+    <th nzWidth="300px" nzCustomFilter>
+      Action Name
+      <nz-filter-trigger [(nzVisible)]="filterActionNameIsVisible" [nzActive]="actionNameKeyword.length > 0" [nzDropdownMenu]="menu">
+        <i nz-icon nzType="search"></i>
+      </nz-filter-trigger>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box p-2">
+            <input type="text" nz-input placeholder="Enter keyword" class="mb-2" [(ngModel)]="actionNameKeyword" />
+            <nz-space>
+              <button *nzSpaceItem nz-button nzSize="small" nzType="primary" (click)="filterActionName()" class="search-button">Search</button>
+              <button *nzSpaceItem nz-button nzSize="small" (click)="resetFilterActionName()">Reset</button>
+            </nz-space>
+          </div>
+        </div>
+      </nz-dropdown-menu>
+    </th>
     <th nzWidth="120px">Action Description</th>
   </tr>
   </thead>

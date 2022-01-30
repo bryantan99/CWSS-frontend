@@ -353,12 +353,14 @@
             [nzScroll]="{x: '960px'}">
     <thead>
     <tr>
+      <th nzWidth="150px">Health Issue ID</th>
       <th nzWidth="150px">Disease Name</th>
       <th nzWidth="500px">Description</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let data of healthTable.data; let i = index">
+      <td>{{data?.issueId || "-"}}</td>
       <td>
         <div class="d-flex align-items-center">
           <span>{{data?.diseaseName || '-'}}</span>

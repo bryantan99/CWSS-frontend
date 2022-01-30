@@ -70,51 +70,57 @@ export class NewPostModalComponent implements OnInit, OnChanges {
       this.postForm.controls[key].updateValueAndValidity();
     }
 
-    if (this.postForm.valid) {
-      this.isSubmitted = true;
-      this.adminPostService.addAdminPost(this.postForm.value, this.fileList)
-        .subscribe(resp => {
-          if (resp) {
-            this.isVisible = false;
-            this.emitIsVisible();
-            this.emitAddNewPost();
-            this.resetForm();
-            this.isSubmitted = false;
-          }
-        }, error => {
-          this.isSubmitted = false;
-          if (error.status === HttpStatusConstant.FORBIDDEN) {
-            this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
-            this.eventBusService.emit(new EventData('logout', null));
-          } else {
-            this.notificationService.createErrorNotification("There's an error when creating new post.");
-          }
-        });
+    if (!this.postForm.valid) {
+      this.notificationService.createErrorNotification("The post form is invalid.");
+      return;
     }
+
+    this.isSubmitted = true;
+    this.adminPostService.addAdminPost(this.postForm.value, this.fileList)
+      .subscribe(resp => {
+        if (resp) {
+          this.isVisible = false;
+          this.emitIsVisible();
+          this.emitAddNewPost();
+          this.resetForm();
+          this.isSubmitted = false;
+        }
+      }, error => {
+        this.isSubmitted = false;
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There's an error when creating new post.");
+        }
+      });
   }
 
   handleOkUpdate(): void {
-    if (this.postForm.valid) {
-      this.isSubmitted = true;
-      this.adminPostService.updatePost(this.postForm.value, this.fileList)
-        .subscribe(resp => {
-          if (resp) {
-            this.isVisible = false;
-            this.emitIsVisible();
-            this.emitAddNewPost();
-            this.resetForm();
-            this.isSubmitted = false;
-          }
-        }, error => {
-          this.isSubmitted = false;
-          if (error.status === HttpStatusConstant.FORBIDDEN) {
-            this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
-            this.eventBusService.emit(new EventData('logout', null));
-          } else {
-            this.notificationService.createErrorNotification("There's an error when updating post.");
-          }
-        });
+    if (!this.postForm.valid) {
+      this.notificationService.createErrorNotification("The post form is invalid.");
+      return;
     }
+
+    this.isSubmitted = true;
+    this.adminPostService.updatePost(this.postForm.value, this.fileList)
+      .subscribe(resp => {
+        if (resp) {
+          this.isVisible = false;
+          this.emitIsVisible();
+          this.emitAddNewPost();
+          this.resetForm();
+          this.isSubmitted = false;
+        }
+      }, error => {
+        this.isSubmitted = false;
+        if (error.status === HttpStatusConstant.FORBIDDEN) {
+          this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
+          this.eventBusService.emit(new EventData('logout', null));
+        } else {
+          this.notificationService.createErrorNotification("There's an error when updating post.");
+        }
+      });
   }
 
   handleCancel() {

@@ -19,10 +19,13 @@ export class ActivityLogComponent implements OnInit {
   form: FormGroup;
   isLoading: boolean = false;
   logList: any[] = [];
+  displayLogList: any[] = [];
   descriptionModelIsVisible: boolean = false;
   readonly NZ_DATE_FORMAT = GeneralConstant.NZ_DATE_FORMAT;
   selectedObj: any = null;
   MODULE_LIST: DropdownChoiceModel[] = [];
+  filterActionNameIsVisible: boolean = false;
+  actionNameKeyword: string = '';
 
   constructor(private fb: FormBuilder,
               private auditService: AuditService,
@@ -50,6 +53,9 @@ export class ActivityLogComponent implements OnInit {
   getLog() {
     const moduleName = this.moduleNameControl.value;
     this.isLoading = true;
+    if (this.actionNameKeyword) {
+      this.resetFilterActionName();
+    }
     this.auditService.getAuditLogs(moduleName)
       .pipe(finalize(() => {
         this.isLoading = false;
@@ -57,6 +63,7 @@ export class ActivityLogComponent implements OnInit {
       .subscribe(resp => {
         if (resp && resp.status === HttpStatusConstant.OK) {
           this.logList = resp.data ? resp.data : [];
+          this.displayLogList = [...this.logList];
         }
       }, error => {
         this.isLoading = false;
@@ -100,5 +107,15 @@ export class ActivityLogComponent implements OnInit {
         this.notificationService.createErrorNotification(msg);
       }
     })
+  }
+
+  filterActionName() {
+    this.filterActionNameIsVisible = false;
+    this.displayLogList = this.logList.filter((item: any) => item.actionName.indexOf(this.actionNameKeyword) !== -1);
+  }
+
+  resetFilterActionName() {
+    this.actionNameKeyword = '';
+    this.filterActionName();
   }
 }
