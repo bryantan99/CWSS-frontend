@@ -18,14 +18,16 @@
 
       <ng-template #titleTemplate>
         <nz-row>
-          <nz-col [nzSm]="24" [nzMd]="6">
+          <nz-col [nzXs]="24" [nzMd]="6">
             <span>{{post.adminBean?.fullName}}</span><br>
             <small>{{post.createdDate | date: 'short'}}</small>
           </nz-col>
 
-          <nz-col [nzSm]="24" [nzMd]="18" *ngIf="isSuperAdmin || (isAdmin && post.adminBean.username == user.username)">
-            <button class="float-end" nz-button nz-dropdown [nzDropdownMenu]="menu4">Action<i nz-icon nzType="down"></i>
-            </button>
+          <nz-col [nzXs]="24" [nzMd]="18">
+            <div class="float-end">
+              <button *ngIf="isSuperAdmin || (isAdmin && post.adminBean.username == user.username)" nz-button nz-dropdown [nzDropdownMenu]="menu4">Action<i nz-icon nzType="down"></i></button>
+              <p *ngIf="isAdmin" class="text-center fs-6"><small class="d-inline-block">(PostId: {{post?.postId}})</small></p>
+            </div>
             <nz-dropdown-menu #menu4="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item (click)="editPost(post?.postId)">Edit Post</li>
