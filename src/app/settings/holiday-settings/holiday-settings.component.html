@@ -1,0 +1,109 @@
+<form nz-form [formGroup]="queryForm">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="fw-bold">Year</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+            <nz-select formControlName="year" nzAllowClear [nzPlaceHolder]="'Select a year'"
+                       (ngModelChange)="getHolidays()">
+                <nz-option *ngFor="let choice of YEAR_LIST" [nzLabel]="choice.text"
+                           [nzValue]="choice.value"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<nz-space class="mb-4">
+    <button *nzSpaceItem nz-button nzType="primary" (click)="addHoliday(false)">Add Holiday</button>
+    <button *nzSpaceItem nz-button nzType="default" (click)="addHoliday(true)">Add Holiday (Excel)</button>
+</nz-space>
+
+<nz-table
+    #holidayTable
+    [nzLoading]="isLoading"
+    [nzData]="displayHolidayList"
+    [nzScroll]="{x: '500px'}">
+    <thead>
+    <tr>
+        <th nzWidth="80px">Holiday Name</th>
+        <th nzWidth="120px">Holiday Date</th>
+        <th nzWidth="120px">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of holidayTable.data">
+        <td>{{ data?.holidayName || "-" }}</td>
+        <td>{{ (data?.holidayDate | date: 'MMM d, y') || "-"}}</td>
+        <td>
+            <button nz-button nz-dropdown [nzDropdownMenu]="menu">
+                Actions
+                <i nz-icon nzType="down"></i>
+            </button>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item (click)="editHoliday(data?.holidayId)">Update Holiday</li>
+                    <li nz-menu-item nz-popconfirm [nzPopconfirmTitle]="'Are you sure you want to delete this holiday?'"
+                        (nzOnConfirm)="deleteHoliday(data?.holidayId)">Delete Holiday
+                    </li>
+                </ul>
+            </nz-dropdown-menu>
+        </td>
+    </tr>
+    </tbody>
+</nz-table>
+
+<nz-modal *ngIf="holidayFormModalIsVisible"
+          [(nzVisible)]="holidayFormModalIsVisible"
+          [nzTitle]="'Holiday'"
+          (nzOnCancel)="closeModal()">
+    <ng-container *nzModalContent>
+        <form *ngIf="!addUsingExcel; else uploadExcelFormTpl" [formGroup]="holidayForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Holiday Name</nz-form-label>
+                <nz-form-control [nzSpan]="24" [nzErrorTip]="holidayNameErrorTpl">
+                    <input nz-input formControlName="holidayName">
+                </nz-form-control>
+                <ng-template #holidayNameErrorTpl let-control>
+                    <div *ngIf="control.invalid && (control.touched || control.dirty)">
+                        <div *ngIf="control.errors?.required">
+                            Please enter a holiday name.
+                        </div>
+                    </div>
+                </ng-template>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="24" class="fw-bold" nzRequired>Holiday Date</nz-form-label>
+                <nz-form-control [nzSpan]="24" [nzErrorTip]="holidayDateErrorTpl">
+                    <nz-date-picker formControlName="holidayDate"></nz-date-picker>
+                </nz-form-control>
+                <ng-template #holidayDateErrorTpl let-control>
+                    <div *ngIf="control.invalid && (control.touched || control.dirty)">
+                        <div *ngIf="control.errors?.required">
+                            Please select a holiday date.
+                        </div>
+                    </div>
+                </ng-template>
+            </nz-form-item>
+        </form>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" (click)="closeModal()">Cancel</button>
+        <button *ngIf="!addUsingExcel" nz-button nzType="primary" [disabled]="((!holidayForm.touched && !holidayForm.dirty) || !holidayForm.valid)" (click)="isEditHoliday ? updateHoliday() : saveHoliday()">{{isEditHoliday ? 'Update' : 'Create'}}</button>
+        <button *ngIf="addUsingExcel" nz-button nzType="primary" [disabled]="addUsingExcel && fileList.length != 1" (click)="saveHolidayUsingExcel()">Bulk Insert</button>
+    </div>
+</nz-modal>
+
+<ng-template #uploadExcelFormTpl>
+    <nz-alert nzType="info" [nzDescription]="descriptionTpl" nzShowIcon class="mb-4"></nz-alert>
+    <nz-form-label class="fw-bold" [nzSpan]="24" nzRequired>Excel file</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+        <nz-upload [nzLimit]="1" [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzRemove]="removeFile" [nzAccept]="ACCEPTABLE_FILE_FORMAT">
+            <button nz-button [disabled]="fileList.length >= 1">
+                <i nz-icon nzType="upload"></i>Select {{ fileList?.length || 0 }} / 1 Excel File
+            </button>
+        </nz-upload>
+    </nz-form-control>
+</ng-template>
+
+<ng-template #descriptionTpl>
+    Get the template from <a (click)="downloadExcelTpl()">here</a>.
+</ng-template>

@@ -17,6 +17,7 @@
     <ng-container [ngSwitch]="optionIdFormControl.value">
       <app-account-setting *ngSwitchCase="'account'"></app-account-setting>
       <app-activity-log *ngSwitchCase="'activity-log'"></app-activity-log>
+      <app-holiday-settings *ngSwitchCase="'holiday'"></app-holiday-settings>
     </ng-container>
   </nz-col>
 </nz-row>

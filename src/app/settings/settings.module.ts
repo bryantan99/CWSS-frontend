@@ -7,14 +7,15 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AccountSettingComponent } from './account-setting/account-setting.component';
 import {RouterModule} from "@angular/router";
 import { ActivityLogComponent } from './activity-log/activity-log.component';
-
+import { HolidaySettingsComponent } from './holiday-settings/holiday-settings.component';
 
 
 @NgModule({
   declarations: [
     SettingsComponent,
     AccountSettingComponent,
-    ActivityLogComponent
+    ActivityLogComponent,
+    HolidaySettingsComponent
   ],
     imports: [
         CommonModule,

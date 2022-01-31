@@ -30,6 +30,7 @@
     "bootstrap": "^5.0.1",
     "ckeditor4-angular": "^2.2.1",
     "express": "^4.17.2",
+    "file-saver": "^2.0.5",
     "highcharts": "^9.2.2",
     "highcharts-angular": "^2.10.0",
     "moment": "^2.29.1",

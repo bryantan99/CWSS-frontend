@@ -13,6 +13,7 @@ export class SettingsComponent implements OnInit {
   form: FormGroup;
   options = [];
   isSuperAdmin: boolean = false;
+  isAdmin: boolean = false;
   user: User;
 
   get optionIdFormControl(): FormControl {
@@ -23,6 +24,7 @@ export class SettingsComponent implements OnInit {
               private authService: AuthService) {
     this.authService.user.subscribe(resp => {
       this.user = resp;
+      this.isAdmin = this.authService.isAdminLoggedIn();
       this.isSuperAdmin = this.authService.hasRole(RoleConstant.ROLE_SUPER_ADMIN);
     })
   }
@@ -46,12 +48,20 @@ export class SettingsComponent implements OnInit {
       }
     ]
 
-    if (this.isSuperAdmin) {
+    if (this.isAdmin) {
       options.push({
-        text: 'Activity Log',
-        value: 'activity-log'
+        text: 'Holiday',
+        value: 'holiday'
       });
+
+      if (this.isSuperAdmin) {
+        options.push({
+          text: 'Activity Log',
+          value: 'activity-log'
+        });
+      }
     }
+
 
     this.options = options;
   }
