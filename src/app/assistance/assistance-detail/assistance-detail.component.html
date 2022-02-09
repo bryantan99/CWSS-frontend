@@ -8,29 +8,29 @@
   </button>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item *ngIf="assistanceRecord?.appointmentModel?.status === 'pending_admin' && isAdmin || assistanceRecord?.appointmentModel?.status === 'pending_user' && !isAdmin">
+      <li nz-menu-item *ngIf="
+      assistanceRecord?.appointmentModel?.status === 'pending_admin' && isAdmin && (!assistanceRecord?.appointmentModel?.adminUsername || assistanceRecord?.appointmentModel?.adminUsername == user.username) ||
+      assistanceRecord?.appointmentModel?.status === 'pending_user' && !isAdmin && assistanceRecord?.appointmentModel.username == user.username">
         <a (click)="acceptAppointment(assistanceRecord?.appointmentModel?.appointmentId)">Accept Appointment Datetime</a>
       </li>
-      <li nz-menu-item *ngIf="assistanceRecord?.appointmentModel?.status === 'pending_admin' && isAdmin || assistanceRecord?.appointmentModel?.status === 'pending_user' && !isAdmin">
+      <li nz-menu-item *ngIf="
+      assistanceRecord?.appointmentModel?.status === 'pending_admin' && isAdmin && (!assistanceRecord?.appointmentModel?.adminUsername || assistanceRecord?.appointmentModel?.adminUsername == user.username) ||
+      assistanceRecord?.appointmentModel?.status === 'pending_user' && !isAdmin && assistanceRecord?.appointmentModel.username == user.username">
         <a (click)="openRescheduleModel()">Reschedule Appointment Datetime</a>
       </li>
-      <li nz-menu-item *ngIf="assistanceRecord?.status === 'pending' && assistanceRecord?.appointmentModel?.status === 'confirmed' && isAdmin">
+      <li nz-menu-item *ngIf="assistanceRecord?.status === 'pending' && assistanceRecord?.appointmentModel?.status === 'confirmed' && isAdmin && assistanceRecord?.appointmentModel?.adminUsername == user.username">
         <a (click)="openUpdateAppointmentStatusModal()">Update Appointment Status</a>
       </li>
-<!--      <li nz-menu-item *ngIf="assistanceRecord?.appointmentStatus === 'completed' && assistanceRecord?.status ==='pending' && isAdmin">-->
-<!--        <a (click)="acceptRequest(assistanceRecord?.assistanceId)">Accept Request</a>-->
-<!--      </li>-->
       <li nz-menu-item
-          *ngIf="(isAdmin && ((assistanceRecord?.appointmentModel == null) || assistanceRecord.status !== 'pending')) || (assistanceRecord?.status === 'pending' && !isAdmin)">
+          *ngIf="
+          (((isAdmin && assistanceRecord?.adminUsername == user.username) || isSuperAdmin) && ((assistanceRecord?.appointmentModel == null) || assistanceRecord.status !== 'pending')) ||
+          (!isAdmin && (assistanceRecord?.appointmentModel?.status == 'pending_user' || assistanceRecord?.appointmentModel?.status == 'pending_admin'))">
         <a (click)="onEditMode()">Update Request</a>
       </li>
-<!--      <li nz-menu-item *ngIf="assistanceRecord?.appointmentStatus === 'completed' && assistanceRecord?.status === 'pending' && isAdmin">-->
-<!--        <a (click)="openRejectAssistanceModal()">Reject Request</a>-->
-<!--      </li>-->
-      <li nz-menu-item *ngIf="assistanceRecord?.status === 'pending' && !isAdmin">
+      <li nz-menu-item *ngIf="(assistanceRecord?.status === 'pending' && !isAdmin) || (isAdmin && assistanceRecord?.adminUsername == user.username)">
         <a nz-popconfirm
-           nzPopconfirmTitle="Are you sure you want to cancel this request?"
-           (nzOnConfirm)="deleteRec(assistanceRecord?.assistanceId)">Cancel Request</a>
+           nzPopconfirmTitle="Are you sure you want to delete this request? This action cannot be undone."
+           (nzOnConfirm)="deleteRec(assistanceRecord?.assistanceId)">Delete Request</a>
       </li>
       <li nz-menu-item>
         <a (click)="openCommentDrawer()">View comment</a>
@@ -113,7 +113,7 @@
       </nz-descriptions-item>
 
       <nz-descriptions-item nzTitle="Status">
-        <ng-container *ngIf="nzEditForAdmin; else displayStatusTpl">
+        <ng-container *ngIf="nzEditForAdmin && user.username == assistanceRecord?.adminUsername; else displayStatusTpl">
           <nz-form-control [nzSpan]="24" [nzErrorTip]="statusErrorTpl">
             <nz-select class="w-100" formControlName="status">
               <nz-option *ngFor="let choice of ASSISTANCE_REQUEST_STATUS_DROPDOWN" [nzLabel]="choice.text"

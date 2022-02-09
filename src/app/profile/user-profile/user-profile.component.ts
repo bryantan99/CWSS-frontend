@@ -99,7 +99,8 @@ export class UserProfileComponent implements OnInit {
           this.notificationService.createErrorNotification("Your session has expired. For security reason, you have been auto logged out.");
           this.eventBusService.emit(new EventData('logout', null));
         } else {
-          this.notificationService.createErrorNotification("There\'s an error when approving user account.");
+          const msg = error && error.error && error.error.message ? error.error.message : "There\'s an error when approving user account.";
+          this.notificationService.createErrorNotification(msg);
         }
       })
   }
