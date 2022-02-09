@@ -27,7 +27,7 @@
           (!isAdmin && (assistanceRecord?.appointmentModel?.status == 'pending_user' || assistanceRecord?.appointmentModel?.status == 'pending_admin'))">
         <a (click)="onEditMode()">Update Request</a>
       </li>
-      <li nz-menu-item *ngIf="(assistanceRecord?.status === 'pending' && !isAdmin) || (isAdmin && assistanceRecord?.adminUsername == user.username)">
+      <li nz-menu-item *ngIf="(assistanceRecord?.status === 'pending' && !isAdmin) || (isAdmin && assistanceRecord?.adminUsername == user.username) || isSuperAdmin">
         <a nz-popconfirm
            nzPopconfirmTitle="Are you sure you want to delete this request? This action cannot be undone."
            (nzOnConfirm)="deleteRec(assistanceRecord?.assistanceId)">Delete Request</a>
